@@ -1,0 +1,11 @@
+vendor
+build
+.idea
+
+.env
+.env*
+._*
+.AppleDouble
+.DS_Store
+composer.lock
+log/*.log

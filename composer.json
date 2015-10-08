@@ -1,0 +1,50 @@
+{
+    "name": "laravel/lumen",
+    "description": "iROKO Voucher service.",
+    "keywords": ["payment", "iroko", "voucher"],
+    "license": "MIT",
+    "type": "project",
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "http://toran.tools.irokotv.com:3000/repo/private/"
+        }
+    ],
+    "require": {
+        "laravel/lumen-framework": "5.1.*",
+        "vlucas/phpdotenv": "~1.0",
+        "palanik/lumen-cors": "dev-master",
+        "iroko/logging": "~1.1.2",
+        "league/fractal": "^0.12.0",
+        "iroko/common-lib": "~0.0.4",
+        "iroko/analytics": "~1.1.0",
+        "iroko/auth-api": "~1.1.2",
+        "iroko/notify": "~0.0.4",
+        "league/csv":"7.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.0",
+        "fzaninotto/faker": "~1.0",
+        "squizlabs/php_codesniffer": "2.*",
+        "mockery/mockery": "dev-master",
+        "ext-curl": "*",
+        "psr/log": "~1.0",
+        "ext-mbstring" : "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Voucher\\": "app/"
+        },
+        "classmap": [
+            "database/"
+        ]
+    },
+    "autoload-dev": {
+        "classmap": [
+            "tests/"
+        ]
+    },
+    "config": {
+        "preferred-install": "dist"
+    }
+}

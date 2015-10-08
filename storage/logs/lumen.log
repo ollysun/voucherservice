@@ -1,0 +1,356 @@
+[2015-10-08 19:43:49] lumen.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Class 'Iroko\Notify\Providers\NotifyServiceProvider' not found' in /Applications/MAMP/htdocs/Payment/voucher-service/vendor/laravel/lumen-framework/src/Application.php:268
+Stack trace:
+#0 [internal function]: Laravel\Lumen\Application->Laravel\Lumen\{closure}()
+#1 {main}  
+[2015-10-08 19:46:34] lumen.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Class 'Iroko\Notify\Providers\NotifyServiceProvider' not found' in /Applications/MAMP/htdocs/Payment/voucher-service/vendor/laravel/lumen-framework/src/Application.php:268
+Stack trace:
+#0 [internal function]: Laravel\Lumen\Application->Laravel\Lumen\{closure}()
+#1 {main}  
+[2015-10-08 19:53:32] lumen.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Class 'Iroko\Notify\Providers\NotifyServiceProvider' not found' in /Applications/MAMP/htdocs/Payment/voucher-service/vendor/laravel/lumen-framework/src/Application.php:268
+Stack trace:
+#0 [internal function]: Laravel\Lumen\Application->Laravel\Lumen\{closure}()
+#1 {main}  
+[2015-10-08 20:04:12] lumen.ERROR: exception 'ReflectionException' with message 'Class Voucher\Console\Kernel does not exist' in /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/container/Container.php:736
+Stack trace:
+#0 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/container/Container.php(736): ReflectionClass->__construct('Voucher\\Console...')
+#1 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/container/Container.php(626): Illuminate\Container\Container->build('Voucher\\Console...', Array)
+#2 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/laravel/lumen-framework/src/Application.php(447): Illuminate\Container\Container->make('Voucher\\Console...', Array)
+#3 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/container/Container.php(216): Laravel\Lumen\Application->make('Voucher\\Console...', Array)
+#4 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/container/Container.php(733): Illuminate\Container\Container->Illuminate\Container\{closure}(Object(Laravel\Lumen\Application), Array)
+#5 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/container/Container.php(626): Illuminate\Container\Container->build(Object(Closure), Array)
+#6 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/laravel/lumen-framework/src/Application.php(447): Illuminate\Container\Container->make('Illuminate\\Cont...', Array)
+#7 /Applications/MAMP/htdocs/Payment/voucher-service/artisan(33): Laravel\Lumen\Application->make('Illuminate\\Cont...')
+#8 {main}  
+[2015-10-08 20:05:06] lumen.ERROR: exception 'PDOException' with message 'SQLSTATE[42000] [1049] Unknown database 'voucher'' in /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Connectors/Connector.php:50
+Stack trace:
+#0 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Connectors/Connector.php(50): PDO->__construct('mysql:host=loca...', 'root', 'root', Array)
+#1 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Connectors/MySqlConnector.php(22): Illuminate\Database\Connectors\Connector->createConnection('mysql:host=loca...', Array, Array)
+#2 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Connectors/ConnectionFactory.php(60): Illuminate\Database\Connectors\MySqlConnector->connect(Array)
+#3 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Connectors/ConnectionFactory.php(49): Illuminate\Database\Connectors\ConnectionFactory->createSingleConnection(Array)
+#4 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/DatabaseManager.php(175): Illuminate\Database\Connectors\ConnectionFactory->make(Array, 'mysql')
+#5 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/DatabaseManager.php(67): Illuminate\Database\DatabaseManager->makeConnection('mysql')
+#6 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Migrations/DatabaseMigrationRepository.php(171): Illuminate\Database\DatabaseManager->connection(NULL)
+#7 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Migrations/DatabaseMigrationRepository.php(139): Illuminate\Database\Migrations\DatabaseMigrationRepository->getConnection()
+#8 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Migrations/Migrator.php(393): Illuminate\Database\Migrations\DatabaseMigrationRepository->repositoryExists()
+#9 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Console/Migrations/MigrateCommand.php(100): Illuminate\Database\Migrations\Migrator->repositoryExists()
+#10 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Console/Migrations/MigrateCommand.php(58): Illuminate\Database\Console\Migrations\MigrateCommand->prepareDatabase()
+#11 [internal function]: Illuminate\Database\Console\Migrations\MigrateCommand->fire()
+#12 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/container/Container.php(502): call_user_func_array(Array, Array)
+#13 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/console/Command.php(150): Illuminate\Container\Container->call(Array)
+#14 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Command/Command.php(259): Illuminate\Console\Command->execute(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#15 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/console/Command.php(136): Symfony\Component\Console\Command\Command->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#16 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Application.php(878): Illuminate\Console\Command->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#17 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Application.php(195): Symfony\Component\Console\Application->doRunCommand(Object(Illuminate\Database\Console\Migrations\MigrateCommand), Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#18 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Application.php(126): Symfony\Component\Console\Application->doRun(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#19 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/laravel/lumen-framework/src/Console/Kernel.php(78): Symfony\Component\Console\Application->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#20 /Applications/MAMP/htdocs/Payment/voucher-service/artisan(35): Laravel\Lumen\Console\Kernel->handle(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#21 {main}  
+[2015-10-08 20:06:05] lumen.ERROR: exception 'PDOException' with message 'SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'unsigned not null, `type` enum('time', 'discount') not null default 'time', `sta' at line 1' in /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Connection.php:381
+Stack trace:
+#0 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Connection.php(381): PDO->prepare('create table `v...')
+#1 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Connection.php(629): Illuminate\Database\Connection->Illuminate\Database\{closure}(Object(Illuminate\Database\MySqlConnection), 'create table `v...', Array)
+#2 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Connection.php(596): Illuminate\Database\Connection->runQueryCallback('create table `v...', Array, Object(Closure))
+#3 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Connection.php(382): Illuminate\Database\Connection->run('create table `v...', Array, Object(Closure))
+#4 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Schema/Blueprint.php(76): Illuminate\Database\Connection->statement('create table `v...')
+#5 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Schema/Builder.php(191): Illuminate\Database\Schema\Blueprint->build(Object(Illuminate\Database\MySqlConnection), Object(Illuminate\Database\Schema\Grammars\MySqlGrammar))
+#6 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Schema/Builder.php(134): Illuminate\Database\Schema\Builder->build(Object(Illuminate\Database\Schema\Blueprint))
+#7 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/support/Facades/Facade.php(213): Illuminate\Database\Schema\Builder->create('vouchers', Object(Closure))
+#8 /Applications/MAMP/htdocs/Payment/voucher-service/database/migrations/2015_10_08_153826_create_vouchers_table.php(40): Illuminate\Support\Facades\Facade::__callStatic('create', Array)
+#9 /Applications/MAMP/htdocs/Payment/voucher-service/database/migrations/2015_10_08_153826_create_vouchers_table.php(40): Illuminate\Support\Facades\Schema::create('vouchers', Object(Closure))
+#10 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Migrations/Migrator.php(135): CreateVouchersTable->up()
+#11 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Migrations/Migrator.php(112): Illuminate\Database\Migrations\Migrator->runUp('2015_10_08_1538...', 1, false)
+#12 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Migrations/Migrator.php(85): Illuminate\Database\Migrations\Migrator->runMigrationList(Array, false)
+#13 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Console/Migrations/MigrateCommand.php(74): Illuminate\Database\Migrations\Migrator->run('/Applications/M...', false)
+#14 [internal function]: Illuminate\Database\Console\Migrations\MigrateCommand->fire()
+#15 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/container/Container.php(502): call_user_func_array(Array, Array)
+#16 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/console/Command.php(150): Illuminate\Container\Container->call(Array)
+#17 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Command/Command.php(259): Illuminate\Console\Command->execute(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#18 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/console/Command.php(136): Symfony\Component\Console\Command\Command->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#19 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Application.php(878): Illuminate\Console\Command->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#20 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Application.php(195): Symfony\Component\Console\Application->doRunCommand(Object(Illuminate\Database\Console\Migrations\MigrateCommand), Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#21 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Application.php(126): Symfony\Component\Console\Application->doRun(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#22 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/laravel/lumen-framework/src/Console/Kernel.php(78): Symfony\Component\Console\Application->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#23 /Applications/MAMP/htdocs/Payment/voucher-service/artisan(35): Laravel\Lumen\Console\Kernel->handle(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#24 {main}
+
+Next exception 'Illuminate\Database\QueryException' with message 'SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'unsigned not null, `type` enum('time', 'discount') not null default 'time', `sta' at line 1 (SQL: create table `vouchers` (`id` int unsigned not null auto_increment primary key, `code` varchar(255) unsigned not null, `type` enum('time', 'discount') not null default 'time', `status` enum('active', 'claiming', 'claimed', 'deleted', 'expired', 'in_active') not null, `category` enum('new', 'expired', 'active', 'new_expired') not null, `title` enum('Internal', 'VODAFONE_GHANA_STAFF_MOBILE', 'VODAFONE_GHANA_CUSTOMER_MOBILE', 'VODAFONE_GHANA_STAFF_FIXEDLINE') not null, `location` varchar(255) not null, `description` varchar(255) not null, `duration` int not null, `period` enum('day', 'week', 'month', 'year') not null, `valid_from` datetime not null, `valid_to` datetime not null, `is_limited` tinyint(1) not null, `limit` int not null, `created_at` timestamp default 0 not null, `updated_at` timestamp default 0 not null) default character set utf8 collate utf8_unicode_ci engine = InnoDB)' in /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Connection.php:636
+Stack trace:
+#0 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Connection.php(596): Illuminate\Database\Connection->runQueryCallback('create table `v...', Array, Object(Closure))
+#1 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Connection.php(382): Illuminate\Database\Connection->run('create table `v...', Array, Object(Closure))
+#2 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Schema/Blueprint.php(76): Illuminate\Database\Connection->statement('create table `v...')
+#3 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Schema/Builder.php(191): Illuminate\Database\Schema\Blueprint->build(Object(Illuminate\Database\MySqlConnection), Object(Illuminate\Database\Schema\Grammars\MySqlGrammar))
+#4 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Schema/Builder.php(134): Illuminate\Database\Schema\Builder->build(Object(Illuminate\Database\Schema\Blueprint))
+#5 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/support/Facades/Facade.php(213): Illuminate\Database\Schema\Builder->create('vouchers', Object(Closure))
+#6 /Applications/MAMP/htdocs/Payment/voucher-service/database/migrations/2015_10_08_153826_create_vouchers_table.php(40): Illuminate\Support\Facades\Facade::__callStatic('create', Array)
+#7 /Applications/MAMP/htdocs/Payment/voucher-service/database/migrations/2015_10_08_153826_create_vouchers_table.php(40): Illuminate\Support\Facades\Schema::create('vouchers', Object(Closure))
+#8 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Migrations/Migrator.php(135): CreateVouchersTable->up()
+#9 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Migrations/Migrator.php(112): Illuminate\Database\Migrations\Migrator->runUp('2015_10_08_1538...', 1, false)
+#10 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Migrations/Migrator.php(85): Illuminate\Database\Migrations\Migrator->runMigrationList(Array, false)
+#11 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Console/Migrations/MigrateCommand.php(74): Illuminate\Database\Migrations\Migrator->run('/Applications/M...', false)
+#12 [internal function]: Illuminate\Database\Console\Migrations\MigrateCommand->fire()
+#13 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/container/Container.php(502): call_user_func_array(Array, Array)
+#14 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/console/Command.php(150): Illuminate\Container\Container->call(Array)
+#15 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Command/Command.php(259): Illuminate\Console\Command->execute(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#16 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/console/Command.php(136): Symfony\Component\Console\Command\Command->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#17 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Application.php(878): Illuminate\Console\Command->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#18 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Application.php(195): Symfony\Component\Console\Application->doRunCommand(Object(Illuminate\Database\Console\Migrations\MigrateCommand), Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#19 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Application.php(126): Symfony\Component\Console\Application->doRun(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#20 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/laravel/lumen-framework/src/Console/Kernel.php(78): Symfony\Component\Console\Application->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#21 /Applications/MAMP/htdocs/Payment/voucher-service/artisan(35): Laravel\Lumen\Console\Kernel->handle(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#22 {main}  
+[2015-10-08 20:08:07] lumen.ERROR: exception 'PDOException' with message 'SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'unsigned not null, `type` enum('time', 'discount') not null default 'time', `sta' at line 1' in /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Connection.php:381
+Stack trace:
+#0 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Connection.php(381): PDO->prepare('create table `v...')
+#1 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Connection.php(629): Illuminate\Database\Connection->Illuminate\Database\{closure}(Object(Illuminate\Database\MySqlConnection), 'create table `v...', Array)
+#2 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Connection.php(596): Illuminate\Database\Connection->runQueryCallback('create table `v...', Array, Object(Closure))
+#3 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Connection.php(382): Illuminate\Database\Connection->run('create table `v...', Array, Object(Closure))
+#4 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Schema/Blueprint.php(76): Illuminate\Database\Connection->statement('create table `v...')
+#5 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Schema/Builder.php(191): Illuminate\Database\Schema\Blueprint->build(Object(Illuminate\Database\MySqlConnection), Object(Illuminate\Database\Schema\Grammars\MySqlGrammar))
+#6 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Schema/Builder.php(134): Illuminate\Database\Schema\Builder->build(Object(Illuminate\Database\Schema\Blueprint))
+#7 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/support/Facades/Facade.php(213): Illuminate\Database\Schema\Builder->create('vouchers', Object(Closure))
+#8 /Applications/MAMP/htdocs/Payment/voucher-service/database/migrations/2015_10_08_153826_create_vouchers_table.php(40): Illuminate\Support\Facades\Facade::__callStatic('create', Array)
+#9 /Applications/MAMP/htdocs/Payment/voucher-service/database/migrations/2015_10_08_153826_create_vouchers_table.php(40): Illuminate\Support\Facades\Schema::create('vouchers', Object(Closure))
+#10 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Migrations/Migrator.php(135): CreateVouchersTable->up()
+#11 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Migrations/Migrator.php(112): Illuminate\Database\Migrations\Migrator->runUp('2015_10_08_1538...', 1, false)
+#12 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Migrations/Migrator.php(85): Illuminate\Database\Migrations\Migrator->runMigrationList(Array, false)
+#13 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Console/Migrations/MigrateCommand.php(74): Illuminate\Database\Migrations\Migrator->run('/Applications/M...', false)
+#14 [internal function]: Illuminate\Database\Console\Migrations\MigrateCommand->fire()
+#15 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/container/Container.php(502): call_user_func_array(Array, Array)
+#16 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/console/Command.php(150): Illuminate\Container\Container->call(Array)
+#17 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Command/Command.php(259): Illuminate\Console\Command->execute(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#18 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/console/Command.php(136): Symfony\Component\Console\Command\Command->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#19 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Application.php(878): Illuminate\Console\Command->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#20 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Application.php(195): Symfony\Component\Console\Application->doRunCommand(Object(Illuminate\Database\Console\Migrations\MigrateCommand), Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#21 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Application.php(126): Symfony\Component\Console\Application->doRun(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#22 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/laravel/lumen-framework/src/Console/Kernel.php(78): Symfony\Component\Console\Application->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#23 /Applications/MAMP/htdocs/Payment/voucher-service/artisan(35): Laravel\Lumen\Console\Kernel->handle(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#24 {main}
+
+Next exception 'Illuminate\Database\QueryException' with message 'SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'unsigned not null, `type` enum('time', 'discount') not null default 'time', `sta' at line 1 (SQL: create table `vouchers` (`id` int unsigned not null auto_increment primary key, `code` varchar(255) unsigned not null, `type` enum('time', 'discount') not null default 'time', `status` enum('active', 'claiming', 'claimed', 'deleted', 'expired', 'in_active') not null default 'in_active', `category` enum('new', 'expired', 'active', 'new_expired') not null, `title` enum('Internal', 'VODAFONE_GHANA_STAFF_MOBILE', 'VODAFONE_GHANA_CUSTOMER_MOBILE', 'VODAFONE_GHANA_STAFF_FIXEDLINE') not null, `location` varchar(255) not null, `description` varchar(255) not null, `duration` int not null, `period` enum('day', 'week', 'month', 'year') not null, `valid_from` datetime not null, `valid_to` datetime not null, `is_limited` tinyint(1) not null, `limit` int not null, `created_at` timestamp default 0 not null, `updated_at` timestamp default 0 not null) default character set utf8 collate utf8_unicode_ci engine = InnoDB)' in /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Connection.php:636
+Stack trace:
+#0 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Connection.php(596): Illuminate\Database\Connection->runQueryCallback('create table `v...', Array, Object(Closure))
+#1 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Connection.php(382): Illuminate\Database\Connection->run('create table `v...', Array, Object(Closure))
+#2 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Schema/Blueprint.php(76): Illuminate\Database\Connection->statement('create table `v...')
+#3 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Schema/Builder.php(191): Illuminate\Database\Schema\Blueprint->build(Object(Illuminate\Database\MySqlConnection), Object(Illuminate\Database\Schema\Grammars\MySqlGrammar))
+#4 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Schema/Builder.php(134): Illuminate\Database\Schema\Builder->build(Object(Illuminate\Database\Schema\Blueprint))
+#5 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/support/Facades/Facade.php(213): Illuminate\Database\Schema\Builder->create('vouchers', Object(Closure))
+#6 /Applications/MAMP/htdocs/Payment/voucher-service/database/migrations/2015_10_08_153826_create_vouchers_table.php(40): Illuminate\Support\Facades\Facade::__callStatic('create', Array)
+#7 /Applications/MAMP/htdocs/Payment/voucher-service/database/migrations/2015_10_08_153826_create_vouchers_table.php(40): Illuminate\Support\Facades\Schema::create('vouchers', Object(Closure))
+#8 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Migrations/Migrator.php(135): CreateVouchersTable->up()
+#9 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Migrations/Migrator.php(112): Illuminate\Database\Migrations\Migrator->runUp('2015_10_08_1538...', 1, false)
+#10 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Migrations/Migrator.php(85): Illuminate\Database\Migrations\Migrator->runMigrationList(Array, false)
+#11 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Console/Migrations/MigrateCommand.php(74): Illuminate\Database\Migrations\Migrator->run('/Applications/M...', false)
+#12 [internal function]: Illuminate\Database\Console\Migrations\MigrateCommand->fire()
+#13 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/container/Container.php(502): call_user_func_array(Array, Array)
+#14 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/console/Command.php(150): Illuminate\Container\Container->call(Array)
+#15 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Command/Command.php(259): Illuminate\Console\Command->execute(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#16 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/console/Command.php(136): Symfony\Component\Console\Command\Command->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#17 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Application.php(878): Illuminate\Console\Command->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#18 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Application.php(195): Symfony\Component\Console\Application->doRunCommand(Object(Illuminate\Database\Console\Migrations\MigrateCommand), Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#19 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Application.php(126): Symfony\Component\Console\Application->doRun(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#20 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/laravel/lumen-framework/src/Console/Kernel.php(78): Symfony\Component\Console\Application->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#21 /Applications/MAMP/htdocs/Payment/voucher-service/artisan(35): Laravel\Lumen\Console\Kernel->handle(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#22 {main}  
+[2015-10-08 20:12:25] lumen.ERROR: exception 'RuntimeException' with message 'Not enough arguments.' in /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Input/Input.php:77
+Stack trace:
+#0 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Command/Command.php(254): Symfony\Component\Console\Input\Input->validate()
+#1 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/console/Command.php(136): Symfony\Component\Console\Command\Command->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#2 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Application.php(878): Illuminate\Console\Command->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#3 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Application.php(195): Symfony\Component\Console\Application->doRunCommand(Object(Illuminate\Database\Console\Migrations\MigrateMakeCommand), Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#4 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Application.php(126): Symfony\Component\Console\Application->doRun(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#5 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/laravel/lumen-framework/src/Console/Kernel.php(78): Symfony\Component\Console\Application->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#6 /Applications/MAMP/htdocs/Payment/voucher-service/artisan(35): Laravel\Lumen\Console\Kernel->handle(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#7 {main}  
+[2015-10-08 20:12:41] lumen.ERROR: exception 'RuntimeException' with message 'Not enough arguments.' in /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Input/Input.php:77
+Stack trace:
+#0 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Command/Command.php(254): Symfony\Component\Console\Input\Input->validate()
+#1 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/console/Command.php(136): Symfony\Component\Console\Command\Command->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#2 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Application.php(878): Illuminate\Console\Command->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#3 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Application.php(195): Symfony\Component\Console\Application->doRunCommand(Object(Illuminate\Database\Console\Migrations\MigrateMakeCommand), Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#4 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Application.php(126): Symfony\Component\Console\Application->doRun(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#5 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/laravel/lumen-framework/src/Console/Kernel.php(78): Symfony\Component\Console\Application->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#6 /Applications/MAMP/htdocs/Payment/voucher-service/artisan(35): Laravel\Lumen\Console\Kernel->handle(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#7 {main}  
+[2015-10-08 20:15:18] lumen.ERROR: exception 'RuntimeException' with message 'Not enough arguments.' in /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Input/Input.php:77
+Stack trace:
+#0 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Command/Command.php(254): Symfony\Component\Console\Input\Input->validate()
+#1 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/console/Command.php(136): Symfony\Component\Console\Command\Command->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#2 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Application.php(878): Illuminate\Console\Command->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#3 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Application.php(195): Symfony\Component\Console\Application->doRunCommand(Object(Illuminate\Database\Console\Migrations\MigrateMakeCommand), Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#4 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Application.php(126): Symfony\Component\Console\Application->doRun(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#5 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/laravel/lumen-framework/src/Console/Kernel.php(78): Symfony\Component\Console\Application->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#6 /Applications/MAMP/htdocs/Payment/voucher-service/artisan(35): Laravel\Lumen\Console\Kernel->handle(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#7 {main}  
+[2015-10-08 20:17:29] lumen.ERROR: exception 'RuntimeException' with message 'Not enough arguments.' in /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Input/Input.php:77
+Stack trace:
+#0 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Command/Command.php(254): Symfony\Component\Console\Input\Input->validate()
+#1 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/console/Command.php(136): Symfony\Component\Console\Command\Command->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#2 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Application.php(878): Illuminate\Console\Command->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#3 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Application.php(195): Symfony\Component\Console\Application->doRunCommand(Object(Illuminate\Database\Console\Migrations\MigrateMakeCommand), Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#4 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Application.php(126): Symfony\Component\Console\Application->doRun(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#5 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/laravel/lumen-framework/src/Console/Kernel.php(78): Symfony\Component\Console\Application->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#6 /Applications/MAMP/htdocs/Payment/voucher-service/artisan(35): Laravel\Lumen\Console\Kernel->handle(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#7 {main}  
+[2015-10-08 20:17:54] lumen.ERROR: exception 'PDOException' with message 'SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'unsigned not null, `type` enum('time', 'discount') not null default 'time', `sta' at line 1' in /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Connection.php:381
+Stack trace:
+#0 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Connection.php(381): PDO->prepare('create table `v...')
+#1 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Connection.php(629): Illuminate\Database\Connection->Illuminate\Database\{closure}(Object(Illuminate\Database\MySqlConnection), 'create table `v...', Array)
+#2 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Connection.php(596): Illuminate\Database\Connection->runQueryCallback('create table `v...', Array, Object(Closure))
+#3 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Connection.php(382): Illuminate\Database\Connection->run('create table `v...', Array, Object(Closure))
+#4 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Schema/Blueprint.php(76): Illuminate\Database\Connection->statement('create table `v...')
+#5 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Schema/Builder.php(191): Illuminate\Database\Schema\Blueprint->build(Object(Illuminate\Database\MySqlConnection), Object(Illuminate\Database\Schema\Grammars\MySqlGrammar))
+#6 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Schema/Builder.php(134): Illuminate\Database\Schema\Builder->build(Object(Illuminate\Database\Schema\Blueprint))
+#7 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/support/Facades/Facade.php(213): Illuminate\Database\Schema\Builder->create('vouchers', Object(Closure))
+#8 /Applications/MAMP/htdocs/Payment/voucher-service/database/migrations/2015_10_08_153826_create_vouchers_table.php(40): Illuminate\Support\Facades\Facade::__callStatic('create', Array)
+#9 /Applications/MAMP/htdocs/Payment/voucher-service/database/migrations/2015_10_08_153826_create_vouchers_table.php(40): Illuminate\Support\Facades\Schema::create('vouchers', Object(Closure))
+#10 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Migrations/Migrator.php(135): CreateVouchersTable->up()
+#11 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Migrations/Migrator.php(112): Illuminate\Database\Migrations\Migrator->runUp('2015_10_08_1538...', 1, false)
+#12 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Migrations/Migrator.php(85): Illuminate\Database\Migrations\Migrator->runMigrationList(Array, false)
+#13 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Console/Migrations/MigrateCommand.php(74): Illuminate\Database\Migrations\Migrator->run('/Applications/M...', false)
+#14 [internal function]: Illuminate\Database\Console\Migrations\MigrateCommand->fire()
+#15 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/container/Container.php(502): call_user_func_array(Array, Array)
+#16 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/console/Command.php(150): Illuminate\Container\Container->call(Array)
+#17 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Command/Command.php(259): Illuminate\Console\Command->execute(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#18 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/console/Command.php(136): Symfony\Component\Console\Command\Command->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#19 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Application.php(878): Illuminate\Console\Command->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#20 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Application.php(195): Symfony\Component\Console\Application->doRunCommand(Object(Illuminate\Database\Console\Migrations\MigrateCommand), Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#21 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Application.php(126): Symfony\Component\Console\Application->doRun(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#22 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/laravel/lumen-framework/src/Console/Kernel.php(78): Symfony\Component\Console\Application->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#23 /Applications/MAMP/htdocs/Payment/voucher-service/artisan(35): Laravel\Lumen\Console\Kernel->handle(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#24 {main}
+
+Next exception 'Illuminate\Database\QueryException' with message 'SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'unsigned not null, `type` enum('time', 'discount') not null default 'time', `sta' at line 1 (SQL: create table `vouchers` (`id` int unsigned not null auto_increment primary key, `code` varchar(255) unsigned not null, `type` enum('time', 'discount') not null default 'time', `status` enum('active', 'claiming', 'claimed', 'deleted', 'expired', 'in_active') not null default 'in_active', `category` enum('new', 'expired', 'active', 'new_expired') not null, `title` enum('Internal', 'VODAFONE_GHANA_STAFF_MOBILE', 'VODAFONE_GHANA_CUSTOMER_MOBILE', 'VODAFONE_GHANA_STAFF_FIXEDLINE') not null, `location` varchar(255) not null, `description` varchar(255) not null, `duration` int not null, `period` enum('day', 'week', 'month', 'year') not null, `valid_from` datetime not null, `valid_to` datetime not null, `is_limited` tinyint(1) not null, `limit` int not null, `created_at` timestamp default 0 not null, `updated_at` timestamp default 0 not null) default character set utf8 collate utf8_unicode_ci engine = InnoDB)' in /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Connection.php:636
+Stack trace:
+#0 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Connection.php(596): Illuminate\Database\Connection->runQueryCallback('create table `v...', Array, Object(Closure))
+#1 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Connection.php(382): Illuminate\Database\Connection->run('create table `v...', Array, Object(Closure))
+#2 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Schema/Blueprint.php(76): Illuminate\Database\Connection->statement('create table `v...')
+#3 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Schema/Builder.php(191): Illuminate\Database\Schema\Blueprint->build(Object(Illuminate\Database\MySqlConnection), Object(Illuminate\Database\Schema\Grammars\MySqlGrammar))
+#4 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Schema/Builder.php(134): Illuminate\Database\Schema\Builder->build(Object(Illuminate\Database\Schema\Blueprint))
+#5 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/support/Facades/Facade.php(213): Illuminate\Database\Schema\Builder->create('vouchers', Object(Closure))
+#6 /Applications/MAMP/htdocs/Payment/voucher-service/database/migrations/2015_10_08_153826_create_vouchers_table.php(40): Illuminate\Support\Facades\Facade::__callStatic('create', Array)
+#7 /Applications/MAMP/htdocs/Payment/voucher-service/database/migrations/2015_10_08_153826_create_vouchers_table.php(40): Illuminate\Support\Facades\Schema::create('vouchers', Object(Closure))
+#8 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Migrations/Migrator.php(135): CreateVouchersTable->up()
+#9 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Migrations/Migrator.php(112): Illuminate\Database\Migrations\Migrator->runUp('2015_10_08_1538...', 1, false)
+#10 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Migrations/Migrator.php(85): Illuminate\Database\Migrations\Migrator->runMigrationList(Array, false)
+#11 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Console/Migrations/MigrateCommand.php(74): Illuminate\Database\Migrations\Migrator->run('/Applications/M...', false)
+#12 [internal function]: Illuminate\Database\Console\Migrations\MigrateCommand->fire()
+#13 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/container/Container.php(502): call_user_func_array(Array, Array)
+#14 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/console/Command.php(150): Illuminate\Container\Container->call(Array)
+#15 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Command/Command.php(259): Illuminate\Console\Command->execute(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#16 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/console/Command.php(136): Symfony\Component\Console\Command\Command->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#17 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Application.php(878): Illuminate\Console\Command->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#18 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Application.php(195): Symfony\Component\Console\Application->doRunCommand(Object(Illuminate\Database\Console\Migrations\MigrateCommand), Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#19 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Application.php(126): Symfony\Component\Console\Application->doRun(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#20 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/laravel/lumen-framework/src/Console/Kernel.php(78): Symfony\Component\Console\Application->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#21 /Applications/MAMP/htdocs/Payment/voucher-service/artisan(35): Laravel\Lumen\Console\Kernel->handle(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#22 {main}  
+[2015-10-08 20:20:02] lumen.ERROR: exception 'PDOException' with message 'SQLSTATE[42S02]: Base table or view not found: 1146 Table 'voucher.vouchers_logs' doesn't exist' in /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Connection.php:381
+Stack trace:
+#0 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Connection.php(381): PDO->prepare('insert into `vo...')
+#1 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Connection.php(629): Illuminate\Database\Connection->Illuminate\Database\{closure}(Object(Illuminate\Database\MySqlConnection), 'insert into `vo...', Array)
+#2 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Connection.php(596): Illuminate\Database\Connection->runQueryCallback('insert into `vo...', Array, Object(Closure))
+#3 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Connection.php(382): Illuminate\Database\Connection->run('insert into `vo...', Array, Object(Closure))
+#4 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Connection.php(338): Illuminate\Database\Connection->statement('insert into `vo...', Array)
+#5 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Query/Builder.php(1741): Illuminate\Database\Connection->insert('insert into `vo...', Array)
+#6 /Applications/MAMP/htdocs/Payment/voucher-service/database/seeds/VoucherLogsSeeder.php(58): Illuminate\Database\Query\Builder->insert(Array)
+#7 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Seeder.php(42): VoucherLogsSeeder->run()
+#8 /Applications/MAMP/htdocs/Payment/voucher-service/database/seeds/DatabaseSeeder.php(17): Illuminate\Database\Seeder->call('VoucherLogsSeed...')
+#9 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Console/Seeds/SeedCommand.php(61): DatabaseSeeder->run()
+#10 [internal function]: Illuminate\Database\Console\Seeds\SeedCommand->fire()
+#11 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/container/Container.php(502): call_user_func_array(Array, Array)
+#12 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/console/Command.php(150): Illuminate\Container\Container->call(Array)
+#13 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Command/Command.php(259): Illuminate\Console\Command->execute(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#14 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/console/Command.php(136): Symfony\Component\Console\Command\Command->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#15 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Application.php(878): Illuminate\Console\Command->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#16 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Application.php(195): Symfony\Component\Console\Application->doRunCommand(Object(Illuminate\Database\Console\Seeds\SeedCommand), Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#17 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Application.php(126): Symfony\Component\Console\Application->doRun(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#18 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/laravel/lumen-framework/src/Console/Kernel.php(78): Symfony\Component\Console\Application->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#19 /Applications/MAMP/htdocs/Payment/voucher-service/artisan(35): Laravel\Lumen\Console\Kernel->handle(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#20 {main}
+
+Next exception 'Illuminate\Database\QueryException' with message 'SQLSTATE[42S02]: Base table or view not found: 1146 Table 'voucher.vouchers_logs' doesn't exist (SQL: insert into `vouchers_logs` (`action`, `comments`, `platform`, `user_id`, `voucher_id`) values (success, just a test comment, web, 500, 1), (attempt, just a test comment, cms, 501, 2), (success, just a test comment, mobile, 500, 3), (attempt, just a test comment, web, 501, 4), (success, just a test comment, cms, 500, 5), (attempt, just a test comment, mobile, 501, 6))' in /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Connection.php:636
+Stack trace:
+#0 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Connection.php(596): Illuminate\Database\Connection->runQueryCallback('insert into `vo...', Array, Object(Closure))
+#1 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Connection.php(382): Illuminate\Database\Connection->run('insert into `vo...', Array, Object(Closure))
+#2 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Connection.php(338): Illuminate\Database\Connection->statement('insert into `vo...', Array)
+#3 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Query/Builder.php(1741): Illuminate\Database\Connection->insert('insert into `vo...', Array)
+#4 /Applications/MAMP/htdocs/Payment/voucher-service/database/seeds/VoucherLogsSeeder.php(58): Illuminate\Database\Query\Builder->insert(Array)
+#5 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Seeder.php(42): VoucherLogsSeeder->run()
+#6 /Applications/MAMP/htdocs/Payment/voucher-service/database/seeds/DatabaseSeeder.php(17): Illuminate\Database\Seeder->call('VoucherLogsSeed...')
+#7 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Console/Seeds/SeedCommand.php(61): DatabaseSeeder->run()
+#8 [internal function]: Illuminate\Database\Console\Seeds\SeedCommand->fire()
+#9 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/container/Container.php(502): call_user_func_array(Array, Array)
+#10 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/console/Command.php(150): Illuminate\Container\Container->call(Array)
+#11 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Command/Command.php(259): Illuminate\Console\Command->execute(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#12 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/console/Command.php(136): Symfony\Component\Console\Command\Command->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#13 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Application.php(878): Illuminate\Console\Command->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#14 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Application.php(195): Symfony\Component\Console\Application->doRunCommand(Object(Illuminate\Database\Console\Seeds\SeedCommand), Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#15 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Application.php(126): Symfony\Component\Console\Application->doRun(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#16 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/laravel/lumen-framework/src/Console/Kernel.php(78): Symfony\Component\Console\Application->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#17 /Applications/MAMP/htdocs/Payment/voucher-service/artisan(35): Laravel\Lumen\Console\Kernel->handle(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#18 {main}  
+[2015-10-08 20:22:23] lumen.ERROR: exception 'PDOException' with message 'SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '1' for key 'PRIMARY'' in /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Connection.php:381
+Stack trace:
+#0 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Connection.php(381): PDOStatement->execute(Array)
+#1 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Connection.php(629): Illuminate\Database\Connection->Illuminate\Database\{closure}(Object(Illuminate\Database\MySqlConnection), 'insert into `vo...', Array)
+#2 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Connection.php(596): Illuminate\Database\Connection->runQueryCallback('insert into `vo...', Array, Object(Closure))
+#3 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Connection.php(382): Illuminate\Database\Connection->run('insert into `vo...', Array, Object(Closure))
+#4 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Connection.php(338): Illuminate\Database\Connection->statement('insert into `vo...', Array)
+#5 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Query/Builder.php(1741): Illuminate\Database\Connection->insert('insert into `vo...', Array)
+#6 /Applications/MAMP/htdocs/Payment/voucher-service/database/seeds/VouchersSeeder.php(113): Illuminate\Database\Query\Builder->insert(Array)
+#7 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Seeder.php(42): VouchersSeeder->run()
+#8 /Applications/MAMP/htdocs/Payment/voucher-service/database/seeds/DatabaseSeeder.php(16): Illuminate\Database\Seeder->call('VouchersSeeder')
+#9 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Console/Seeds/SeedCommand.php(61): DatabaseSeeder->run()
+#10 [internal function]: Illuminate\Database\Console\Seeds\SeedCommand->fire()
+#11 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/container/Container.php(502): call_user_func_array(Array, Array)
+#12 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/console/Command.php(150): Illuminate\Container\Container->call(Array)
+#13 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Command/Command.php(259): Illuminate\Console\Command->execute(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#14 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/console/Command.php(136): Symfony\Component\Console\Command\Command->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#15 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Application.php(878): Illuminate\Console\Command->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#16 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Application.php(195): Symfony\Component\Console\Application->doRunCommand(Object(Illuminate\Database\Console\Seeds\SeedCommand), Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#17 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Application.php(126): Symfony\Component\Console\Application->doRun(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#18 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/laravel/lumen-framework/src/Console/Kernel.php(78): Symfony\Component\Console\Application->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#19 /Applications/MAMP/htdocs/Payment/voucher-service/artisan(35): Laravel\Lumen\Console\Kernel->handle(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#20 {main}
+
+Next exception 'Illuminate\Database\QueryException' with message 'SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '1' for key 'PRIMARY' (SQL: insert into `vouchers` (`category`, `code`, `description`, `duration`, `id`, `is_limited`, `limit`, `location`, `period`, `status`, `title`, `type`, `valid_from`, `valid_to`) values (new, asdf1234, A voucher, 3, 1, 1, 0, Nigeria, day, active, Internal, time, 2015-10-08 00:00:00, 2015-12-30 00:00:00), (expired, bsdf1234, A voucher, 1, 2, 1, 0, Nigeria, week, claiming, VODAFONE_GHANA_STAFF_MOBILE, time, 2015-10-08 00:00:00, 2015-12-30 00:00:00), (active, csdf1234, A voucher, 2, 3, 1, 0, Nigeria, month, claimed, VODAFONE_GHANA_CUSTOMER_MOBILE, time, 2015-10-08 00:00:00, 2015-12-30 00:00:00), (new_expired, dsdf1234, A voucher, 1, 4, 0, 5, Nigeria, year, deleted, VODAFONE_GHANA_STAFF_FIXEDLINE, time, 2015-10-08 00:00:00, 2015-12-30 00:00:00), (new, esdf1234, A voucher, 4, 5, 0, 10, Nigeria, day, expired, Internal, time, 2015-10-08 00:00:00, 2015-12-30 00:00:00), (expired, fsdf1234, A voucher, 1, 6, 0, 15, Nigeria, week, in_active, VODAFONE_GHANA_STAFF_MOBILE, time, 2015-10-08 00:00:00, 2015-12-30 00:00:00))' in /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Connection.php:636
+Stack trace:
+#0 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Connection.php(596): Illuminate\Database\Connection->runQueryCallback('insert into `vo...', Array, Object(Closure))
+#1 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Connection.php(382): Illuminate\Database\Connection->run('insert into `vo...', Array, Object(Closure))
+#2 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Connection.php(338): Illuminate\Database\Connection->statement('insert into `vo...', Array)
+#3 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Query/Builder.php(1741): Illuminate\Database\Connection->insert('insert into `vo...', Array)
+#4 /Applications/MAMP/htdocs/Payment/voucher-service/database/seeds/VouchersSeeder.php(113): Illuminate\Database\Query\Builder->insert(Array)
+#5 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Seeder.php(42): VouchersSeeder->run()
+#6 /Applications/MAMP/htdocs/Payment/voucher-service/database/seeds/DatabaseSeeder.php(16): Illuminate\Database\Seeder->call('VouchersSeeder')
+#7 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/database/Console/Seeds/SeedCommand.php(61): DatabaseSeeder->run()
+#8 [internal function]: Illuminate\Database\Console\Seeds\SeedCommand->fire()
+#9 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/container/Container.php(502): call_user_func_array(Array, Array)
+#10 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/console/Command.php(150): Illuminate\Container\Container->call(Array)
+#11 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Command/Command.php(259): Illuminate\Console\Command->execute(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#12 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/illuminate/console/Command.php(136): Symfony\Component\Console\Command\Command->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#13 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Application.php(878): Illuminate\Console\Command->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#14 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Application.php(195): Symfony\Component\Console\Application->doRunCommand(Object(Illuminate\Database\Console\Seeds\SeedCommand), Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#15 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/symfony/console/Application.php(126): Symfony\Component\Console\Application->doRun(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#16 /Applications/MAMP/htdocs/Payment/voucher-service/vendor/laravel/lumen-framework/src/Console/Kernel.php(78): Symfony\Component\Console\Application->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#17 /Applications/MAMP/htdocs/Payment/voucher-service/artisan(35): Laravel\Lumen\Console\Kernel->handle(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#18 {main}  
+[2015-10-08 21:51:15] lumen.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Maximum execution time of 30 seconds exceeded' in /Applications/MAMP/htdocs/Payment/voucher-service/app/Http/Controllers/VouchersController.php:77
+Stack trace:
+#0 [internal function]: Laravel\Lumen\Application->Laravel\Lumen\{closure}()
+#1 {main}  
+[2015-10-08 21:51:55] lumen.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Maximum execution time of 30 seconds exceeded' in /Applications/MAMP/htdocs/Payment/voucher-service/app/Http/Controllers/VouchersController.php:77
+Stack trace:
+#0 [internal function]: Laravel\Lumen\Application->Laravel\Lumen\{closure}()
+#1 {main}  
+[2015-10-08 21:57:51] lumen.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Call to undefined function Voucher\Http\Controllers\fget()' in /Applications/MAMP/htdocs/Payment/voucher-service/app/Http/Controllers/VouchersController.php:71
+Stack trace:
+#0 [internal function]: Laravel\Lumen\Application->Laravel\Lumen\{closure}()
+#1 {main}  
+[2015-10-08 22:02:06] lumen.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Maximum execution time of 30 seconds exceeded' in /Applications/MAMP/htdocs/Payment/voucher-service/app/Http/Controllers/VouchersController.php:78
+Stack trace:
+#0 [internal function]: Laravel\Lumen\Application->Laravel\Lumen\{closure}()
+#1 {main}  
+[2015-10-08 22:02:12] lumen.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Maximum execution time of 30 seconds exceeded' in /Applications/MAMP/htdocs/Payment/voucher-service/app/Http/Controllers/VouchersController.php:76
+Stack trace:
+#0 [internal function]: Laravel\Lumen\Application->Laravel\Lumen\{closure}()
+#1 {main}  

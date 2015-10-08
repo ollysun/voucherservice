@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<phpdox xmlns="http://xml.phpdox.net/config" silent="false">
+
+    <project name="iROKO" source="app" workdir="${basedir}/build/api/xml">
+
+        <collector publiconly="false" backend="parser">
+        	<include mask="*.php" />
+   			<exclude mask="*Autoload.php" />
+        </collector>
+
+        <generator output="${basedir}/build/api/docs">
+            
+            <enrich base="${basedir}/build/logs">
+              <source type="build" />
+              <source type="phpcs" />
+              <source type="pmd" />
+              <source type="phploc" />
+              <source type="phpunit">
+                  <coverage path="coverage/xml" />
+              </source>
+            </enrich>
+            
+            <build engine="html" enabled="true" output="html" />
+
+            <build engine="todo" enabled="false" output="todo">
+                <file name="todolist.txt" encoding="utf-8" />
+            </build>
+
+            <build engine="graph" enabled="true" output="graph" />
+
+        </generator>
+    </project>
+
+</phpdox>
