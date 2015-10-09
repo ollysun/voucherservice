@@ -7,6 +7,13 @@ class VoucherValidator extends IlluminateValidator
     public static function getVoucherRules()
     {
         return [
+
+        ];
+    }
+
+    public static function getRedeemRules()
+    {
+        return [
             'user_id' => 'regex:/(^[0-9]+$)+/|required',
             'platform' => 'string|required',
             'valid_form' => 'date|date_format:Y-m-d H:i:s',
