@@ -36,12 +36,13 @@ class Voucher
     {
         try {
             $voucher = $this->isVoucherExistsAndValid($data);
-            $user_valid_data = $this->isVoucherValidForUser($data, $voucher);
+            $user_eligible = $this->isVoucherValidForUser($data, $voucher);
 
             $subscription_data = [
                 'user_id'   => $data['user_id'],
                 'platform'  => $data['platform'],
-                'customer_id' => $user_valid_data['customer_id'], //get or generate this.
+                'customer_id' => $user_eligible['customer_id'],
+                'plan_id' => $user_eligible['plan_id'],
             ];
 
             $this->subscribeUserUsingVoucher($subscription_data, $voucher);
@@ -63,22 +64,9 @@ class Voucher
                 'action' => 'attempt',
                 'comment'   => 'User tried using a non existing voucher code.',
             ];
-            $this->voucher_logs_repository->addVoucherLog($data);
-            throw new \Exception('The voucher code is invalid.');
-
         } else {
-            if ($voucher->valid_to < Carbon::now()) {
-                $data = [
-                    'voucher_id' => $voucher['data']['id'],
-                    'user_id' => $data['user_id'],
-                    'platform' => $data['platform'],
-                    'action' => 'attempt',
-                    'comment'   => 'User tried using a voucher code whose validity period has passed.',
-                ];
-                $this->voucher_logs_repository->addVoucherLog($data);
-                throw new \Exception('The voucher code is invalid.');
-            } else {
-                if ($voucher->status == 'active' || $voucher->status == 'claiming') {
+            if ($voucher->status == 'active' || $voucher->status == 'claiming') {
+                if ($voucher->valid_to >= Carbon::now()) {
                     return $voucher['data'];
                 } else {
                     $data = [
@@ -86,13 +74,21 @@ class Voucher
                         'user_id' => $data['user_id'],
                         'platform' => $data['platform'],
                         'action' => 'attempt',
-                        'comment'   => 'User tried using a voucher code that is not active.',
+                        'comment'   => 'User tried using a voucher code whose validity period has passed.',
                     ];
-                    $this->voucher_logs_repository->addVoucherLog($data);
-                    throw new \Exception('The voucher code is invalid.');
                 }
+            } else {
+                $data = [
+                    'voucher_id' => $voucher['data']['id'],
+                    'user_id' => $data['user_id'],
+                    'platform' => $data['platform'],
+                    'action' => 'attempt',
+                    'comment'   => 'User tried using a voucher code that is not active.',
+                ];
             }
         }
+        $this->voucher_logs_repository->addVoucherLog($data);
+        throw new \Exception('The voucher code is invalid.');
     }
 
     protected function isVoucherValidForUser($user_data, $voucher_data)
@@ -100,8 +96,6 @@ class Voucher
         $subscription = $this->subscriptions_api->subscriptionApi('/subscriptions/'. $user_data['user_id'], 'get');
 
         if($subscription['data']) {
-            $plan = $this->plans_api->plansApi('/plans/'. $subscription['data']['plan_id'], 'get');
-
             switch ($voucher_data['category']) {
                 case 'new_expire':
                     if (!$subscription['data']['is_active']){
@@ -116,6 +110,7 @@ class Voucher
                     break;
 
                 case 'active':
+                    $plan = $this->plans_api->plansApi('/plans/'. $subscription['data']['plan_id'], 'get');
                     if ($subscription['data']['is_active'] && !$plan['data']['is_recurring']){
                         return $subscription;
                     }
@@ -134,6 +129,11 @@ class Voucher
 
         } else {
             if ($voucher_data['category'] == 'new' || $voucher_data['category'] == 'new_expire') {
+                $subscription = [
+                    'customer_id' => NULL,
+                    'plan_id' => NULL,
+                    'subscription_platform_id'  => NULL,
+                ];
                 return $subscription;
             } else {
                 $data = [
@@ -151,9 +151,8 @@ class Voucher
 
     protected function subscribeUserUsingVoucher($subscription_data, $voucher_data)
     {
-
-        $subscribe = $this->subscriptions_api->subscriptionApi('/subscriptions/using-voucher', 'post');
-
+        //@ todo post sqs
+        $subscribe = $this->sqs_client->subscriptionApi('/subscriptions/', 'post');
         if ($subscribe['data']) {
             $data = [
                 'voucher_id' => $voucher_data['id'],

@@ -159,7 +159,7 @@ class VouchersController extends Controller {
         }
     }
 
-    public function redeemVoucher()
+    public function redeem()
     {
         try {
             $inputs = $this->request->all();
