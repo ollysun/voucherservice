@@ -42,7 +42,7 @@ class VoucherValidator extends IlluminateValidator
             'offset' =>'regex:/(^[0-9]+$)+/'
         ];
     }
-    
+
     public static function getMessages()
     {
         return [
