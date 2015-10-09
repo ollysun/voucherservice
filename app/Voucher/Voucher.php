@@ -9,10 +9,13 @@ use Carbon\Carbon;
 class Voucher
 {
     protected $voucher_repository;
+
     protected $voucher_logs_repository;
+
     protected $subscriptions_api;
+
     protected $plans_api;
-    
+
     public function __construct(IVouchersRepository $voucher, VoucherLogsRepository $voucher_logs_repository)
     {
         $this->voucher_repository = $voucher;
@@ -148,6 +151,7 @@ class Voucher
 
     protected function subscribeUserUsingVoucher($subscription_data, $voucher_data)
     {
+
         $subscribe = $this->subscriptions_api->subscriptionApi('/subscriptions/using-voucher', 'post');
 
         if ($subscribe['data']) {
@@ -170,7 +174,6 @@ class Voucher
                 'action' => 'attempt',
                 'comment' => 'User tried subscribing with valid voucher, but something went wrong on the subscription service.',
             ];
-
             $this->voucher_logs_repository->addVoucherLog($data);
             throw new \Exception('Something went wrong on the subscription service.');
         }

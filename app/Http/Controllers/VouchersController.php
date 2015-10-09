@@ -25,7 +25,6 @@ class VouchersController extends Controller {
     public function __construct(Request $request, VouchersRepository $repository, Voucher $voucher)
     {
         parent::__construct($request);
-
         $this->repository = $repository;
         $this->voucher = $voucher;
     }

@@ -11,6 +11,7 @@ use Voucher\Payment\Event;
 class VouchersRepository extends AbstractRepository
 {
     protected $model;
+
     protected $log_model;
     protected $error;
 
@@ -59,8 +60,8 @@ class VouchersRepository extends AbstractRepository
             } else {
                 return null;
             }
-        } catch (\Exception $ex) {
-            throw new \Exception($ex->getMessage());
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
         }
     }
 
