@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Validator;
 use Voucher\Repositories\VouchersRepository;
 use Voucher\Validators\VoucherValidator;
 use Voucher\Voucher\Voucher;
+use Illuminate\Support\Facades\Input;
 use League\Csv\Writer;
 
 class VouchersController extends Controller {
@@ -24,6 +25,7 @@ class VouchersController extends Controller {
     public function __construct(Request $request, VouchersRepository $repository, Voucher $voucher)
     {
         parent::__construct($request);
+
         $this->repository = $repository;
         $this->voucher = $voucher;
     }
@@ -39,7 +41,7 @@ class VouchersController extends Controller {
         $rules = VoucherValidator::getParamsRules();
         $messages = VoucherValidator::getMessages();
 
-        try{
+        try {
             $validator = Validator::make($fields, $rules, $messages);
 
             if ($validator->fails()) {
@@ -71,8 +73,7 @@ class VouchersController extends Controller {
                     return $this->respondWithArray($data);
                 }
             }
-        }catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             Log::error(SELF::LOGTITLE, array_merge(
                 [
                     'error' => $e->getMessage()
@@ -81,13 +82,11 @@ class VouchersController extends Controller {
             ));
             return $this->errorInternalError($e->getMessage());
         }
-
-
     }
 
     public function create()
     {
-        try{
+        try {
             $inputs = $this->request->all();
             $messages = VoucherValidator::getMessages();
             $rules = VoucherValidator::getVoucherRules();
@@ -109,8 +108,7 @@ class VouchersController extends Controller {
                 ));
                 return $this->respondCreated($voucher);
             }
-        }catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             Log::error(SELF::LOGTITLE, array_merge(
                 [
                     'error' => $e->getMessage()
@@ -131,7 +129,7 @@ class VouchersController extends Controller {
             VoucherValidator::getIdRules()
         );
         $messages = VoucherValidator::getMessages();
-        try{
+        try {
             $validator = Validator::make($fields, $rules, $messages);
             if ($validator->fails()) {
                 Log::error(SELF::LOGTITLE, array_merge(
@@ -139,10 +137,10 @@ class VouchersController extends Controller {
                     $this->log
                 ));
                 return $this->errorWrongArgs($validator->errors());
-            }else{
+            } else {
                 if (!$this->repository->getVoucherById($voucher_id)) {
                     return $this->errorNotFound('Check Id, voucher detail not found');
-                }else{
+                } else {
                     $voucher_update =  $this->repository->createOrUpdate($voucher_id, $fields);
                     Log::info(SELF::LOGTITLE, array_merge(
                         [
@@ -153,15 +151,13 @@ class VouchersController extends Controller {
                     return $this->respondWithArray($voucher_update);
                 }
             }
-        }catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             Log::error(SELF::LOGTITLE, array_merge(
                 ['error' => $e->getMessage()],
                 $this->log
             ));
             return $this->errorInternalError($e->getMessage());
         }
-
     }
 
     public function redeemVoucher()

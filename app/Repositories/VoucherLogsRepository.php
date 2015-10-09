@@ -23,7 +23,11 @@ class VoucherLogsRepository extends AbstractRepository
             $log->comment = $data['comment'];
             $log->save();
 
+<<<<<<< HEAD
             return self::transform($log, new VoucherLogTransformer());
+=======
+            return true;
+>>>>>>> initial redeem feature setup
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
         }
