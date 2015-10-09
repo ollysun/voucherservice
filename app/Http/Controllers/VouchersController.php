@@ -32,12 +32,76 @@ class VouchersController extends Controller {
             $messages = VoucherValidator::getMessages();
             $rules = VoucherValidator::getVoucherRules();
 
-            $validators = Validator::make($inputs, $rules, $messages);
-
-        }catch (\Exception $ex)
+            $validator = Validator::make($inputs, $rules, $messages);
+            if ($validator->fails()) {
+                Log::error(SELF::LOGTITLE, array_merge(
+                    [
+                        'error' => $validator->errors()
+                    ],
+                    $this->log
+                ));
+                return $this->errorWrongArgs($validator->errors());
+            } else {
+                $voucher = $this->repository->createOrUpdate(null,$inputs);
+                Log::info(SELF::LOGTITLE, array_merge(
+                    ['success' => 'Voucher successfully created'],
+                    $this->log
+                ));
+                return $this->respondCreated($voucher);
+            }
+        }catch (\Exception $e)
         {
-
+            Log::error(SELF::LOGTITLE, array_merge(
+                [
+                    'error' => $e->getMessage()
+                ],
+                $this->log
+            ));
+            return $this->errorInternalError($e->getMessage());
         }
+    }
+
+    public function update($voucher_id)
+    {
+        $fields = $this->request->all();
+        $fields['id'] = $voucher_id;
+
+        $rules = array_merge(
+            VoucherValidator::getVoucherRules(),
+            VoucherValidator::getIdRules()
+        );
+        $messages = VoucherValidator::getMessages();
+        try{
+            $validator = Validator::make($fields, $rules, $messages);
+            if ($validator->fails()) {
+                Log::error(SELF::LOGTITLE, array_merge(
+                    ['error' => $validator->errors()],
+                    $this->log
+                ));
+                return $this->errorWrongArgs($validator->errors());
+            }else{
+                if (!$this->repository->getVoucherById($voucher_id)) {
+                    return $this->errorNotFound('Check Id, voucher detail not found');
+                }else{
+                    $voucher_update =  $this->repository->createOrUpdate($voucher_id, $fields);
+                    Log::info(SELF::LOGTITLE, array_merge(
+                        [
+                            'successfully Update' => 'Voucher successfully update'
+                        ],
+                        $this->log
+                    ));
+                    return $this->respondWithArray($voucher_update);
+                }
+            }
+        }catch (\Exception $e)
+        {
+            Log::error(SELF::LOGTITLE, array_merge(
+                ['error' => $e->getMessage()],
+                $this->log
+            ));
+            return $this->errorInternalError($e->getMessage());
+        }
+
     }
 
     

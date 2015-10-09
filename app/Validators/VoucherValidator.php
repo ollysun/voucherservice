@@ -12,15 +12,23 @@ class VoucherValidator extends IlluminateValidator
             'valid_form' => 'date|date_format:Y-m-d H:i:s',
             'valid_to' => 'date|date_format:Y-m-d H:i:s|after:valid_from',
             'status' => 'required|regex:/(^[0-9]+$)+/',
-            'title' => 'required|string',
+            'title' => 'required|regex:/(^[0-9]+$)+/',
             'description' => 'required|string',
             'location' => 'required|string',
-            'is_limit' => 'required|boolean',
+            'is_limited' => 'required|boolean',
             'limit' => 'required|integer',
             'period' => 'required|regex:/(^[0-9]+$)+/',
-            'duration' => 'required|integer',
-            'category' => 'required|integer',
-            'type' => 'required|integer'
+            'duration' => 'required|regex:/(^[0-9]+$)+/',
+            'category' => 'required|regex:/(^[0-9]+$)+/',
+            'type' => 'required|integer',
+            'code' => 'required|string'
+        ];
+    }
+
+    public static function getIdRules()
+    {
+        return [
+            'id' => 'required|regex:/^[0-9]+$/'
         ];
     }
 
@@ -44,7 +52,11 @@ class VoucherValidator extends IlluminateValidator
             'period.regex' => 'Provide the period for the voucher',
             'duration.integer' => 'Specify the Voucher duration',
             'category.integer' => 'Provide the category status',
-            'type.integer' => 'Provide the Voucher Type'
+            'code.required' => 'Provide the voucher code',
+            'code.string' => 'Voucher code can only be string',
+            'type.integer' => 'Provide the Voucher Type',
+            'id.required' => 'The voucher Id is required',
+            'id.regex' => 'Voucher Id can only be integer.',
         ];
     }
 }
