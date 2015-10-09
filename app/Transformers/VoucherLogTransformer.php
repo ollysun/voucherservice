@@ -42,7 +42,7 @@ class VoucherLogTransformer extends TransformerAbstract
 
     public function includeVoucherLogs(VoucherLog $voucherLog)
     {
-        $voucherLogs = $voucherLog->voucher();
-        return $this->item($voucherLogs, new VoucherLogTransformer());
+        $voucher = $voucherLog->voucher();
+        return $this->item($voucher, new VoucherTransformer());
     }
 }
