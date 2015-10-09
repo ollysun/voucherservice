@@ -15,4 +15,8 @@ return array(
         'max_num_messages' => env('INCOMING_MAX_MESSAGES', 10),
         'sleep_time_when_no_messages' => env('INCOMING_SLEEP_WHEN_EMPTY', 5)
     ),
+
+    'outgoing_queue' => array(
+        'sqs_endpoint_url' => env('OUTGOING_SQS_VOUCHER_ENDPOINT'),
+    ),
 );

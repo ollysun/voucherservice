@@ -19,8 +19,8 @@ class VoucherLogsRepository extends AbstractRepository
             $log->voucher_id = (isset($data['voucher_id']) ? $data['voucher_id'] : NULL);
             $log->user_id = (isset($data['user_id']) ? $data['user_id'] : NULL);
             $log->action = (isset($data['action']) ? $data['action'] : NULL);
-            $log->platform = (isset($data['platform']) ? $data['platform'] : NULL);
-            $log->comment = (isset($data['comment']) ? $data['comment'] : NULL);
+            $log->platform = (isset($data['platform']) ? $data['platform'] : 'web');
+            $log->comment = (isset($data['comment']) ? $data['comment'] : ' ');
             $log->save();
             return self::transform($log, new VoucherLogTransformer());
         } catch (\Exception $e) {

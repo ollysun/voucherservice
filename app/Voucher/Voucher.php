@@ -5,6 +5,8 @@ use Voucher\Services\SubscriptionService;
 use Voucher\Services\PlanService;
 use Voucher\Repositories\IVouchersRepository;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Config;
+use Aws\Sqs\SqsClient;
 
 class Voucher
 {
@@ -16,10 +18,16 @@ class Voucher
 
     protected $plans_api;
 
+    protected $config;
+
+    protected $sqs_client;
+
     public function __construct(IVouchersRepository $voucher, VoucherLogsRepository $voucher_logs_repository)
     {
         $this->voucher_repository = $voucher;
         $this->voucher_logs_repository = $voucher_logs_repository;
+        $this->config = Config::get('sqs');
+        $this->sqs_client = new SqsClient($this->config['aws_credentials']);
     }
 
     public function setSubscriptionService(SubscriptionService $subscription)
@@ -43,9 +51,10 @@ class Voucher
                 'platform'  => $data['platform'],
                 'customer_id' => $user_eligible['customer_id'],
                 'plan_id' => $user_eligible['plan_id'],
+                'voucher_id' => $voucher['id'],
+                'code' => $voucher['code']
             ];
-
-            $this->subscribeUserUsingVoucher($subscription_data, $voucher);
+            $this->subscribeUserUsingVoucher($subscription_data);
             return true;
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
@@ -149,13 +158,16 @@ class Voucher
         }
     }
 
-    protected function subscribeUserUsingVoucher($subscription_data, $voucher_data)
+    protected function subscribeUserUsingVoucher($subscription_data)
     {
-        //@ todo post sqs
-        $subscribe = $this->sqs_client->subscriptionApi('/subscriptions/', 'post');
-        if ($subscribe['data']) {
+        $subscribe_response = $this->sqs_client->sendMessage(array(
+                'QueueUrl' => $this->config['outgoing_queue']['endpoint_url'],
+                'MessageBody' => $subscription_data
+        ));
+
+        if ($subscribe_response->get('MessageId')) {
             $data = [
-                'voucher_id' => $voucher_data['id'],
+                'voucher_id' => $subscription_data['voucher_id'],
                 'user_id'   => $subscription_data['user_id'],
                 'platform'  => $subscription_data['platform'],
                 'action' => 'success',
@@ -167,7 +179,7 @@ class Voucher
 
         } else {
             $data = [
-                'voucher_id' => $voucher_data['id'],
+                'voucher_id' => $subscription_data['id'],
                 'user_id'   => $subscription_data['user_id'],
                 'platform'  => $subscription_data['platform'],
                 'action' => 'attempt',
