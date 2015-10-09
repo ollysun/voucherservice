@@ -34,7 +34,7 @@ class SubscriptionService
 
         $resp = $res->getBody()->getContents();
         $response = json_decode($resp, true);
-        Log::info('Processing SUB - SERVICE - Production plan_data', array(
+        Log::info('Processing SUB - SERVICE - Production susbcription_data', array(
             'susbcription_data' => $response
         ));
         return $response;
