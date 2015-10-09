@@ -25,7 +25,7 @@ class VouchersController extends Controller {
         $this->repository = $repository;
     }
 
-    public function store()
+    public function create()
     {
         try{
             $inputs = $this->request->all();
