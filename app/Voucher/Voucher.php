@@ -12,8 +12,7 @@ class Voucher
     protected $voucher_logs_repository;
     protected $subscriptions_api;
     protected $plans_api;
-
-
+    
     public function __construct(IVouchersRepository $voucher, VoucherLogsRepository $voucher_logs_repository)
     {
         $this->voucher_repository = $voucher;
