@@ -12,17 +12,20 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Voucher\Repositories\VouchersRepository;
 use Voucher\Validators\VoucherValidator;
+use Voucher\Voucher\Voucher;
 use League\Csv\Writer;
 
 class VouchersController extends Controller {
 
     protected $repository;
 
-    public function __construct(Request $request, VouchersRepository $repository)
+    protected $voucher;
+
+    public function __construct(Request $request, VouchersRepository $repository, Voucher $voucher)
     {
         parent::__construct($request);
-
         $this->repository = $repository;
+        $this->voucher = $voucher;
     }
 
     public function index()
@@ -170,85 +173,21 @@ class VouchersController extends Controller {
 
             $validator = Validator::make($inputs, $rules, $messages);
             if ($validator->fails()){
+                Log::error(SELF::LOGTITLE, array_merge(
+                    ['error' => $validator->errors()],
+                    $this->log
+                ));
                 return $this->errorWrongArgs($validator->errors());
             } else {
-                $voucher = $this->_isVoucherExists($inputs);
-
-                $data = $this->_validVoucherByUser($inputs, $voucher);
-
-                $this->voucher_repo->startSubscription($data, $voucher);
-
-                //@todo will clean this up later
-                $data = [
-                    'voucher_id' => $voucher->id,
-                    'action' => 'success',
-                    'comment' => 'User successfully used a voucher.',
-                ];
-
-                $this->log_repo->addVoucherLog($data);
-                return $this->respondSuccess('Voucher successfully redeemed.');
+                $this->voucher->redeem($inputs);
+                return $this->respondSuccess('Voucher successfully redeemed, your subscription is active.');
             }
         } catch (\Exception $e) {
+            Log::error(SELF::LOGTITLE, array_merge(
+                ['error' => $e->getMessage()],
+                $this->log
+            ));
             return $this->errorInternalError($e->getMessage());
         }
     }
-
-    protected function _isVoucherExists($data)
-    {
-        $voucher = $this->voucher_repo->isVoucherExist($data);
-        if ($voucher) {
-            return $voucher;
-        } else {
-            $data = [
-                'action' => 'attempt',
-                'comment' => 'User tried using a non existing voucher code.',
-            ];
-            $this->log_repo->addVoucherLog($data);
-            throw new \Exception('The Voucher code does not exist.');
-        }
-    }
-
-    protected function _validVoucherByUser($data, $voucher)
-    {
-        $subscription = $this->voucher_repo->getSubscription($data['user_id']);
-
-        switch ($voucher->category) {
-            case 'new':
-                if (!$subscription){
-                    return $subscription;
-                }
-                break;
-
-            case 'new_expire':
-                if (!$subscription || !$subscription->is_active){
-                    return $subscription;
-                }
-                break;
-
-            case 'expired':
-                if (!$subscription->is_active){
-                    return $subscription;
-                }
-                break;
-
-            case 'active':
-                if ($subscription || $subscription->is_active){
-                    $plan = $this->plansApi("/plans/".$subscription['plan_id'], 'get');
-                    if ($plan['data']['is_recurring']) {
-                        return $subscription;
-                    }
-                }
-                break;
-        }
-
-        $data = [
-            'voucher_id' => $voucher->id,
-            'action' => 'attempt',
-            'comment' => 'User tried using a voucher code not meant their account.',
-        ];
-        $this->log_repo->addVoucherLog($data);
-        throw new \Exception('The Voucher code is invalid.');
-    }
-
-    
 }

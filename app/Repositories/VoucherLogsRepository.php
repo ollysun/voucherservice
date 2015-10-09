@@ -23,7 +23,7 @@ class VoucherLogsRepository extends AbstractRepository
             $log->comment = $data['comment'];
             $log->save();
 
-            return true;
+            return self::transform($log, new VoucherLogTransformer());
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
         }
