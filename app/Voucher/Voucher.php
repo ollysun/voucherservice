@@ -162,7 +162,7 @@ class Voucher
     {
         $subscribe_response = $this->sqs_client->sendMessage(array(
                 'QueueUrl' => $this->config['outgoing_queue']['endpoint_url'],
-                'MessageBody' => $subscription_data
+                'MessageBody' => base64_encode(json_encode($subscription_data))
         ));
 
         if ($subscribe_response->get('MessageId')) {
