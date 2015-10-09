@@ -12,17 +12,37 @@ class VoucherValidator extends IlluminateValidator
             'valid_form' => 'date|date_format:Y-m-d H:i:s',
             'valid_to' => 'date|date_format:Y-m-d H:i:s|after:valid_from',
             'status' => 'required|regex:/(^[0-9]+$)+/',
-            'title' => 'required|string',
+            'title' => 'required|regex:/(^[0-9]+$)+/',
             'description' => 'required|string',
             'location' => 'required|string',
-            'is_limit' => 'required|boolean',
+            'is_limited' => 'required|boolean',
             'limit' => 'required|integer',
             'period' => 'required|regex:/(^[0-9]+$)+/',
-            'duration' => 'required|integer',
-            'category' => 'required|integer',
-            'type' => 'required|integer'
+            'duration' => 'required|regex:/(^[0-9]+$)+/',
+            'category' => 'required|regex:/(^[0-9]+$)+/',
+            'type' => 'required|integer',
+            'code' => 'required|string'
         ];
     }
+
+    public static function getIdRules()
+    {
+        return [
+            'id' => 'required|regex:/^[0-9]+$/'
+        ];
+    }
+
+    public static function getParamsRules()
+    {
+        return [
+            'query' => 'string',
+            'sort' => 'in:created_at,updated_at,user_id,is_active,status',
+            'limit' => 'regex:/(^[0-9]+$)+/',
+            'order' => 'in:ASC,DESC',
+            'offset' =>'regex:/(^[0-9]+$)+/'
+        ];
+    }
+
 
     public static function getMessages()
     {
@@ -44,7 +64,16 @@ class VoucherValidator extends IlluminateValidator
             'period.regex' => 'Provide the period for the voucher',
             'duration.integer' => 'Specify the Voucher duration',
             'category.integer' => 'Provide the category status',
-            'type.integer' => 'Provide the Voucher Type'
+            'code.required' => 'Provide the voucher code',
+            'code.string' => 'Voucher code can only be string',
+            'type.integer' => 'Provide the Voucher Type',
+            'id.required' => 'The voucher Id is required',
+            'id.regex' => 'Voucher Id can only be integer.',
+            'limit.regex' =>  'Pagination limit must be an integer.',
+            'order.in' => 'order can only be ASC or DESC',
+            'offset.regex'    =>  'Pagination offset must be an integer.',
+            'query.string'   =>  'The search query can only contain numbers or alphabets.',
+            'sort.in'    =>  'The sort parameter is invalid.'
         ];
     }
 }
