@@ -32,6 +32,18 @@ class VoucherValidator extends IlluminateValidator
         ];
     }
 
+    public static function getParamsRules()
+    {
+        return [
+            'query' => 'string',
+            'sort' => 'in:created_at,updated_at,user_id,is_active,status',
+            'limit' => 'regex:/(^[0-9]+$)+/',
+            'order' => 'in:ASC,DESC',
+            'offset' =>'regex:/(^[0-9]+$)+/'
+        ];
+    }
+
+
     public static function getMessages()
     {
         return [
@@ -57,6 +69,11 @@ class VoucherValidator extends IlluminateValidator
             'type.integer' => 'Provide the Voucher Type',
             'id.required' => 'The voucher Id is required',
             'id.regex' => 'Voucher Id can only be integer.',
+            'limit.regex' =>  'Pagination limit must be an integer.',
+            'order.in' => 'order can only be ASC or DESC',
+            'offset.regex'    =>  'Pagination offset must be an integer.',
+            'query.string'   =>  'The search query can only contain numbers or alphabets.',
+            'sort.in'    =>  'The sort parameter is invalid.'
         ];
     }
 }

@@ -20,6 +20,35 @@ class VouchersRepository extends AbstractRepository
         $this->log_model = $voucherLog;
     }
 
+    public function getVouchers($data)
+    {
+        try {
+            Paginator::currentPageResolver(
+                function () use ($data) {
+                    return $data['offset'];
+                }
+            );
+
+            if (is_null($data['query'])) {
+                $vouchers = $this->model->orderBy($data['sort'], $data['order'])
+                    ->paginate($data['limit']);
+
+            } else {
+                $vouchers = $this->model->where('code', 'like', '%'.$data['query'].'%')
+                    ->orderBy($data['sort'], $data['order'])
+                    ->paginate($data['limit']);
+            }
+            if ($vouchers->isEmpty()) {
+                return null;
+            } else {
+                $list_vouchers = self::setPaginationLinks($vouchers, $data);
+                return self::transform($list_vouchers, new VoucherTransformer());
+            }
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
+
     public function getVoucherById($id)
     {
         try {
