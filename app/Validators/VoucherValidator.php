@@ -33,6 +33,8 @@ class VoucherValidator extends IlluminateValidator
         ];
     }
 
+
+
     public static function getIdRules()
     {
         return [
@@ -99,7 +101,9 @@ class VoucherValidator extends IlluminateValidator
             'platform.string' => 'The Platform can only be a string',
             'platform.in' => 'The Platform is invalid',
             'code.required' => 'The Code is required',
-            'code.string' => 'The Code can only be a string'
+            'code.string' => 'The Code can only be a string',
+            'brand.string' => 'The brand can only be string',
+            'total.regex' => 'The total must be number'
         ];
     }
 }

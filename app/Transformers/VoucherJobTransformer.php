@@ -1,15 +1,46 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: tech4
+ * User: Tech-1
  * Date: 10/12/15
- * Time: 11:28 AM
+ * Time: 12:59 PM
  */
 
 namespace Voucher\Transformers;
 
+use League\Fractal\TransformerAbstract;
+use Voucher\Models\VoucherJob;
 
-class VoucherJobTransformer
-{
+class VoucherJobTransformer extends TransformerAbstract{
+
+    protected $availableIncludes = [
+        'voucherJobParamMetadata'
+    ];
+
+    public static function transform(VoucherJob $voucherJob)
+    {
+        return [
+            'id' => (int) $voucherJob->id,
+            'status' => (int) $voucherJob->status,
+            'comments' => (string) $voucherJob->comments,
+            '_links' => [
+                [
+                    'rel' => 'self',
+                    'uri' => '/voucherJob/' . $voucherJob->id
+                ],
+                [
+                    'rel' => 'voucherJobParamMetadata',
+                    'uri' => '/voucherJob/' . $voucherJob->id . '/voucherParamMetadata'
+                ]
+            ]
+        ];
+    }
+
+    public function includeVoucherParamMetadata(VoucherJob $voucherJob)
+    {
+        $voucherParamMetadata = $voucherJob->voucherJobParamMetadata;
+        return $this->collection($voucherParamMetadata, new VoucherJobParamMetadataTransformer());
+
+    }
 
 }
