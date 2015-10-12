@@ -8,7 +8,6 @@
 
 namespace Voucher\Models;
 
-
 use Illuminate\Database\Eloquent\Model;
 
 class VoucherJobsParamsMetadata extends Model {
@@ -21,5 +20,4 @@ class VoucherJobsParamsMetadata extends Model {
     {
         return $this->belongsTo('Voucher\Models\VoucherJob');
     }
-
 }

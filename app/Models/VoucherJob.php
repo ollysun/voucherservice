@@ -9,5 +9,4 @@ class VoucherJob extends Model
     {
         return $this->hasMany('Voucher\Models\VoucherJobsParamsMetadata');
     }
-
 }

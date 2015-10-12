@@ -13,6 +13,7 @@ use Aws\S3\S3Client;
 use Illuminate\Config;
 use Voucher\Repositories\VoucherCodesRepository;
 
+
 class TaskController extends Controller
 {
     protected $sqs_worker;
@@ -20,6 +21,8 @@ class TaskController extends Controller
     protected $voucher_jobs_repo;
 
     protected $voucher_jobs_params_repo;
+
+    protected $voucher_repo;
 
     protected $voucher_codes_repo;
 
@@ -146,6 +149,7 @@ class TaskController extends Controller
 
             echo $result['ObjectURL'];
             //@TODO remove file from storage path after s3 uploaded successfully - Chizzy
+
             unlink($filepath . '/' . $file_name . '.csv');
         }
         catch (\Exception $e) {

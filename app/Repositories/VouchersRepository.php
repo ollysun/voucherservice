@@ -1,36 +1,27 @@
 <?php namespace Voucher\Repositories;
 
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\DB;
 use Voucher\Models\Voucher;
 use Voucher\Models\VoucherLog;
-use Illuminate\Support\Facades\DB;
 use Voucher\Transformers\VoucherTransformer;
-use Voucher\Transformers\VoucherLogTransformer;
 use Voucher\Models\VoucherJob;
 use Voucher\Models\Voucher_jobs_params_metadata;
 use Voucher\Transformers\VoucherJobParamMetadataTransformer;
 use Voucher\Transformers\VoucherJobTransformer;
-
-use Voucher\Payment\Event;
+use Voucher\Voucher\Event;
 
 class VouchersRepository extends AbstractRepository implements IVouchersRepository
 {
     protected $model;
 
     protected $log_model;
-    protected $error;
 
     public function __construct(Voucher $voucher, VoucherLog $voucherLog)
     {
         $this->model = $voucher;
         $this->log_model = $voucherLog;
     }
-
-    public function getVoucherByCode($data)
-    {
-
-    }
-
 
     public function getVouchers($data)
     {
@@ -76,6 +67,20 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
         }
     }
 
+    public function getVoucherByCode($code)
+    {
+        try {
+            $voucher = $this->model->where('code', $code)->get();
+
+            if (!is_null($voucher)) {
+                return self::transform($voucher, new VoucherTransformer());
+            } else {
+                return false;
+            }
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
 
     public function createOrUpdate($id = null, $input)
     {
@@ -107,12 +112,11 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
         }
     }
 
-    public function getByJobId($job, $offset, $limit)
+    public function getByJobId($job)
     {
         try {
             $vouchers = $this->model->where('voucher_job_id', '=', $job->id)
-                ->limit($limit)
-                ->skip($offset)
+                ->limit(25000)
                 ->get();
 
             return self::transform($vouchers, new VoucherTransformer());
@@ -192,6 +196,4 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
             throw new \Exception($ex->getMessage());
         }
     }
-
-
 }
