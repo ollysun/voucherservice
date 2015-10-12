@@ -16,6 +16,7 @@ class CreateVoucherJobsTable extends Migration
             $table->engine = 'InnoDB';
             $table->charset = 'utf8';
             $table->collate = 'utf8_unicode_ci';
+
             $table->increments('id')->unsigned();
             $table->enum('status', ['new', 'processing','completed','error'])->default('new')->index('status');
             $table->string('comments', 100)->nullable();
