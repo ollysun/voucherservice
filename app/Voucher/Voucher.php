@@ -3,7 +3,7 @@
 use Voucher\Repositories\VoucherLogsRepository;
 use Voucher\Services\SubscriptionService;
 use Voucher\Services\PlanService;
-use Voucher\Repositories\IVouchersRepository;
+use Voucher\Repositories\VouchersRepository;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Config;
 use Aws\Sqs\SqsClient;
@@ -22,7 +22,7 @@ class Voucher
 
     protected $sqs_client;
 
-    public function __construct(IVouchersRepository $voucher, VoucherLogsRepository $voucher_logs_repository)
+    public function __construct(VouchersRepository $voucher, VoucherLogsRepository $voucher_logs_repository)
     {
         $this->voucher_repository = $voucher;
         $this->voucher_logs_repository = $voucher_logs_repository;
