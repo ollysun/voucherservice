@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Voucher\Notification\VoucherNotification;
+use Voucher\Models\VoucherCode;
 use Voucher\Validators\VoucherValidator;
 use Log;
 use Notification;
@@ -12,7 +13,6 @@ use Voucher\Repositories\VouchersRepository;
 use Aws\S3\S3Client;
 use Illuminate\Config;
 use Voucher\Repositories\VoucherCodesRepository;
-
 
 class TaskController extends Controller
 {
