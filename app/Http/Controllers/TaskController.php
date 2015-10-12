@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Voucher\Notification\VoucherNotification;
 use Voucher\Models\VoucherCode;
+use Voucher\Notification\VoucherNotification;
 use Voucher\Validators\VoucherValidator;
 use Log;
 use Notification;
@@ -71,8 +72,8 @@ class TaskController extends Controller
                     $vouchers = $this->voucher_repo->getByJobId($job);
 
                     $csv_file = $this->generateCsv($vouchers);
-                    $this->uploadS3($csv_file);
-                    $this->notify($vouchers);
+                    $s3_result = $this->uploadS3($csv_file);
+                    $this->notify($s3_result);
 
                     //@TODO loop ends - Lawrence
 
@@ -157,10 +158,13 @@ class TaskController extends Controller
         }
     }
 
-    public function notify($data)
+    public function notify($s3_result)
     {
         try {
             //@TODO implement Voucher Notification Chizzy
+            $notify = new VoucherNotification(1, 'Generate Voucher Initiated', [1]);
+            $notify->__set('data', $s3_result);
+            Notification::send($notify);
         }
         catch (\Exception $e) {
             return $e->getMessage();
