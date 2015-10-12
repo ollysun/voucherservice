@@ -146,7 +146,6 @@ class TaskController extends Controller
 
             echo $result['ObjectURL'];
             //@TODO remove file from storage path after s3 uploaded successfully - Chizzy
-
             unlink($filepath . '/' . $file_name . '.csv');
         }
         catch (\Exception $e) {
