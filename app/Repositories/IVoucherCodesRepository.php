@@ -10,7 +10,7 @@ namespace Voucher\Repositories;
 
 interface IVoucherCodesRepository
 {
-    public function isExistingVoucherCode($code);
+    public function isNotExistingVoucherCode($code);
 
     public function insertVoucherCode($data);
 }

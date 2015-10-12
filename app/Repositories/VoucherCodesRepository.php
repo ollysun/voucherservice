@@ -8,7 +8,6 @@
 
 namespace Voucher\Repositories;
 
-
 use Voucher\Models\VoucherCode;
 
 class VoucherCodesRepository extends AbstractRepository implements IVoucherCodesRepository
@@ -18,7 +17,7 @@ class VoucherCodesRepository extends AbstractRepository implements IVoucherCodes
         $this->model = $voucherCode;
     }
 
-    public function isExistingVoucherCode($code)
+    public function isNotExistingVoucherCode($code)
     {
         try {
             $code = $this->model->where('code', $code)->get();
