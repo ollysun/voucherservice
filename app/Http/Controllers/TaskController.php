@@ -36,11 +36,9 @@ class TaskController extends Controller
 
             if ($jobs) {
                 foreach ($jobs as $job) {
+
                     $this->voucher_jobs_repo->updateJobStatus($job, 'processing', null);
                     $job_params = $this->voucher_jobs_params_repo->getJobParams($job);
-
-                    $params = array();
-                    $params['job_id'] =  $job->id;
 
                     foreach ($job_params as $job_param) {
                         $params[$job_param->key] = $job_param->value;
@@ -48,12 +46,11 @@ class TaskController extends Controller
 
                     $this->voucher_repo->generateVoucherWithStoredProcedure($params);
 
-                    //DO in Batches limit 25000 per batch
-                    // $get_vouchers = "select * from vouchers where voucher_job_id = 1 limit 10000"; // get this from repo and transformer
-
                     //@TODO Logic to loop through every limit 25000 - Loop Starts - Lawrence
 
-                    $vouchers = $this->voucher_repo->getByJobId($job);
+                    $skip = 25000;
+
+                    $vouchers = $this->voucher_repo->getByJobId($job, $skip, 25000);
 
                     $csv_file = $this->generateCsv($vouchers);
                     $this->uploadS3($csv_file);
@@ -98,7 +95,7 @@ class TaskController extends Controller
 
             foreach ($vouchers as $voucher) {
                 fputcsv($fp, array(
-                        $voucher['code'], $voucher['duration']
+                        $voucher['code'], $voucher['duration'].' '.$vouchers['period']
                     )
                 );
             }

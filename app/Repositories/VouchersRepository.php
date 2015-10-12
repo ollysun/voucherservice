@@ -95,11 +95,12 @@ class VouchersRepository extends AbstractRepository
         }
     }
 
-    public function getByJobId($job)
+    public function getByJobId($job, $offset, $limit)
     {
         try {
             $vouchers = $this->model->where('voucher_job_id', '=', $job->id)
-                ->limit(25000)
+                ->limit($limit)
+                ->skip($offset)
                 ->get();
 
             return self::transform($vouchers, new VoucherTransformer());
