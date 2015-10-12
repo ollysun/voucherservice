@@ -39,10 +39,9 @@ class VoucherJobParamMetadataTransformer extends TransformerAbstract {
         ];
     }
 
-    public function includeVoucherParamMetadata(Voucher_jobs_params_metadata $voucherJobMetadata)
+    public function includeVoucherJob(Voucher_jobs_params_metadata $voucherJobMetadata)
     {
-        $voucherParamMetadata = $voucherJobMetadata->voucherJob;
-        return $this->collection($voucherParamMetadata, new VoucherJob); //@TODO write  transformer for parammetadata
-
+        $voucherJob = $voucherJobMetadata->voucherJob();
+        return $this->collection($voucherJob, new VoucherJobTransformer());
     }
 }

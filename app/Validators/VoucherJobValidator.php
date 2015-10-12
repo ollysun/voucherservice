@@ -8,7 +8,18 @@
 
 namespace Voucher\Validators;
 
+use Illuminate\Validation\Validator as IlluminateValidator;
 
-class VoucherJobValidator {
+
+
+class VoucherJobValidator extends IlluminateValidator  {
+
+    public static function getBrandAndTotalRules()
+    {
+        return[
+            'brand' => 'required|string',
+            'total' => 'required|(^[0-9]+$)+/'
+        ];
+    }
 
 }
