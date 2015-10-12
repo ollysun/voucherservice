@@ -1,0 +1,49 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: tech7
+ * Date: 10/12/15
+ * Time: 12:52 PM
+ */
+
+namespace Voucher\Repositories;
+
+
+use Voucher\Models\VoucherCode;
+
+class VoucherCodesRepository extends AbstractRepository implements IVoucherCodesRepository
+{
+    public function __construct(VoucherCode $voucherCode)
+    {
+        $this->model = $voucherCode;
+    }
+
+    public function isExistingVoucherCode($code)
+    {
+        try {
+            $code = $this->model->where('code', $code);
+
+            if (is_null($code)) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
+
+    public function insertVoucherCode($data)
+    {
+        try {
+            $voucherCodeObject = $this->model;
+
+            $voucherCodeObject->code = $data['code'];
+            $voucherCodeObject->status = $data['status'];
+            $voucherCodeObject->save();
+
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
+}
