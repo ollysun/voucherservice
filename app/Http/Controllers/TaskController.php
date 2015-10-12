@@ -37,8 +37,14 @@ class TaskController extends Controller
             if ($jobs) {
                 foreach ($jobs as $job) {
 
-                    $this->voucher_jobs_repo->updateJobStatus($job, 'processing', null);
+                    $data = [
+                        'job_id' => $job->id,
+                        'status' => 'processing'
+                    ];
+
+                    $this->voucher_jobs_repo->updateJobStatus($data);
                     $job_params = $this->voucher_jobs_params_repo->getJobParams($job);
+                    $params = [];
 
                     foreach ($job_params as $job_param) {
                         $params[$job_param->key] = $job_param->value;
@@ -58,7 +64,12 @@ class TaskController extends Controller
 
                     //@TODO loop ends - Lawrence
 
-                    $this->voucher_jobs_repo->updateJobStatus($job, 'completed', null);
+                    $data = [
+                        'job_id' => $job->id,
+                        'status' => 'completed'
+                    ];
+
+                    $this->voucher_jobs_repo->updateJobStatus($data);
                 }
 
                 Log::info(SELF::LOGTITLE, array_merge(
@@ -75,7 +86,14 @@ class TaskController extends Controller
             }
         }
         catch (\Exception $e) {
-            $this->voucher_jobs_repo->updateJobStatus($job, 'error', $e->getMessage());
+
+            $data = [
+                'job_id' => $job->id,
+                'status' => 'error',
+                'comment' => $e->getMessage()
+            ];
+
+            $this->voucher_jobs_repo->updateJobStatus($data);
             Log::error(SELF::LOGTITLE, array_merge(
                 ['error' => $e->getMessage()],
                 $this->log

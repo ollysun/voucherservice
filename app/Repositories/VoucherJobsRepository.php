@@ -30,12 +30,12 @@ class VoucherJobsRepository extends AbstractRepository
         }
     }
 
-    public function updateJobStatus($job, $params)
+    public function updateJobStatus($params)
     {
         try {
-            $job = $this->model->find($job->id);
-            $job->comment = $params['comments'];
-            $job->status = $params['status'];
+            $job = $this->model->find($params['job_id']);
+            $job->comment = (isset($params['comment'])? $params['comment'] : null);
+            $job->status = (isset($params['status'])? $params['status'] : null);
             $job->save();
 
         } catch (\Exception $e) {
