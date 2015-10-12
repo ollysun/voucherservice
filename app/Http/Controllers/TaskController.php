@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Voucher\Models\VoucherCode;
+use Voucher\Notification\VoucherNotification;
 use Voucher\Repositories\VoucherCodesRepository;
 use Voucher\Validators\VoucherValidator;
 use Log;
@@ -21,10 +22,15 @@ class TaskController extends Controller
 
     protected $voucher_jobs_params_repo;
 
-    protected $voucher_repo;
+    protected $voucher_codes_repo;
 
-    public function __construct(Request $request, VouchersRepository $voucher_repo, VoucherJobsRepository $voucher_jobs_repo, VoucherJobsParamsMetadataRepository $voucher_jobs_params_repo)
-    {
+    public function __construct(
+        Request $request,
+        VouchersRepository $voucher_repo,
+        VoucherJobsRepository $voucher_jobs_repo,
+        VoucherJobsParamsMetadataRepository $voucher_jobs_params_repo,
+        VoucherCodesRepository $voucher_codes_repo
+    ) {
         parent::__construct($request);
 
         $this->voucher_jobs_repo = $voucher_jobs_repo;
@@ -32,6 +38,8 @@ class TaskController extends Controller
         $this->voucher_jobs_params_repo = $voucher_jobs_params_repo;
 
         $this->voucher_repo = $voucher_repo;
+
+        $this->voucher_codes_repo = $voucher_codes_repo;
     }
 
     protected function generateVouchers()
@@ -186,15 +194,13 @@ class TaskController extends Controller
 
             } else {
                 while ($i < $fields['code_amount_generated']) {
-                    for ($i = 0; $i < 8; $i++) {
+                    for ($j = 0; $j < 8; $j++) {
                         $voucher_code .= $characters[rand(0, strlen($characters) - 1)];
                     }
-                    $voucher_code = str_shuffle($voucher_code);
-                    $voucherCodesRepository = new VoucherCodesRepository(new VoucherCode());
-                    $code = $voucherCodesRepository->isExistingVoucherCode($voucher_code); //Check if the voucher code exists
-                    if (!($code)) {
-                        $data = [$voucher_code, 'new'];
-                        $voucherCodesRepository->insertVoucherCode($data); //The code does not exist so it can be stored
+                    $code = $this->voucher_codes_repo->isNotExistingVoucherCode($voucher_code); //Check if the voucher code exists
+                    if ($code) {
+                        $data = ['code' => $voucher_code, 'status' => 'new'];
+                        $this->voucher_codes_repo->insertVoucherCode($data); //The code does not exist so it can be stored
                         $i += 1; //Counter is only increased when generated code doesn't exist in the table
                     }
                     $voucher_code = ''; //Empty the variable for next code to be generated
@@ -203,7 +209,15 @@ class TaskController extends Controller
             }
         }
         catch (\Exception $e) {
-            return ('Could not generate voucher codes'. $e->getMessage());
+            $notify = new VoucherNotification(1, 'Generate Voucher Initiated', [1]);
+            $notify->error = $e->getMessage();
+            Notification::send($notify);
+            Log::error(SELF::LOGTITLE, array_merge(
+                [
+                    'error' => 'Could not generate voucher codes '. $e->getMessage()
+                ],
+                $this->log
+            ));
         }
     }
 }
