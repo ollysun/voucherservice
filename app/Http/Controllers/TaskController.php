@@ -1,18 +1,17 @@
 <?php namespace Voucher\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-use Voucher\Models\VoucherCode;
 use Voucher\Notification\VoucherNotification;
-use Voucher\Repositories\VoucherCodesRepository;
 use Voucher\Validators\VoucherValidator;
 use Log;
+use Notification;
 use Voucher\Repositories\VoucherJobsParamsMetaDataRepository;
 use Voucher\Repositories\VoucherJobsRepository;
 use Voucher\Repositories\VouchersRepository;
 use Aws\S3\S3Client;
 use Illuminate\Config;
+use Voucher\Repositories\VoucherCodesRepository;
 
 class TaskController extends Controller
 {
