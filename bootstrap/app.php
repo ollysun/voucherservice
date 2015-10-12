@@ -93,6 +93,7 @@ if(!class_exists('Notification'))
 $app->configure('iroko_analytics');
 
 $app->configure('sqs');
+$app->configure('s3');
 
 $app->configure('iroko_notify');
 /*

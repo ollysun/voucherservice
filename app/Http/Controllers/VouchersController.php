@@ -242,4 +242,32 @@ class VouchersController extends Controller {
             return $this->errorInternalError($e->getMessage());
         }
     }
+
+    public function bulkCreate()
+    {
+        //@TODO Moses
+//        params format {
+//        status - required
+//        category - required
+//        title - required
+//        location
+//        description
+//          duration - required
+//          period - required
+//          valid_from - required
+//          valid_to - required
+//          is_limited - required
+//          limit - required
+//          brand - required
+//          total - required
+
+//            }
+        //validate the params
+        //insert in to voucher_jobs table with status = "new" and voucher_jobs_params_metadata table
+        //success message = Vouchers will be created and notified to Business team soon!
+
+
+    }
+
+
 }
