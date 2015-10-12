@@ -21,9 +21,9 @@ class VoucherCodesRepository extends AbstractRepository implements IVoucherCodes
     public function isExistingVoucherCode($code)
     {
         try {
-            $code = $this->model->where('code', $code);
+            $code = $this->model->where('code', $code)->get();
 
-            if (is_null($code)) {
+            if ($code->isEmpty()) {
                 return true;
             } else {
                 return false;
