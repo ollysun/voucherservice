@@ -3,10 +3,9 @@
 use Illuminate\Pagination\Paginator;
 use Voucher\Models\Voucher;
 use Voucher\Models\VoucherLog;
-
+use Illuminate\Support\Facades\DB;
 use Voucher\Transformers\VoucherTransformer;
 use Voucher\Transformers\VoucherLogTransformer;
-use Voucher\Payment\Event;
 
 class VouchersRepository extends AbstractRepository
 {
@@ -96,5 +95,46 @@ class VouchersRepository extends AbstractRepository
         }
     }
 
+    public function getByJobId($job, $offset, $limit)
+    {
+        try {
+            $vouchers = $this->model->where('voucher_job_id', '=', $job->id)
+                ->limit($limit)
+                ->skip($offset)
+                ->get();
 
+            return self::transform($vouchers, new VoucherTransformer());
+
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
+
+    public function generateVoucherWithStoredProcedure($params)
+    {
+        try {
+            $vouchers = DB::statement(
+                DB::raw(
+                    'CALL generate_voucher("' .
+                    $params["status"] . '","' .
+                    $params["category"] . '","' .
+                    $params["title"] . '","' .
+                    $params["location"] . '","' .
+                    $params["description"] . '",' .
+                    $params["duration"] . ',"' .
+                    $params["period"] . '","' .
+                    $params["valid_from"] . '","' .
+                    $params["valid_to"] . '","' .
+                    $params["is_limited"] . '",' .
+                    $params["limit"] . ',"' .
+                    $params["brand"] . '",' .
+                    $params["total"] . ',' .
+                    $params["job_id"].
+                    ')'
+                ));
+            return $vouchers;
+        } catch (\Exception $e){
+            throw new \Exception($e->getMessage());
+        }
+    }
 }
