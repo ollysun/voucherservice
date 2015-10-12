@@ -1,132 +1,127 @@
 <?php namespace Voucher\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Voucher\Repositories\VoucherJobsParamsMetaDataRepository;
+use Voucher\Repositories\VoucherJobsRepository;
+use Voucher\Repositories\VouchersRepository;
+use log;
+use Aws\S3\S3Client;
+use Illuminate\Config;
 
 class TaskController extends Controller
 {
     protected $sqs_worker;
 
-    public function __construct(Request $request)
+    protected $voucher_jobs_repo;
+
+    protected $voucher_jobs_params_repo;
+
+    protected $voucher_repo;
+
+    public function __construct(Request $request, VouchersRepository $voucher_repo, VoucherJobsRepository $voucher_jobs_repo, VoucherJobsParamsMetadataRepository $voucher_jobs_params_repo)
     {
         parent::__construct($request);
 
+        $this->voucher_jobs_repo = $voucher_jobs_repo;
+
+        $this->voucher_jobs_params_repo = $voucher_jobs_params_repo;
+
+        $this->voucher_repo = $voucher_repo;
     }
 
     protected function generateVouchers()
     {
         try {
-    //@TODO implement Repository and Transformers based for the below tables - Lawrence and refactor to repo format
-            $get_jobs = DB::table('voucher_jobs')
-                ->where('voucher_jobs.status', '=', 'new')
-                ->orWhere('voucher_jobs.status', '=', 'error')
-                ->get();
-                // use repo and transform to return:
+            $jobs = $this->voucher_jobs_repo->getJobs();
 
-            if($get_jobs) {
-                foreach ($get_jobs as $job) {
-                    DB::table('voucher_jobs')
-                        ->where('id', $job->id)
-                        ->update(['status' => 'processing']);
-
-                    $get_jobs_params = DB::table('voucher_jobs_params_metadata')
-                        ->where('voucher_jobs_params_metadata.voucher_job_id', '=', $job->id)
-                        ->get();
+            if ($jobs) {
+                foreach ($jobs as $job) {
+                    $this->voucher_jobs_repo->updateJobStatus($job, 'processing', null);
+                    $job_params = $this->voucher_jobs_params_repo->getJobParams($job);
 
                     $params = array();
                     $params['job_id'] =  $job->id;
 
-                    foreach ($get_jobs_params as $get_jobs_param) {
-                        $params[$get_jobs_param->key] = $get_jobs_param->value;
+                    foreach ($job_params as $job_param) {
+                        $params[$job_param->key] = $job_param->value;
                     }
 
-                    $create_vouchers = DB::statement(
-                                            DB::raw(
-                                                'CALL generate_voucher("' .
-                                                    $params["status"] . '","' .
-                                                    $params["category"] . '","' .
-                                                    $params["title"] . '","' .
-                                                    $params["location"] . '","' .
-                                                    $params["description"] . '",' .
-                                                    $params["duration"] . ',"' .
-                                                    $params["period"] . '","' .
-                                                    $params["valid_from"] . '","' .
-                                                    $params["valid_to"] . '","' .
-                                                    $params["is_limited"] . '",' .
-                                                    $params["limit"] . ',"' .
-                                                    $params["brand"] . '",' .
-                                                    $params["total"] . ',' .
-                                                    $job->id.
-                                                ')'
-                                            ));
+                    $this->voucher_repo->generateVoucherWithStoredProcedure($params);
 
                     //DO in Batches limit 25000 per batch
                     // $get_vouchers = "select * from vouchers where voucher_job_id = 1 limit 10000"; // get this from repo and transformer
 
                     //@TODO Logic to loop through every limit 25000 - Loop Starts - Lawrence
 
-                    $vouchers = DB::table('vouchers')
-                        ->where('voucher_job_id', '=', $job->id)
-                        ->limit(25000)
-                        ->get();
+                    $vouchers = $this->voucher_repo->getByJobId($job);
 
-                    $this->generateCsv($vouchers);
-                    $this->uploadS3($vouchers);
+                    $csv_file = $this->generateCsv($vouchers);
+                    $this->uploadS3($csv_file);
                     $this->notify($vouchers);
+
                     //@TODO loop ends - Lawrence
-                    DB::table('voucher_jobs')
-                        ->where('id', $job->id)
-                        ->update(['status' => 'completed']);
 
-
+                    $this->voucher_jobs_repo->updateJobStatus($job, 'completed', null);
                 }
-            } else {
-                //@TODO implement Log: ('No voucher jobs to process');
-            }
 
+                Log::info(SELF::LOGTITLE, array_merge(
+                    ['success' => 'Successfully generated Voucher Codes.'],
+                    $this->log
+                ));
+                return $this->respondSuccess('Successfully generated Voucher Codes.');
+            } else {
+                Log::info(SELF::LOGTITLE, array_merge(
+                    ['success' => 'No voucher jobs to process'],
+                    $this->log
+                ));
+                return $this->respondSuccess('No voucher jobs to process');
+            }
         }
         catch (\Exception $e) {
-            //@TODO update jobs voucher_jobs table-status =error and comment = e->getMessage - Lawrence
-            return $e->getMessage();
+            $this->voucher_jobs_repo->updateJobStatus($job, 'error', $e->getMessage());
+            Log::error(SELF::LOGTITLE, array_merge(
+                ['error' => $e->getMessage()],
+                $this->log
+            ));
+            return $this->errorInternalError($e->getMessage());
         }
     }
 
-    public function generateCsv($data)
+    public function generateCsv($vouchers)
     {
         try {
+            $voucher_file = $vouchers['data'][0]['title'].'_'.date('Y_m_d_H_i_s', time());
 
-            $data['file_name'] = $data['title'].'_'.date("Y_m_d_H_i_s",time());
-
-            //@TODO format $data similar to $list format - Lawrence
-            $list = array (
-                array('INgfhdg', '1 month'),
-                array('INfty3', '1 month'),
-                array("INfdgfh", "1 month")
-            );
-
-            $fp = fopen(storage_path('vouchers').'/'.$data['file_name'].'.csv', 'w');
+            $fp = fopen(storage_path('vouchers').'/'.$voucher_file.'.csv', 'w');
 
             fputcsv($fp, array('Voucher Code', 'Duration'));
 
-            foreach ($list as $fields) {
-                fputcsv($fp, $fields);
+            foreach ($vouchers as $voucher) {
+                fputcsv($fp, array(
+                        $voucher['code'], $voucher['duration']
+                    )
+                );
             }
 
             fclose($fp);
-            return $data;
+            return $voucher_file;
         }
         catch (\Exception $e) {
-            return ('error during CSV File generation : '.$e->getMessage());
+            Log::error(SELF::LOGTITLE, array_merge(
+                ['error' => $e->getMessage()],
+                $this->log
+            ));
+            return $this->errorInternalError('error during CSV File generation : '.$e->getMessage());
         }
     }
 
-    public function uploadS3($data)
+    public function uploadS3($file_name)
     {
         try {
             $bucket = getenv('AWS_S3_BUCKET');
 
             $filepath = storage_path('vouchers');
-            $keyname = getenv('AWS_S3_BUCKET_FOLDER').'/'.$data['file_name'];
+            $keyname = getenv('AWS_S3_BUCKET_FOLDER').'/'.$file_name;
 
 
             $s3 = new S3Client(Config::get('s3'));
@@ -139,6 +134,7 @@ class TaskController extends Controller
 
             echo $result['ObjectURL'];
             //@TODO remove file from storage path after s3 uploaded successfully - Chizzy
+
 
         }
         catch (\Exception $e) {
