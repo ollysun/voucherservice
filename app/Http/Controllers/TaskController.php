@@ -71,6 +71,8 @@ class TaskController extends Controller
                         ->get();
 
                     $this->generateCsv($vouchers);
+                    $this->uploadS3($vouchers);
+                    $this->notify($vouchers);
                     //@TODO loop ends - Lawrence
                     DB::table('voucher_jobs')
                         ->where('id', $job->id)
