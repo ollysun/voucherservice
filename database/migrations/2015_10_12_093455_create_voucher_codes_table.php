@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateVoucherJobsTable extends Migration
+class CreateVoucherCodesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,14 +12,14 @@ class CreateVoucherJobsTable extends Migration
      */
     public function up()
     {
-        Schema::create('voucher_jobs', function (Blueprint $table) {
+        Schema::create('voucher_codes', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->charset = 'utf8';
             $table->collate = 'utf8_unicode_ci';
 
             $table->increments('id')->unsigned();
-            $table->enum('status', ['new', 'processing','completed','error'])->default('new')->index('status');
-            $table->string('comments', 100)->nullable();
+            $table->string('code')->unique('code');
+            $table->enum('status', ['new', 'used']);
             $table->timestamps();
         });
     }
@@ -31,6 +31,6 @@ class CreateVoucherJobsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('voucher_jobs');
+        Schema::drop('voucher_codes');
     }
 }

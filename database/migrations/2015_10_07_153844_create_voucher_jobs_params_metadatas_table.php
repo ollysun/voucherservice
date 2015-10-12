@@ -33,6 +33,6 @@ class CreateVoucherJobsParamsMetadatasTable extends Migration
      */
     public function down()
     {
-        Schema::drop('voucher_jobs');
+        Schema::drop('voucher_jobs_params_metadata');
     }
 }

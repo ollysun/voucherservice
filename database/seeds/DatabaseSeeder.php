@@ -13,9 +13,13 @@ class DatabaseSeeder extends Seeder {
 	public function run()
 	{
 		Model::unguard();
+
         $this->call('VouchersSeeder');
 		$this->call('VoucherLogsSeeder');
-        Model::reguard();
+		$this->call('VoucherJobsSeeder');
+		$this->call('VoucherJobsParamsMetadataSeeder');
+
+		Model::reguard();
 	}
 
 }

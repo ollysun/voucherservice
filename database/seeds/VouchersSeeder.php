@@ -97,7 +97,7 @@ class VouchersSeeder extends Seeder
                     'id' => 6,
                     'code' => 'fsdf1234',
                     'type' => 'time',
-                    'status' => 'in_active',
+                    'status' => 'inactive',
                     'category' => 'expired',
                     'title' => 'VODAFONE_GHANA_STAFF_MOBILE',
                     'location' => 'Nigeria',
