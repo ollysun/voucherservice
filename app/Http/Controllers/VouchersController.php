@@ -16,6 +16,7 @@ use Voucher\Validators\VoucherJobValidator;
 use Voucher\Voucher\Voucher;
 use Illuminate\Support\Facades\Input;
 use League\Csv\Writer;
+use Log;
 
 class VouchersController extends Controller
 {
