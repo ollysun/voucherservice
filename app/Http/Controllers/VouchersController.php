@@ -17,8 +17,8 @@ use Voucher\Voucher\Voucher;
 use Illuminate\Support\Facades\Input;
 use League\Csv\Writer;
 
-class VouchersController extends Controller {
-
+class VouchersController extends Controller
+{
     protected $repository;
 
     protected $voucher;

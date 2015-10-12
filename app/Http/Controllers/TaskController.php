@@ -3,8 +3,6 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Voucher\Notification\VoucherNotification;
-use Voucher\Models\VoucherCode;
-use Voucher\Notification\VoucherNotification;
 use Voucher\Validators\VoucherValidator;
 use Log;
 use Notification;
