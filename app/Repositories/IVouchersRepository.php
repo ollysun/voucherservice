@@ -10,7 +10,11 @@ interface IVouchersRepository
 
     public function createOrUpdate($id, $input);
 
-    public function getByJobId($job, $offset, $limit);
+    public function getByJobId($job);
 
     public function generateVoucherWithStoredProcedure($params);
+
+    public function insertVoucherJob($status);
+
+    public function insertVoucherJobParamMetadata($data);
 }
