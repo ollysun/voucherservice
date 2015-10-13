@@ -10,7 +10,7 @@ use Voucher\Repositories\VoucherJobsParamsMetaDataRepository;
 use Voucher\Repositories\VoucherJobsRepository;
 use Voucher\Repositories\VouchersRepository;
 use Aws\S3\S3Client;
-use Illuminate\Config;
+use Illuminate\Support\Facades\Config;
 use Voucher\Repositories\VoucherCodesRepository;
 
 class TaskController extends Controller
@@ -48,51 +48,81 @@ class TaskController extends Controller
         try {
             $jobs = $this->voucher_jobs_repo->getJobs();
 
-            if ($jobs) {
-                foreach ($jobs as $job) {
-                    $this->voucher_jobs_repo->updateJobStatus($job, 'processing', null);
-                    $job_params = $this->voucher_jobs_params_repo->getJobParams($job);
-
-                    $params = array();
-                    $params['job_id'] =  $job->id;
-
-                    foreach ($job_params as $job_param) {
-                        $params[$job_param->key] = $job_param->value;
-                    }
-
-                    $this->voucher_repo->generateVoucherWithStoredProcedure($params);
-
-                    //DO in Batches limit 25000 per batch
-                    // $get_vouchers = "select * from vouchers where voucher_job_id = 1 limit 10000"; // get this from repo and transformer
-
-                    //@TODO Logic to loop through every limit 25000 - Loop Starts - Lawrence
-
-                    $vouchers = $this->voucher_repo->getByJobId($job);
-
-                    $csv_file = $this->generateCsv($vouchers);
-                    $s3_result = $this->uploadS3($csv_file);
-                    $this->notify($s3_result);
-
-                    //@TODO loop ends - Lawrence
-
-                    $this->voucher_jobs_repo->updateJobStatus($job, 'completed', null);
-                }
-
-                Log::info(SELF::LOGTITLE, array_merge(
-                    ['success' => 'Successfully generated Voucher Codes.'],
-                    $this->log
-                ));
-                return $this->respondSuccess('Successfully generated Voucher Codes.');
-            } else {
+            if (count($jobs['data']) == 0) {
                 Log::info(SELF::LOGTITLE, array_merge(
                     ['success' => 'No voucher jobs to process'],
                     $this->log
                 ));
                 return $this->respondSuccess('No voucher jobs to process');
             }
+        } catch (\Exception $e) {
+            Log::error(SELF::LOGTITLE, array_merge(
+                ['error' => $e->getMessage()],
+                $this->log
+            ));
+            return $this->errorInternalError($e->getMessage());
         }
-        catch (\Exception $e) {
-            $this->voucher_jobs_repo->updateJobStatus($job, 'error', $e->getMessage());
+
+        try {
+            foreach ($jobs as $job) {
+                $update_data = [
+                    'job_id' => $job->id,
+                    'status' => 'processing'
+                ];
+
+                $this->voucher_jobs_repo->updateJobStatus($update_data);
+                $job_params = $this->voucher_jobs_params_repo->getJobParams($job);
+                $params = [];
+
+                foreach ($job_params as $job_param) {
+                    $params[$job_param->key] = $job_param->value;
+                }
+
+                $this->voucher_repo->generateVoucherWithStoredProcedure($params);
+
+                $loop_params = [
+                    'limit' => 25000,
+                    'start' => 1,
+                    'job_id' => $job->id
+                ];
+
+                while ($loop_params['start'] > 0) {
+
+                    $vouchers = $this->voucher_repo->getByJobIdAndLimit($loop_params);
+                    $csv_file = $this->generateCsv($vouchers);
+                    $this->uploadS3($csv_file);
+                    $this->notify($vouchers);
+
+                    if (count($vouchers) < $loop_params['limit']) {
+                        $loop_params['start'] = 0;
+                    } else {
+                        $loop_params['start'] = $loop_params['start'] + $loop_params['limit'] + 1;
+                    }
+                }
+
+                $update_data = [
+                    'job_id' => $job->id,
+                    'status' => 'completed'
+                ];
+
+                $this->voucher_jobs_repo->updateJobStatus($update_data);
+            }
+
+            Log::info(SELF::LOGTITLE, array_merge(
+                ['success' => 'Successfully generated Voucher Codes.'],
+                $this->log
+            ));
+            return $this->respondSuccess('Successfully generated Voucher Codes.');
+
+        } catch (\Exception $e) {
+
+            $update_data = [
+                'job_id' => $job->id,
+                'status' => 'error',
+                'comment' => $e->getMessage()
+            ];
+
+            $this->voucher_jobs_repo->updateJobStatus($update_data);
             Log::error(SELF::LOGTITLE, array_merge(
                 ['error' => $e->getMessage()],
                 $this->log
@@ -116,7 +146,6 @@ class TaskController extends Controller
                     )
                 );
             }
-
             fclose($fp);
             return $voucher_file;
         }
