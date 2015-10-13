@@ -1,15 +1,9 @@
 <?php
 /**
  * Created by PhpStorm.
-<<<<<<< HEAD
  * User: Tech-1
  * Date: 10/12/15
  * Time: 12:59 PM
-=======
- * User: tech4
- * Date: 10/12/15
- * Time: 11:28 AM
->>>>>>> task controller voucher generation refactor
  */
 
 namespace Voucher\Transformers;
