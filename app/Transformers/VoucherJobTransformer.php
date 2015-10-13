@@ -36,7 +36,7 @@ class VoucherJobTransformer extends TransformerAbstract{
                 ],
                 [
                     'rel' => 'voucherJobParamMetadata',
-                    'uri' => '/voucherJob/' . $voucherJob->id . '/voucherParamMetadata'
+                    'uri' => '/voucherJob/' . $voucherJob->id . '/voucherJobParamMetadata'
                 ]
             ]
         ];

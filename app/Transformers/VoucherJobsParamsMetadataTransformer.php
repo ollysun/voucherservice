@@ -9,7 +9,7 @@
 namespace Voucher\Transformers;
 
 use League\Fractal\TransformerAbstract;
-use Voucher\Models\VoucherJobsParamsMetadata;
+use Voucher\Models\VoucherJobParamMetadata;
 
 class VoucherJobParamMetadataTransformer extends TransformerAbstract {
 
@@ -17,7 +17,7 @@ class VoucherJobParamMetadataTransformer extends TransformerAbstract {
         'voucherJob'
     ];
 
-    public static function transform(VoucherJobsParamsMetadata $voucherJobMetadata)
+    public static function transform(VoucherJobParamMetadata $voucherJobMetadata)
     {
         return [
             'id' => (int) $voucherJobMetadata->id,
@@ -39,7 +39,7 @@ class VoucherJobParamMetadataTransformer extends TransformerAbstract {
         ];
     }
 
-    public function includeVoucherJob(VoucherJobsParamsMetadata $voucherJobMetadata)
+    public function includeVoucherJob(VoucherJobParamMetadata $voucherJobMetadata)
     {
         $voucherJob = $voucherJobMetadata->voucherJob();
         return $this->collection($voucherJob, new VoucherJobTransformer());

@@ -7,6 +7,6 @@ class VoucherJob extends Model
 
     public function voucherJobParamMetadata()
     {
-        return $this->hasMany('Voucher\Models\VoucherJobsParamsMetadata');
+        return $this->hasMany('Voucher\Models\VoucherJobParamMetadata');
     }
 }
