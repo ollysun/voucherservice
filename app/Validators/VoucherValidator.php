@@ -33,8 +33,6 @@ class VoucherValidator extends IlluminateValidator
         ];
     }
 
-
-
     public static function getIdRules()
     {
         return [
@@ -46,6 +44,13 @@ class VoucherValidator extends IlluminateValidator
     {
         return [
             'user_id'=> 'required|regex:/(^[0-9]+$)+/',
+        ];
+    }
+
+    public static function getCodeAmountGeneratedRules()
+    {
+        return [
+            'code_amount_generated'=> 'required|regex:/(^[0-9]+$)+/',
         ];
     }
 
@@ -102,8 +107,8 @@ class VoucherValidator extends IlluminateValidator
             'platform.in' => 'The Platform is invalid',
             'code.required' => 'The Code is required',
             'code.string' => 'The Code can only be a string',
-            'brand.string' => 'The brand can only be string',
-            'total.regex' => 'The total must be number'
+            'code_amount_generated.required' => 'The Code Amount Generated is required',
+            'code_amount_generated.regex' => 'The Code Amount Generated can only be an integer'
         ];
     }
 }

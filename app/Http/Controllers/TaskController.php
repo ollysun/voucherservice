@@ -1,10 +1,15 @@
 <?php namespace Voucher\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+use Voucher\Models\VoucherCode;
+use Voucher\Repositories\VoucherCodesRepository;
+use Voucher\Validators\VoucherValidator;
+use Log;
 use Voucher\Repositories\VoucherJobsParamsMetaDataRepository;
 use Voucher\Repositories\VoucherJobsRepository;
 use Voucher\Repositories\VouchersRepository;
-use log;
 use Aws\S3\S3Client;
 use Illuminate\Config;
 
@@ -36,15 +41,11 @@ class TaskController extends Controller
 
             if ($jobs) {
                 foreach ($jobs as $job) {
-
-                    $data = [
-                        'job_id' => $job->id,
-                        'status' => 'processing'
-                    ];
-
-                    $this->voucher_jobs_repo->updateJobStatus($data);
+                    $this->voucher_jobs_repo->updateJobStatus($job, 'processing', null);
                     $job_params = $this->voucher_jobs_params_repo->getJobParams($job);
-                    $params = [];
+
+                    $params = array();
+                    $params['job_id'] =  $job->id;
 
                     foreach ($job_params as $job_param) {
                         $params[$job_param->key] = $job_param->value;
@@ -52,11 +53,12 @@ class TaskController extends Controller
 
                     $this->voucher_repo->generateVoucherWithStoredProcedure($params);
 
+                    //DO in Batches limit 25000 per batch
+                    // $get_vouchers = "select * from vouchers where voucher_job_id = 1 limit 10000"; // get this from repo and transformer
+
                     //@TODO Logic to loop through every limit 25000 - Loop Starts - Lawrence
 
-                    $skip = 25000;
-
-                    $vouchers = $this->voucher_repo->getByJobId($job, $skip, 25000);
+                    $vouchers = $this->voucher_repo->getByJobId($job);
 
                     $csv_file = $this->generateCsv($vouchers);
                     $this->uploadS3($csv_file);
@@ -64,12 +66,7 @@ class TaskController extends Controller
 
                     //@TODO loop ends - Lawrence
 
-                    $data = [
-                        'job_id' => $job->id,
-                        'status' => 'completed'
-                    ];
-
-                    $this->voucher_jobs_repo->updateJobStatus($data);
+                    $this->voucher_jobs_repo->updateJobStatus($job, 'completed', null);
                 }
 
                 Log::info(SELF::LOGTITLE, array_merge(
@@ -86,14 +83,7 @@ class TaskController extends Controller
             }
         }
         catch (\Exception $e) {
-
-            $data = [
-                'job_id' => $job->id,
-                'status' => 'error',
-                'comment' => $e->getMessage()
-            ];
-
-            $this->voucher_jobs_repo->updateJobStatus($data);
+            $this->voucher_jobs_repo->updateJobStatus($job, 'error', $e->getMessage());
             Log::error(SELF::LOGTITLE, array_merge(
                 ['error' => $e->getMessage()],
                 $this->log
@@ -113,7 +103,7 @@ class TaskController extends Controller
 
             foreach ($vouchers as $voucher) {
                 fputcsv($fp, array(
-                        $voucher['code'], $voucher['duration'].' '.$vouchers['period']
+                        $voucher['code'], $voucher['duration']
                     )
                 );
             }
@@ -150,7 +140,7 @@ class TaskController extends Controller
             echo $result['ObjectURL'];
             //@TODO remove file from storage path after s3 uploaded successfully - Chizzy
 
-
+            unlink($filepath . '/' . $file_name . '.csv');
         }
         catch (\Exception $e) {
             return ('S3 Upload error:'. $e->getMessage());
@@ -170,14 +160,50 @@ class TaskController extends Controller
     //This will be run by a Schedular cron jobs , vouchers codes will be generated in upfront but not assigned to any telcos yet
     //voucher code can be upto 6-8alphanum. I will talk to Ngozi to implement Salted Vouchers. But for now lets put algorithim
 
-    public function generateVoucherCodes($data)
+    public function generateVoucherCodes()
     {
+        $fields = $this->request->all();
+        $rules = VoucherValidator::getCodeAmountGeneratedRules();
+        $messages = VoucherValidator::getMessages();
+
         try {
             //@TODO Algorithm to generate unique voucher code - Chizzy
             // Create migration for new table - "voucher_codes" column "id","code","status"->enum (new,used)
+            //$fields['code_amount_generated'] amount of codes to generate
+            $characters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"; //Acceptable characters for voucher code generation
+            $voucher_code = '';
+            $i = 0;
+            $validator = Validator::make($fields, $rules, $messages);
+
+            if ($validator->fails()) {
+                Log::error(SELF::LOGTITLE, array_merge(
+                    [
+                        'error' => $validator->errors()
+                    ],
+                    $this->log
+                ));
+                return $this->errorWrongArgs($validator->errors());
+
+            } else {
+                while ($i < $fields['code_amount_generated']) {
+                    for ($i = 0; $i < 8; $i++) {
+                        $voucher_code .= $characters[rand(0, strlen($characters) - 1)];
+                    }
+                    $voucher_code = str_shuffle($voucher_code);
+                    $voucherCodesRepository = new VoucherCodesRepository(new VoucherCode());
+                    $code = $voucherCodesRepository->isExistingVoucherCode($voucher_code); //Check if the voucher code exists
+                    if (!($code)) {
+                        $data = [$voucher_code, 'new'];
+                        $voucherCodesRepository->insertVoucherCode($data); //The code does not exist so it can be stored
+                        $i += 1; //Counter is only increased when generated code doesn't exist in the table
+                    }
+                    $voucher_code = ''; //Empty the variable for next code to be generated
+                }
+                return $this->respondCreated(['Voucher Codes have been generated.']);
+            }
         }
         catch (\Exception $e) {
-            return $e->getMessage();
+            return ('Could not generate voucher codes'. $e->getMessage());
         }
     }
 }
