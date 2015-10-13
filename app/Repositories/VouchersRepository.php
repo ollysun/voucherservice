@@ -13,7 +13,7 @@ use Voucher\Transformers\VoucherJobTransformer;
 
 use Voucher\Payment\Event;
 
-class VouchersRepository extends AbstractRepository
+class VouchersRepository extends AbstractRepository implements IVouchersRepository
 {
     protected $model;
 
@@ -25,6 +25,12 @@ class VouchersRepository extends AbstractRepository
         $this->model = $voucher;
         $this->log_model = $voucherLog;
     }
+
+    public function getVoucherByCode($data)
+    {
+
+    }
+
 
     public function getVouchers($data)
     {
