@@ -10,8 +10,6 @@ namespace Voucher\Validators;
 
 use Illuminate\Validation\Validator as IlluminateValidator;
 
-
-
 class VoucherJobValidator extends IlluminateValidator  {
 
     public static function getBrandAndTotalRules()

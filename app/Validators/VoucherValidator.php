@@ -50,7 +50,7 @@ class VoucherValidator extends IlluminateValidator
     public static function getCodeAmountGeneratedRules()
     {
         return [
-            'code_amount_generated'=> 'required|regex:/(^[0-9]+$)+/',
+            'code_amount_generated'=> 'required|integer|min:1',
         ];
     }
 
@@ -108,7 +108,12 @@ class VoucherValidator extends IlluminateValidator
             'code.required' => 'The Code is required',
             'code.string' => 'The Code can only be a string',
             'code_amount_generated.required' => 'The Code Amount Generated is required',
-            'code_amount_generated.regex' => 'The Code Amount Generated can only be an integer'
+            'code_amount_generated.integer' => 'The Code Amount Generated can only be an integer',
+            'code_amount_generated.min' => 'The Code Amount Generated must be greater than 0',
+            'brand.required' => 'The Brand is required',
+            'brand.string' => 'The Brand must be a string',
+            'total.required' => 'The Total is required',
+            'total.regex' => 'The Total must be an integer'
         ];
     }
 }

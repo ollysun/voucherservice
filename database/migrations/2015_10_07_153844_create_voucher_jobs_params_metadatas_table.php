@@ -18,7 +18,7 @@ class CreateVoucherJobsParamsMetadatasTable extends Migration
             $table->collate = 'utf8_unicode_ci';
 
             $table->increments('id')->unsigned();
-            $table->integer('voucher_job_id')->unsigned()->index('voucher_job_id');
+            $table->integer('voucher_job_id')->unsigned()->index('voucher_job_id')->nullable();
             $table->foreign('voucher_job_id')->references('id')->on('voucher_jobs');
             $table->string('key', 30)->index('voucher_jobs_params_metadata_key');
             $table->text('value')->nullable();
