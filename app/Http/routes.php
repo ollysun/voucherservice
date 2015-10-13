@@ -9,5 +9,4 @@ $app->post('/vouchers/redeem', 'VouchersController@redeem');
 
 $app->post('/vouchers/process', 'TaskController@generateVouchers');
 
-//@TODO CHIZZY
 $app->post('/vouchers/generateCodes', 'TaskController@generateVoucherCodes');

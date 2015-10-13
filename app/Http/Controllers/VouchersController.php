@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Voucher\Repositories\VouchersRepository;
 use Voucher\Validators\VoucherValidator;
+use Voucher\Validators\VoucherJobValidator;
 use Voucher\Voucher\Voucher;
 use Illuminate\Support\Facades\Input;
 use League\Csv\Writer;
@@ -188,26 +189,49 @@ class VouchersController extends Controller {
 
     public function bulkCreate()
     {
-        //@TODO Moses
-//        params format {
-//        status - required
-//        category - required
-//        title - required
-//        location
-//        description
-//          duration - required
-//          period - required
-//          valid_from - required
-//          valid_to - required
-//          is_limited - required
-//          limit - required
-//          brand - required
-//          total - required
+        $value = $this->request->all();
+        $rules = array_merge(
+            VoucherValidator::getVoucherRules(),
+            VoucherJobValidator::getBrandAndTotalRules()
+        );
+        $messages = VoucherValidator::getMessages();
+        $validator = Validator::make($value, $rules, $messages);
+        try{
+            if ($validator->fails())
+            {
+                Log::error(SELF::LOGTITLE, array_merge(
+                    ['error' => $validator->errors()],
+                    $this->log
+                ));
+                return $this->errorWrongArgs($validator->errors());
+            }else{
+                $key = [
+                        'status' , 'category',
+                         'title', 'location',
+                        'description', 'duration ', 'period', 'valid_from',
+                        'valid_to', ' is_limited ', 'limit', ' brand', ' total'
+                ];
+                $voucherJob = $this->repository->insertVoucherJob('new');
+                $voucher_job_id = $voucherJob->id;
+                $voucherParamMetadata = compact($voucher_job_id, $key, $value);
+                $voucherParam = $this->repository->insertVoucherJobParamMetadata($voucherParamMetadata);
+                Log::info(SELF::LOGTITLE, array_merge(
+                    [
+                        'successfully Update' => 'Vouchers will be created and notified to Business team soon!'
+                    ],
+                    $this->log
+                ));
+                return $this->respondWithArray($voucherParam);
+            }
+        }catch (\Exception $e)
+        {
+            Log::error(SELF::LOGTITLE, array_merge(
+                ['error' => $e->getMessage()],
+                $this->log
+            ));
+            return $this->errorInternalError($e->getMessage());
+        }
 
-//            }
-        //validate the params
-        //insert in to voucher_jobs table with status = "new" and voucher_jobs_params_metadata table
-        //success message = Vouchers will be created and notified to Business team soon!
 
 
     }

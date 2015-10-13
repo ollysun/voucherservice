@@ -2,13 +2,8 @@
 
 use Illuminate\Database\Seeder;
 
-class VoucherJobsSeeder extends Seeder
-{
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
+class VoucherJobsSeeder extends Seeder {
+
     public function run()
     {
         DB::table('voucher_jobs')
@@ -30,3 +25,4 @@ class VoucherJobsSeeder extends Seeder
             ]);
     }
 }
+

@@ -6,8 +6,14 @@ use Voucher\Models\VoucherLog;
 use Illuminate\Support\Facades\DB;
 use Voucher\Transformers\VoucherTransformer;
 use Voucher\Transformers\VoucherLogTransformer;
+use Voucher\Models\VoucherJob;
+use Voucher\Models\Voucher_jobs_params_metadata;
+use Voucher\Transformers\VoucherJobParamMetadataTransformer;
+use Voucher\Transformers\VoucherJobTransformer;
 
-class VouchersRepository extends AbstractRepository
+use Voucher\Payment\Event;
+
+class VouchersRepository extends AbstractRepository implements IVouchersRepository
 {
     protected $model;
 
@@ -19,6 +25,12 @@ class VouchersRepository extends AbstractRepository
         $this->model = $voucher;
         $this->log_model = $voucherLog;
     }
+
+    public function getVoucherByCode($data)
+    {
+
+    }
+
 
     public function getVouchers($data)
     {
@@ -137,4 +149,49 @@ class VouchersRepository extends AbstractRepository
             throw new \Exception($e->getMessage());
         }
     }
+
+    public function insertVoucherJob($status)
+    {
+        try{
+            $voucherJob = new VoucherJob();
+            if($status == 'new')
+            {
+                $voucherJob->status = 'new';
+                $voucherJob->comments = 'New VoucherJob Inserted';
+            }elseif($status == 'processing')
+            {
+                $voucherJob->status = 'processing';
+                $voucherJob->comments = 'Processing VoucherJob.........';
+            }elseif($status == 'completed')
+            {
+                $voucherJob->status = 'completed';
+                $voucherJob->comments = 'VoucherJob Complete processing';
+            }else
+            {
+                $voucherJob->status = 'error';
+                $voucherJob->comments = 'Error processing the Voucher';
+            }
+            $voucherJob->save();
+            return self::transform($voucherJob, new VoucherJobTransformer());
+        }catch (\Exception $ex) {
+            throw new \Exception($ex->getMessage());
+        }
+    }
+
+    public function insertVoucherJobParamMetadata($data)
+    {
+        try{
+           $voucherMetadata = new Voucher_jobs_params_metadata();
+            $voucherMetadata->voucher_job_id = $data['voucher_job_id'];
+            $voucherMetadata->key = $data['key'];
+            $voucherMetadata->value = $data['value'];
+            $voucherMetadata->save();
+            return self::transform($voucherMetadata, new VoucherJobParamMetadataTransformer());
+
+        }catch (\Exception $ex) {
+            throw new \Exception($ex->getMessage());
+        }
+    }
+
+
 }

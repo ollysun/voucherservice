@@ -11,7 +11,7 @@ namespace Voucher\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class VoucherJobsParamsMetadata extends Model {
+class Voucher_jobs_params_metadata extends Model {
 
     /**
      * Get the VoucherJob record associated.
