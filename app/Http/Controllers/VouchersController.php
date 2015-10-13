@@ -190,13 +190,13 @@ class VouchersController extends Controller
 
     public function bulkCreate()
     {
-        $value = $this->request->all();
+        $fields = $this->request->all();
         $rules = array_merge(
             VoucherValidator::getVoucherRules(),
             VoucherJobValidator::getBrandAndTotalRules()
         );
         $messages = VoucherValidator::getMessages();
-        $validator = Validator::make($value, $rules, $messages);
+        $validator = Validator::make($fields, $rules, $messages);
         try{
             if ($validator->fails())
             {
@@ -207,14 +207,16 @@ class VouchersController extends Controller
                 return $this->errorWrongArgs($validator->errors());
             }else{
                 $key = [
-                        'status' , 'category',
-                         'title', 'location',
-                        'description', 'duration ', 'period', 'valid_from',
-                        'valid_to', ' is_limited ', 'limit', ' brand', ' total'
+                        'type', 'status' , 'category',
+                        'title', 'location', 'description', 'duration ',
+                        'period', 'is_limited','limit',
+                         'brand', ' total','valid_from', 'valid_to',
                 ];
+                $value = array_values($fields); // getting the value from the field data
+                $arrayCombineKeyValue = array_combine($key,$value);
                 $voucherJob = $this->repository->insertVoucherJob('new');
-                $voucher_job_id = $voucherJob->id;
-                $voucherParamMetadata = compact($voucher_job_id, $key, $value);
+                $voucher_job_id = $voucherJob['data']['id'];
+                $voucherParamMetadata = compact("voucher_job_id", 'arrayCombineKeyValue');
                 $voucherParam = $this->repository->insertVoucherJobParamMetadata($voucherParamMetadata);
                 Log::info(SELF::LOGTITLE, array_merge(
                     [

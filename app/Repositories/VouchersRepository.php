@@ -11,16 +11,18 @@ use Voucher\Transformers\VoucherJobParamMetadataTransformer;
 use Voucher\Transformers\VoucherJobTransformer;
 use Voucher\Voucher\Event;
 
-class VouchersRepository extends AbstractRepository implements IVouchersRepository
+class VouchersRepository extends AbstractRepository
 {
     protected $model;
 
     protected $log_model;
-
-    public function __construct(Voucher $voucher, VoucherLog $voucherLog)
+    protected $error;
+    protected $voucherMetadata;
+    public function __construct(Voucher $voucher, VoucherLog $voucherLog, VoucherJobParamMetadata $voucherMetadataModel)
     {
         $this->model = $voucher;
         $this->log_model = $voucherLog;
+        $this->voucherMetadata = $voucherMetadataModel;
     }
 
     public function getVouchers($data)
@@ -185,13 +187,18 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
     public function insertVoucherJobParamMetadata($data)
     {
         try{
-           $voucherMetadata = new VoucherJobParamMetadata();
-            $voucherMetadata->voucher_job_id = $data['voucher_job_id'];
-            $voucherMetadata->key = $data['key'];
-            $voucherMetadata->value = $data['value'];
-            $voucherMetadata->save();
-            return self::transform($voucherMetadata, new VoucherJobParamMetadataTransformer());
-
+            $value_job = $data['voucher_job_id'];
+            foreach($data['arrayCombineKeyValue'] as $key => $value)
+            {
+                $voucherMetadata = $this->voucherMetadata;
+                if (in_array($key, $data['arrayCombineKeyValue'])) {
+                    $voucherMetadata->voucher_job_id = $value_job;
+                    $voucherMetadata->key = trim($key);
+                    $voucherMetadata->value = trim($value);
+                    $voucherMetadata->save();
+                }
+            }
+            return self::transform($this->voucherMetadata->all(), new VoucherJobParamMetadataTransformer());
         }catch (\Exception $ex) {
             throw new \Exception($ex->getMessage());
         }
