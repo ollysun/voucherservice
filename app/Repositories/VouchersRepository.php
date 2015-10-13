@@ -3,7 +3,7 @@
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\DB;
 use Voucher\Models\Voucher;
-use Voucher\Models\VoucherJobsParamsMetadata;
+use Voucher\Models\VoucherJobParamMetadata;
 use Voucher\Models\VoucherLog;
 use Voucher\Transformers\VoucherTransformer;
 use Voucher\Models\VoucherJob;
@@ -185,7 +185,7 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
     public function insertVoucherJobParamMetadata($data)
     {
         try{
-           $voucherMetadata = new VoucherJobsParamsMetadata();
+           $voucherMetadata = new VoucherJobParamMetadata();
             $voucherMetadata->voucher_job_id = $data['voucher_job_id'];
             $voucherMetadata->key = $data['key'];
             $voucherMetadata->value = $data['value'];
