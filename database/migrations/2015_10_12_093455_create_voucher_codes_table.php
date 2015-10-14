@@ -18,8 +18,8 @@ class CreateVoucherCodesTable extends Migration
             $table->collate = 'utf8_unicode_ci';
 
             $table->increments('id')->unsigned();
-            $table->string('voucher_code')->unique('voucher_code');
-            $table->enum('code_status', ['new', 'used']);
+            $table->string('voucher_code')->unique('voucher_code')->index('voucher_code');
+            $table->enum('code_status', ['new', 'used'])->default('new')->index('code_status');
             $table->timestamps();
         });
     }

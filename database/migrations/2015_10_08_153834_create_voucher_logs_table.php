@@ -21,8 +21,8 @@ class CreateVoucherLogsTable extends Migration
             $table->integer('voucher_id')->unsigned()->index('voucher_id')->nullable();
             $table->foreign('voucher_id')->references('id')->on('vouchers');
             $table->integer('user_id')->unsigned()->index('user_id');
-            $table->enum('action', ['success', 'attempt']);
-            $table->enum('platform', ['web', 'cms', 'mobile']);
+            $table->enum('action', ['success', 'attempt'])->index('action')->default('success');
+            $table->enum('platform', ['web', 'cms', 'mobile'])->index('platform')->default('mobile');
             $table->string('comments', 100)->default('');
             $table->timestamps();
         });

@@ -27,11 +27,11 @@ class CreateVouchersTable extends Migration
                 'VODAFONE_GHANA_STAFF_MOBILE',
                 'VODAFONE_GHANA_CUSTOMER_MOBILE',
                 'VODAFONE_GHANA_STAFF_FIXEDLINE'
-            ])->default('INTERNAL');
+            ])->default('INTERNAL')->index('title');
             $table->string('location')->nullable();
             $table->string('description')->nullable();
-            $table->integer('duration');
-            $table->enum('period', ['day','week','month','year'])->default('day');
+            $table->integer('duration')->index('duration');
+            $table->enum('period', ['day','week','month','year'])->default('day')->index('period');
             $table->dateTime('valid_from');
             $table->dateTime('valid_to')->index('valid_to');
             $table->boolean('is_limited')->default(true);
