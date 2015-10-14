@@ -132,7 +132,7 @@ class VouchersController extends Controller
         $fields['id'] = $voucher_id;
 
         $rules = array_merge(
-            VoucherValidator::getVoucherRules(),
+            VoucherValidator::getUpdateRules(),
             VoucherValidator::getIdRules()
         );
         $messages = VoucherValidator::getMessages();
@@ -148,7 +148,8 @@ class VouchersController extends Controller
                 if (!$this->repository->getVoucherById($voucher_id)) {
                     return $this->errorNotFound('Check Id, voucher detail not found');
                 } else {
-                    $voucher_update =  $this->repository->createOrUpdate($voucher_id, $fields);
+                    $data = ['id'=>$fields['id'],'status'=>$fields['status'],'title'=>$fields['title'],'location'=>$fields['location'],'description'=>$fields['description']];
+                    $voucher_update =  $this->repository->update($voucher_id, $data);
                     Log::info(SELF::LOGTITLE, array_merge(
                         [
                             'successfully Update' => 'Voucher successfully update'

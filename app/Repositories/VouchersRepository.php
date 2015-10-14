@@ -145,24 +145,24 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
         }
     }
 
-    public function update($id = null, $input)
+    public function update($id, $input)
     {
         try{
             $vouchersObject = $this->model->find($id);
             $vouchersObject->valid_from = (isset($input['valid_from']) ? $input['valid_from'] : $vouchersObject->valid_from);
             $vouchersObject->valid_to = (isset($input['valid_to']) ? $input['valid_to'] : $vouchersObject->valid_to);
-            $vouchersObject->status = (isset($input['status']) ? $input['status'] : 'active');
-            $vouchersObject->title = (isset($input['title']) ? $input['title'] : 'INTERNAL');
-            $vouchersObject->description = (isset($input['description']) ? $input['description'] : '');
-            $vouchersObject->location = (isset($input['location']) ? $input['location'] : '');
+            $vouchersObject->status = (isset($input['status']) ? $input['status'] : $vouchersObject->status);
+            $vouchersObject->title = (isset($input['title']) ? $input['title'] : $vouchersObject->title);
+            $vouchersObject->description = (isset($input['description']) ? $input['description'] : $vouchersObject->description);
+            $vouchersObject->location = (isset($input['location']) ? $input['location'] : $vouchersObject->location);
             //$vouchersObject->is_limited = $input['is_limited'];
-            $vouchersObject->limit = (isset($input['limit']) ? $input['limit'] : 1);
-            $vouchersObject->period = (isset($input['period']) ? $input['period'] : 'day');
-            $vouchersObject->duration = (isset($input['duration']) ? $input['duration'] : '1');
-            $vouchersObject->category = (isset($input['category']) ? $input['category'] : 'new');
-            $vouchersObject->type = (isset($input['type']) ? $input['type'] : '');
-            $vouchersObject->code = (isset($input['code']) ? $input['code'] : '');
-            $vouchersObject->voucher_job_id = (isset($input['voucher_job_id']) ? $input['voucher_job_id'] : NULL);
+            $vouchersObject->limit = (isset($input['limit']) ? $input['limit'] : $vouchersObject->limit);
+            $vouchersObject->period = (isset($input['period']) ? $input['period'] : $vouchersObject->period);
+            $vouchersObject->duration = (isset($input['duration']) ? $input['duration'] : $vouchersObject->duration);
+            $vouchersObject->category = (isset($input['category']) ? $input['category'] : $vouchersObject->category);
+            $vouchersObject->type = (isset($input['type']) ? $input['type'] : $vouchersObject->type);
+            $vouchersObject->code = (isset($input['code']) ? $input['code'] : $vouchersObject->code);
+            $vouchersObject->voucher_job_id = (isset($input['voucher_job_id']) ? $input['voucher_job_id'] : $vouchersObject->voucher_job_id);
             $vouchersObject->save();
 
             return self::transform( $vouchersObject, new VoucherTransformer());
