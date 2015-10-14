@@ -123,7 +123,7 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
 
     public function updateVoucherCodeStatusByID($id)
     {
-        try{
+        try {
             $vouchersCodeObject = $this->voucherCode->find($id);
             $vouchersCodeObject->code_status = "used";
             $vouchersCodeObject->save();
@@ -232,35 +232,31 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
 
     public function insertVoucherJob($status)
     {
-        try{
+        try {
             $voucherJob = new VoucherJob();
-            if($status == 'new')
-            {
+            if ($status == 'new') {
                 $voucherJob->status = 'new';
                 $voucherJob->comments = 'New VoucherJob Inserted';
-            }elseif($status == 'processing')
-            {
+            } elseif($status == 'processing') {
                 $voucherJob->status = 'processing';
                 $voucherJob->comments = 'Processing VoucherJob.........';
-            }elseif($status == 'completed')
-            {
+            } elseif($status == 'completed') {
                 $voucherJob->status = 'completed';
                 $voucherJob->comments = 'VoucherJob Complete processing';
-            }else
-            {
+            } else {
                 $voucherJob->status = 'error';
                 $voucherJob->comments = 'Error processing the VoucherJob';
             }
             $voucherJob->save();
             return self::transform($voucherJob, new VoucherJobTransformer());
-        }catch (\Exception $ex) {
+        } catch (\Exception $ex) {
             throw new \Exception($ex->getMessage());
         }
     }
 
     public function insertVoucherJobParamMetadata($data)
     {
-        try{
+        try {
             $voucher_job_id = $data['voucher_job_id'];
             $listKeys = [
                 'type', 'status' , 'category',
@@ -268,8 +264,7 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
                 'period', 'is_limited','limit',
                 'brand', ' total','valid_from', 'valid_to','code'
             ];
-            foreach($data['arrayCombineKeyValue'] as $key => $value)
-            {
+            foreach($data['arrayCombineKeyValue'] as $key => $value) {
                 $voucherMetadata = $this->voucherMetadata;
                 if (in_array($key, $listKeys)) {
                     $voucherMetadata->voucher_job_id = $voucher_job_id;
@@ -279,7 +274,7 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
                 }
             }
             return self::transform($this->voucherMetadata->all(), new VoucherJobParamMetadataTransformer());
-        }catch (\Exception $ex) {
+        } catch (\Exception $ex) {
             throw new \Exception($ex->getMessage());
         }
     }
