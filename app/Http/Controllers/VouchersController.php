@@ -102,16 +102,19 @@ class VouchersController extends Controller
                 ));
                 return $this->errorWrongArgs($validator->errors());
             } else {
-                //@TODO - MOSES = pick up one voucher_code from "voucher_codes" table where status ="new"
-
-
-                //and append to the first 2 letter of the title and insert in to vouchers table, also update the stsus to "used" in voucher_codes table
+                $voucherCode = $this->repository->getVoucherCodeByStatus("new");
+                $firstTwoLetter = substr($inputs['title'],0,3);
+                $inputs['code'] = $firstTwoLetter . $voucherCode['data']['voucher_code'];
                 $voucher = $this->repository->createOrUpdate(null,$inputs);
-                Log::info(SELF::LOGTITLE, array_merge(
-                    ['success' => 'Voucher successfully created'],
-                    $this->log
-                ));
-                return $this->respondCreated($voucher);
+                $updateVoucherCode = $this->repository->updateVoucherCodeStatusByID($voucherCode['data']['id']);
+                if ($voucher && $updateVoucherCode)
+                {
+                    Log::info(SELF::LOGTITLE, array_merge(
+                        ['success' => 'Voucher successfully created'],
+                        $this->log
+                    ));
+                    return $this->respondCreated($voucher);
+                }
             }
         } catch (\Exception $e) {
             Log::error(SELF::LOGTITLE, array_merge(

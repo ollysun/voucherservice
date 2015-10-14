@@ -10,6 +10,7 @@ use Voucher\Transformers\VoucherTransformer;
 use Voucher\Models\VoucherJob;
 use Voucher\Transformers\VoucherJobParamMetadataTransformer;
 use Voucher\Transformers\VoucherJobTransformer;
+use Voucher\Transformers\VoucherCodeTransformer;
 use Voucher\Voucher\Event;
 
 class VouchersRepository extends AbstractRepository implements IVouchersRepository
@@ -92,8 +93,28 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
 
     public function getVoucherCodeByStatus($status)
     {
-        $voucherCodeByStatus = $this->voucherCode->where('status', $status)->get();
+        $voucherCodeByStatus = $this->voucherCode->where('status', $status)->first();
+        try {
+            if (!is_null($voucherCodeByStatus)) {
+                return self::transform($voucherCodeByStatus, new VoucherCodeTransformer());
+            } else {
+                return false;
+            }
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
 
+    public function updateVoucherCodeStatusByID($id)
+    {
+        try{
+            $vouchersCodeObject = $this->voucherCode->find($id);
+            $vouchersCodeObject->code_status = "used";
+            $vouchersCodeObject->save();
+            return $vouchersCodeObject;
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
     }
 
     public function createOrUpdate($id = null, $input)
