@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class VoucherJobParamMetadata extends Model
 {
+    protected $table = 'voucher_jobs_params_metadata';
     /**
      * Get the VoucherJob record associated.
      *
