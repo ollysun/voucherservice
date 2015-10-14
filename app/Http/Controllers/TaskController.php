@@ -43,7 +43,7 @@ class TaskController extends Controller
         $this->voucher_codes_repo = $voucher_codes_repo;
     }
 
-    protected function generateVouchers()
+    public function generateVouchers()
     {
         try {
             $jobs = $this->voucher_jobs_repo->getJobs();
@@ -64,13 +64,13 @@ class TaskController extends Controller
         }
 
         try {
-            foreach ($jobs as $job) {
+            foreach ($jobs['data'] as $job) {
                 $update_data = [
-                    'job_id' => $job->id,
+                    'job_id' => $job['id'],
                     'status' => 'processing'
                 ];
 
-                $this->voucher_jobs_repo->updateJobStatus($update_data);
+                //$this->voucher_jobs_repo->updateJobStatus($update_data);
                 $job_params = $this->voucher_jobs_params_repo->getJobParams($job);
                 $params = [];
 
@@ -117,9 +117,9 @@ class TaskController extends Controller
         } catch (\Exception $e) {
 
             $update_data = [
-                'job_id' => $job->id,
+                'job_id' => $job['id'],
                 'status' => 'error',
-                'comment' => $e->getMessage()
+                'comments' => $e->getMessage()
             ];
 
             $this->voucher_jobs_repo->updateJobStatus($update_data);

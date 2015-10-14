@@ -15,7 +15,7 @@ class VoucherJobsParamsMetadataRepository extends AbstractRepository
     public function getJobParams($job)
     {
         try {
-            $params = $this->model->where('voucher_job_id', '=', $job->id)
+            $params = $this->model->where('voucher_job_id', '=', $job['id'])
                 ->get();
             return self::transform($params, new VoucherJobParamMetadataTransformer());
         } catch (\Exception $e) {

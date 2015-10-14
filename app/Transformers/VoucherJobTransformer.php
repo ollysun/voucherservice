@@ -21,7 +21,7 @@ class VoucherJobTransformer extends TransformerAbstract{
     {
         return [
             'id' => (int) $voucherJob->id,
-            'status' => (int) $voucherJob->status,
+            'status' => (string) $voucherJob->status,
             'comments' => (string) $voucherJob->comments,
             '_links' => [
                 [
