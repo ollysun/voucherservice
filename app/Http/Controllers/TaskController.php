@@ -107,7 +107,7 @@ class TaskController extends Controller
 
                 while ($loop_params['start'] > 0) {
 
-                    $vouchers = $this->voucher_repo->getByJobIdAndLimit($loop_params);
+                    $vouchers = $this->voucher_repo->getVouchersByJobIdAndLimit($loop_params);
                     $csv_file = $this->generateCsvFromVouchers($vouchers, $loop_params['voucher_set']++);
                     $this->uploadS3($csv_file);
                     $this->notify($vouchers);

@@ -12,7 +12,7 @@ interface IVouchersRepository
 
     public function update($id, $input);
 
-    public function getByJobIdAndLimit($params);
+    public function getVouchersByJobIdAndLimit($params);
 
     public function insertVoucherJob($status);
 

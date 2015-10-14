@@ -195,7 +195,7 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
      * @return mixed
      * @throws \Exception
      */
-    public function getByJobIdAndLimit($params)
+    public function getVouchersByJobIdAndLimit($params)
     {
         try {
             $vouchers = $this->model->where('voucher_job_id', '=', $params['job_id'])
