@@ -29,9 +29,7 @@ class VoucherValidator extends IlluminateValidator
             'valid_from' => 'required|date|date_format:Y-m-d H:i:s',
             'valid_to' => 'required|date|date_format:Y-m-d H:i:s|after:valid_from',
             'is_limited' => 'boolean',
-            'limit' => 'required|regex:/(^[0-9]+$)+/',
-            'code' => 'string',
-            'voucher_job_id' => 'regex:/(^[0-9]+$)+/'
+            'limit' => 'required|regex:/(^[0-9]+$)+/'
         ];
     }
 

@@ -16,7 +16,7 @@ class VoucherJobValidator extends IlluminateValidator  {
     {
         return[
             'brand' => 'required|string',
-            'total' => 'required|regex:/(^[0-9]+$)+/',
+            'total' => 'required|regex:/(^[0-9]+$)+/|max:3',
         ];
     }
 

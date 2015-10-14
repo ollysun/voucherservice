@@ -6,7 +6,7 @@ use Voucher\Notification\VoucherNotification;
 use Voucher\Validators\VoucherValidator;
 use Log;
 use Notification;
-use Voucher\Repositories\VoucherJobsParamsMetaDataRepository;
+use Voucher\Repositories\VoucherJobParamMetaDatasRepository;
 use Voucher\Repositories\VoucherJobsRepository;
 use Voucher\Repositories\VouchersRepository;
 use Aws\S3\S3Client;
@@ -33,7 +33,7 @@ class TaskController extends Controller
 
         VoucherJobsRepository $voucher_jobs_repo,
 
-        VoucherJobsParamsMetadataRepository $voucher_jobs_params_repo,
+        VoucherJobParamMetadatasRepository $voucher_jobs_params_repo,
 
         VoucherCodesRepository $voucher_codes_repo
     )
