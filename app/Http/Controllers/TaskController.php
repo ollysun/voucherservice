@@ -186,22 +186,22 @@ class TaskController extends Controller
         try {
             $bucket = getenv('AWS_S3_BUCKET');
 
-            $filepath = storage_path('vouchers');
-            $keyname = getenv('AWS_S3_BUCKET_FOLDER').'/'.$file_name;
+            $file_path = storage_path('vouchers');
+            $key_name = getenv('AWS_S3_BUCKET_FOLDER').'/'.$file_name;
 
 
             $s3 = new S3Client(Config::get('s3'));
             // Upload a file.
             $result = $s3->putObject(array(
                 'Bucket' => $bucket,
-                'Key' => $keyname,
-                'SourceFile' => $filepath
+                'Key' => $key_name,
+                'SourceFile' => $file_path
             ));
 
             echo $result['ObjectURL'];
             //@TODO remove file from storage path after s3 uploaded successfully - Chizzy
 
-            unlink($filepath . '/' . $file_name . '.csv');
+            unlink($file_path . '/' . $file_name . '.csv');
         }
         catch (\Exception $e) {
             return ('S3 Upload error:'. $e->getMessage());
