@@ -198,22 +198,14 @@ class TaskController extends Controller
         }
     }
 
-    //This will be run by a Schedular cron jobs , vouchers codes will be generated in upfront but not assigned to any telcos yet
-    //voucher code can be upto 6-8alphanum. I will talk to Ngozi to implement Salted Vouchers. But for now lets put algorithim
-
     public function generateVoucherCodes()
     {
         $fields = $this->request->all();
-        $rules = VoucherValidator::getCodeAmountGeneratedRules();
+        $rules = VoucherValidator::getVoucherCodeRules();
         $messages = VoucherValidator::getMessages();
 
         try {
-            //@TODO Algorithm to generate unique voucher code - Chizzy
-            // Create migration for new table - "voucher_codes" column "id","code","status"->enum (new,used)
-            //$fields['code_amount_generated'] amount of codes to generate
-            $characters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"; //Acceptable characters for voucher code generation
-            $voucher_code = '';
-            $i = 0;
+
             $validator = Validator::make($fields, $rules, $messages);
 
             if ($validator->fails()) {
@@ -226,17 +218,21 @@ class TaskController extends Controller
                 return $this->errorWrongArgs($validator->errors());
 
             } else {
-                while ($i < $fields['code_amount_generated']) {
+                $characters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                $i = 0;
+                $voucher_code = '';
+                while ($i < $fields['total']) {
+
                     for ($j = 0; $j < 8; $j++) {
                         $voucher_code .= $characters[rand(0, strlen($characters) - 1)];
                     }
-                    $code = $this->voucher_codes_repo->isNotExistingVoucherCode($voucher_code); //Check if the voucher code exists
+                    $code = $this->voucher_codes_repo->isNotExistingVoucherCode($voucher_code);
                     if ($code) {
                         $data = ['code' => $voucher_code, 'status' => 'new'];
-                        $this->voucher_codes_repo->insertVoucherCode($data); //The code does not exist so it can be stored
-                        $i += 1; //Counter is only increased when generated code doesn't exist in the table
+                        $this->voucher_codes_repo->insertVoucherCode($data);
+                        $i += 1;
                     }
-                    $voucher_code = ''; //Empty the variable for next code to be generated
+                    $voucher_code = '';
                 }
                 return $this->respondCreated(['Voucher Codes have been generated.']);
             }

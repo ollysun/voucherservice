@@ -47,10 +47,10 @@ class VoucherValidator extends IlluminateValidator
         ];
     }
 
-    public static function getCodeAmountGeneratedRules()
+    public static function getVoucherCodeRules()
     {
         return [
-            'code_amount_generated'=> 'required|integer|min:1',
+            'total'=> 'required|integer|min:1',
         ];
     }
 
