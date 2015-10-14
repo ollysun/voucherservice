@@ -16,6 +16,8 @@ class VoucherNotification extends Notification
         try {
             if (property_exists($this, $property)) {
                 $this->$property = $value;
+            } else {
+                throw new \Exception('Property can\'t be set');
             }
         } catch (\Exception $e) {
             return $e->getMessage();
