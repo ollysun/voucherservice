@@ -245,39 +245,39 @@ class Voucher
      * Push a subscription request/job to sqs queue, to activate a
      * subscription by voucher code.
      *
-     * @param $subscription_data
+     * @param $data
      * @return bool
      * @throws \Exception
      */
-    protected function subscribeUserUsingVoucher($subscription_data)
+    protected function subscribeUserUsingVoucher($data)
     {
         $subscribe_response = $this->sqs_client->sendMessage(array(
                 'QueueUrl' => $this->config['outgoing_queue']['endpoint_url'],
-                'MessageBody' => base64_encode(json_encode($subscription_data))
+                'MessageBody' => base64_encode(json_encode($data))
         ));
 
         if ($subscribe_response->get('MessageId')) {
-            $data = [
-                'voucher_id' => $subscription_data['voucher_id'],
-                'user_id'   => $subscription_data['user_id'],
-                'platform'  => $subscription_data['platform'],
+            $log_data = [
+                'voucher_id' => $data['voucher_id'],
+                'user_id'   => $data['user_id'],
+                'platform'  => $data['platform'],
                 'action' => 'success',
                 'comment' => 'User successfully subscribed using a valid voucher code.',
             ];
 
-            $this->voucher_repository->setVoucherStatusToClaiming($subscription_data);
-            $this->voucher_logs_repository->addVoucherLog($data);
+            $this->voucher_repository->setVoucherStatusToClaiming($data);
+            $this->voucher_logs_repository->addVoucherLog($log_data);
             return true;
 
         } else {
-            $data = [
-                'voucher_id' => $subscription_data['id'],
-                'user_id'   => $subscription_data['user_id'],
-                'platform'  => $subscription_data['platform'],
+            $log_data = [
+                'voucher_id' => $data['id'],
+                'user_id'   => $data['user_id'],
+                'platform'  => $data['platform'],
                 'action' => 'attempt',
                 'comment' => 'User used a valid voucher code, but something went wrong on queuing the subscribe request.',
             ];
-            $this->voucher_logs_repository->addVoucherLog($data);
+            $this->voucher_logs_repository->addVoucherLog($log_data);
             throw new \Exception('Something went wrong on sending a message to sqs, while subscribing by voucher.');
         }
     }
