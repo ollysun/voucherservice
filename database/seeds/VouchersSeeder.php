@@ -27,7 +27,8 @@ class VouchersSeeder extends Seeder
                     'valid_from' => '2015-10-08 00:00:00',
                     'valid_to' => '2015-12-30 00:00:00',
                     'is_limited' => true,
-                    'limit' => 0
+                    'limit' => 0,
+                    'voucher_job_id' => 1
                 ],
                 [
                     'id' => 2,
@@ -43,7 +44,8 @@ class VouchersSeeder extends Seeder
                     'valid_from' => '2015-10-08 00:00:00',
                     'valid_to' => '2015-12-30 00:00:00',
                     'is_limited' => true,
-                    'limit' => 0
+                    'limit' => 0,
+                    'voucher_job_id' => 1
                 ],
                 [
                     'id' => 3,
@@ -59,7 +61,8 @@ class VouchersSeeder extends Seeder
                     'valid_from' => '2015-10-08 00:00:00',
                     'valid_to' => '2015-12-30 00:00:00',
                     'is_limited' => true,
-                    'limit' => 0
+                    'limit' => 0,
+                    'voucher_job_id' => 1
                 ],
                 [
                     'id' => 4,
@@ -75,7 +78,8 @@ class VouchersSeeder extends Seeder
                     'valid_from' => '2015-10-08 00:00:00',
                     'valid_to' => '2015-12-30 00:00:00',
                     'is_limited' => false,
-                    'limit' => 5
+                    'limit' => 5,
+                    'voucher_job_id' => 2
                 ],
                 [
                     'id' => 5,
@@ -91,7 +95,8 @@ class VouchersSeeder extends Seeder
                     'valid_from' => '2015-10-08 00:00:00',
                     'valid_to' => '2015-12-30 00:00:00',
                     'is_limited' => false,
-                    'limit' => 10
+                    'limit' => 10,
+                    'voucher_job_id' => 2
                 ],
                 [
                     'id' => 6,
@@ -107,7 +112,8 @@ class VouchersSeeder extends Seeder
                     'valid_from' => '2015-10-08 00:00:00',
                     'valid_to' => '2015-12-30 00:00:00',
                     'is_limited' => false,
-                    'limit' => 15
+                    'limit' => 15,
+                    'voucher_job_id' => 2
                 ]
 
             ]);
