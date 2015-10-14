@@ -29,7 +29,9 @@ class VoucherValidator extends IlluminateValidator
             'valid_from' => 'date|date_format:Y-m-d H:i:s',
             'valid_to' => 'date|date_format:Y-m-d H:i:s|after:valid_from',
             'is_limited' => 'required|boolean',
-            'limit' => 'regex:/(^[0-9]+$)+/'
+            'limit' => 'regex:/(^[0-9]+$)+/',
+            'code' => 'string',
+            'voucher_job_id' => 'required|regex:/(^[0-9]+$)+/'
         ];
     }
 
@@ -111,7 +113,9 @@ class VoucherValidator extends IlluminateValidator
             'brand.string' => 'The Brand must be a string',
             'total.required' => 'The Total is required',
             'total.regex' => 'The Total must be an integer',
-            'total.min' => 'The Total must be positive'
+            'total.min' => 'The Total must be positive',
+            'voucher_job_id.required' => 'The Voucher job id is required',
+            'voucher_job_id.regex' => 'The Voucher job id must be integer'
         ];
     }
 }

@@ -103,7 +103,7 @@ class VouchersController extends Controller
                 return $this->errorWrongArgs($validator->errors());
             } else {
                 $voucherCode = $this->repository->getVoucherCodeByStatus("new");
-                $firstTwoLetter = substr($inputs['title'],0,3);
+                $firstTwoLetter = substr($inputs['title'],0,2);
                 $inputs['code'] = $firstTwoLetter . $voucherCode['data']['voucher_code'];
                 $voucher = $this->repository->createOrUpdate(null,$inputs);
                 $updateVoucherCode = $this->repository->updateVoucherCodeStatusByID($voucherCode['data']['id']);

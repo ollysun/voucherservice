@@ -93,7 +93,7 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
 
     public function getVoucherCodeByStatus($status)
     {
-        $voucherCodeByStatus = $this->voucherCode->where('status', $status)->first();
+        $voucherCodeByStatus = $this->voucherCode->where('code_status', $status)->first();
         try {
             if (!is_null($voucherCodeByStatus)) {
                 return self::transform($voucherCodeByStatus, new VoucherCodeTransformer());
@@ -138,6 +138,7 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
             $vouchersObject->category = $input['category'];
             $vouchersObject->type = $input['type'];
             $vouchersObject->code = $input['code'];
+            $vouchersObject->voucher_job_id = $input['voucher_job_id'];
             $vouchersObject->save();
 
             return self::transform( $vouchersObject, new VoucherTransformer());
