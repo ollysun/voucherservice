@@ -3,7 +3,7 @@
 use Voucher\Models\VoucherJobParamMetadata;
 use Voucher\Transformers\VoucherJobParamMetadataTransformer;
 
-class VoucherJobsParamsMetadataRepository extends AbstractRepository implements IVoucherJobsParamsMetadataRepository
+class VoucherJobParamMetadatasRepository extends AbstractRepository implements IVoucherJobParamMetadatasRepository
 {
     protected $model;
 
@@ -12,14 +12,7 @@ class VoucherJobsParamsMetadataRepository extends AbstractRepository implements 
         $this->model = $voucher_jobs_params_metadata;
     }
 
-    /**
-     * Retrieves voucher issuing job parameters by job id.
-     *
-     * @param $job
-     * @return mixed
-     * @throws \Exception
-     */
-    public function getJobParameters($job)
+    public function getJobParams($job)
     {
         try {
             $params = $this->model->where('voucher_job_id', '=', $job['id'])

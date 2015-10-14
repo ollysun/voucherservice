@@ -212,21 +212,18 @@ class VouchersController extends Controller
                     $this->log
                 ));
                 return $this->errorWrongArgs($validator->errors());
-            }else{
-                $value = array_values($fields); // getting the value from the field data
-                $keys = array_keys($fields); // getting the key from the field data
-                $arrayCombineKeyValue = array_combine($keys,$value);
+            }else {
+
                 $voucherJob = $this->repository->insertVoucherJob('new');
-                $voucher_job_id = $voucherJob['data']['id'];
-                $voucherParamMetadata = compact("voucher_job_id", 'arrayCombineKeyValue');
-                $voucherParam = $this->repository->insertVoucherJobParamMetadata($voucherParamMetadata);
+
+                $this->repository->insertVoucherJobParamMetadata($fields, $voucherJob['data']['id']);
                 Log::info(SELF::LOGTITLE, array_merge(
                     [
                         'successfully Update' => 'Vouchers will be created and notified to Business team soon!'
                     ],
                     $this->log
                 ));
-                return $this->respondWithArray($voucherParam);
+                return $this->respondWithArray(array("Bulk Voucher order is created, you will be notified once vouchers are generated!"));
             }
         }catch (\Exception $e)
         {
@@ -236,10 +233,5 @@ class VouchersController extends Controller
             ));
             return $this->errorInternalError($e->getMessage());
         }
-
-
-
     }
-
-
 }
