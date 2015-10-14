@@ -103,6 +103,8 @@ class VouchersController extends Controller
                 return $this->errorWrongArgs($validator->errors());
             } else {
                 //@TODO - MOSES = pick up one voucher_code from "voucher_codes" table where status ="new"
+
+
                 //and append to the first 2 letter of the title and insert in to vouchers table, also update the stsus to "used" in voucher_codes table
                 $voucher = $this->repository->createOrUpdate(null,$inputs);
                 Log::info(SELF::LOGTITLE, array_merge(
@@ -208,14 +210,9 @@ class VouchersController extends Controller
                 ));
                 return $this->errorWrongArgs($validator->errors());
             }else{
-                $key = [
-                        'type', 'status' , 'category',
-                        'title', 'location', 'description', 'duration ',
-                        'period', 'is_limited','limit',
-                         'brand', ' total','valid_from', 'valid_to',
-                ];
                 $value = array_values($fields); // getting the value from the field data
-                $arrayCombineKeyValue = array_combine($key,$value);
+                $keys = array_keys($fields); // getting the key from the field data
+                $arrayCombineKeyValue = array_combine($keys,$value);
                 $voucherJob = $this->repository->insertVoucherJob('new');
                 $voucher_job_id = $voucherJob['data']['id'];
                 $voucherParamMetadata = compact("voucher_job_id", 'arrayCombineKeyValue');
