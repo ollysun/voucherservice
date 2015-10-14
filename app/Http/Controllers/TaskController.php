@@ -93,11 +93,8 @@ class TaskController extends Controller
                     $params[$job_param->key] = $job_param->value;
                 }
 
-                $vouchers_issued = $this->voucher_jobs_repo->issueCodesFromVoucherCodesTableToVouchersTable($params);
-                if (count($vouchers_issued) < $params['total']) {
-                    throw new \Exception('There are not enough codes to be issued to providers');
-                }
-
+                $this->voucher_jobs_repo->issueCodesFromVoucherCodesTableToVouchersTable($params);
+                
                 $loop_params = [
                     'limit' => 25000,
                     'start' => 0,
