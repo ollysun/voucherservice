@@ -16,12 +16,9 @@ class VoucherJobsParamsMetadataRepository extends AbstractRepository implements 
      * Retrieves voucher issuing job parameters by job id.
      *
      * @param $job
-     *
      * @return mixed
-     *
      * @throws \Exception
      */
-
     public function getJobParameters($job)
     {
         try {

@@ -7,6 +7,7 @@ use Voucher\Repositories\VouchersRepository;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Config;
 use Aws\Sqs\SqsClient;
+use DateTime;
 
 class Voucher
 {
@@ -109,7 +110,8 @@ class Voucher
                 'plan_id' => $user_eligible['plan_id'],
                 'voucher_id' => $voucher['id'],
                 'code' => $voucher['code'],
-                'voucher_status' => 'claiming'
+                'voucher_status' => 'claiming',
+                'subscription_duration' => $voucher['duration']. ''. $voucher['period'],
             ];
             $this->subscribeUserUsingVoucher($subscription_data);
             return true;
@@ -139,10 +141,14 @@ class Voucher
             ];
         } else {
             if ($voucher['data']['status'] == 'active') {
-                $code_redeem_count = $this->voucher_logs_repository->getVoucherRedeemedCount($data['data']['id']);
 
-                if (Carbon::createFromFormat('Y-m-d H:i:s', $voucher['data']['valid_to']) >= Carbon::now()) {
-                    if ($voucher['data']['limit'] <= $code_redeem_count) {
+                $expires_on = DateTime::createFromFormat('Y-m-d H:i:s', $voucher['data']['valid_to']);
+                $now = DateTime::createFromFormat('Y-m-d H:i:s', Carbon::now());
+                
+                if ($expires_on >= $now) {
+                    $code_redeem_count = $this->voucher_logs_repository->getVoucherRedeemedCount($data['data']['id']);
+
+                    if ($voucher['data']['limit'] < $code_redeem_count) {
                         return $voucher['data'];
                     } else {
                         $data = [
@@ -150,7 +156,7 @@ class Voucher
                             'user_id' => $data['user_id'],
                             'platform' => $data['platform'],
                             'action' => 'attempt',
-                            'comment'   => 'User tried redeeming a voucher code that has reached its redeem limit.',
+                            'comment'   => 'User tried redeeming a voucher code that has reached its usage limit.',
                         ];
                     }
                 } else {
