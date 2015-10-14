@@ -185,12 +185,14 @@ class TaskController extends Controller
         }
     }
 
-    public function notify($s3_result)
+    public function notify($job)
     {
         try {
             //@TODO implement Voucher Notification Chizzy
             $notify = new VoucherNotification(1, 'Generate Voucher Initiated', [1]);
-            $notify->__set('data', $s3_result);
+            $notify->__set('job_id', $job['data']['id']);
+            $notify->__set('job_status', $job['data']['status']);
+
             Notification::send($notify);
         }
         catch (\Exception $e) {
@@ -238,7 +240,9 @@ class TaskController extends Controller
         catch (\Exception $e) {
             $notify = new VoucherNotification(1, 'Generate Voucher Initiated', [1]);
             $notify->error = $e->getMessage();
+
             Notification::send($notify);
+
             Log::error(SELF::LOGTITLE, array_merge(
                 [
                     'error' => 'Could not generate voucher codes '. $e->getMessage()
