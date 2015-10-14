@@ -9,6 +9,7 @@
 namespace Voucher\Repositories;
 
 use Voucher\Models\VoucherCode;
+use Voucher\Transformers\VoucherCodeTransformer;
 
 class VoucherCodesRepository extends AbstractRepository implements IVoucherCodesRepository
 {
@@ -40,6 +41,8 @@ class VoucherCodesRepository extends AbstractRepository implements IVoucherCodes
             $voucherCodeObject->voucher_code = $data['voucher_code'];
             $voucherCodeObject->code_status = $data['voucher_status'];
             $voucherCodeObject->save();
+
+            return self::transform($voucherCodeObject, new VoucherCodeTransformer());
 
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());

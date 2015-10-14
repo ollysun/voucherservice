@@ -34,7 +34,7 @@ class VoucherJobsRepository extends AbstractRepository implements IVoucherJobsRe
     {
         try {
             $job = $this->model->find($params['job_id']);
-            $job->comment = (isset($params['comment'])? $params['comment'] : null);
+            $job->comments = (isset($params['comment'])? $params['comment'] : null);
             $job->status = (isset($params['status'])? $params['status'] : null);
             $job->save();
 
