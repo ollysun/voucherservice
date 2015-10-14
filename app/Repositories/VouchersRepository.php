@@ -117,28 +117,52 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
         }
     }
 
-    public function createOrUpdate($id = null, $input)
+    public function create($input)
     {
         try{
-            if (is_null($id)) {
-                $vouchersObject = $this->model;
-            } else {
-                $vouchersObject = $this->model->find($id);
-            }
-            $vouchersObject->valid_from = $input['valid_from'];
-            $vouchersObject->valid_to = $input['valid_to'];
-            $vouchersObject->status = $input['status'];
-            $vouchersObject->title = $input['title'];
-            $vouchersObject->description = $input['description'];
-            $vouchersObject->location = $input['location'];
-            $vouchersObject->is_limited = $input['is_limited'];
-            $vouchersObject->limit = $input['limit'];
-            $vouchersObject->period = $input['period'];
-            $vouchersObject->duration = $input['duration'];
-            $vouchersObject->category = $input['category'];
-            $vouchersObject->type = $input['type'];
-            $vouchersObject->code = $input['code'];
-            $vouchersObject->voucher_job_id = $input['voucher_job_id'];
+
+            $vouchersObject = $this->model;
+            $vouchersObject->valid_from = (isset($input['valid_from']) ? $input['valid_from'] : '');
+            $vouchersObject->valid_to = (isset($input['valid_to']) ? $input['valid_to'] : '');
+            $vouchersObject->status = (isset($input['status']) ? $input['status'] : 'active');
+            $vouchersObject->title = (isset($input['title']) ? $input['title'] : 'INTERNAL');
+            $vouchersObject->description = (isset($input['description']) ? $input['description'] : '');
+            $vouchersObject->location = (isset($input['location']) ? $input['location'] : '');
+            //$vouchersObject->is_limited = $input['is_limited'];
+            $vouchersObject->limit = (isset($input['limit']) ? $input['limit'] : 1);
+            $vouchersObject->period = (isset($input['period']) ? $input['period'] : 'day');
+            $vouchersObject->duration = (isset($input['duration']) ? $input['duration'] : '1');
+            $vouchersObject->category = (isset($input['category']) ? $input['category'] : 'new');
+            $vouchersObject->type = (isset($input['type']) ? $input['type'] : '');
+            $vouchersObject->code = (isset($input['code']) ? $input['code'] : '');
+            $vouchersObject->voucher_job_id = (isset($input['voucher_job_id']) ? $input['voucher_job_id'] : NULL);
+            $vouchersObject->save();
+
+            return self::transform( $vouchersObject, new VoucherTransformer());
+
+        }catch (\Exception $ex) {
+            throw new \Exception($ex->getMessage());
+        }
+    }
+
+    public function update($id = null, $input)
+    {
+        try{
+            $vouchersObject = $this->model->find($id);
+            $vouchersObject->valid_from = (isset($input['valid_from']) ? $input['valid_from'] : $vouchersObject->valid_from);
+            $vouchersObject->valid_to = (isset($input['valid_to']) ? $input['valid_to'] : $vouchersObject->valid_to);
+            $vouchersObject->status = (isset($input['status']) ? $input['status'] : 'active');
+            $vouchersObject->title = (isset($input['title']) ? $input['title'] : 'INTERNAL');
+            $vouchersObject->description = (isset($input['description']) ? $input['description'] : '');
+            $vouchersObject->location = (isset($input['location']) ? $input['location'] : '');
+            //$vouchersObject->is_limited = $input['is_limited'];
+            $vouchersObject->limit = (isset($input['limit']) ? $input['limit'] : 1);
+            $vouchersObject->period = (isset($input['period']) ? $input['period'] : 'day');
+            $vouchersObject->duration = (isset($input['duration']) ? $input['duration'] : '1');
+            $vouchersObject->category = (isset($input['category']) ? $input['category'] : 'new');
+            $vouchersObject->type = (isset($input['type']) ? $input['type'] : '');
+            $vouchersObject->code = (isset($input['code']) ? $input['code'] : '');
+            $vouchersObject->voucher_job_id = (isset($input['voucher_job_id']) ? $input['voucher_job_id'] : NULL);
             $vouchersObject->save();
 
             return self::transform( $vouchersObject, new VoucherTransformer());

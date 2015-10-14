@@ -22,16 +22,16 @@ class VoucherValidator extends IlluminateValidator
             'status' => 'required|string|in:active,claiming,claimed,deleted,expired,in_active',
             'category' => 'required|string|in:new,expired,active,new_expired',
             'title' => 'required|string|in:INTERNAL,VODAFONE_GHANA_STAFF_MOBILE,VODAFONE_GHANA_CUSTOMER_MOBILE,VODAFONE_GHANA_STAFF_FIXEDLINE',
-            'location' => 'required|string',
-            'description' => 'required|string',
+            'location' => 'string',
+            'description' => 'string',
             'duration' => 'required|regex:/(^[0-9]+$)+/',
             'period' => 'required|string|in:day,week,month,year',
-            'valid_from' => 'date|date_format:Y-m-d H:i:s',
-            'valid_to' => 'date|date_format:Y-m-d H:i:s|after:valid_from',
-            'is_limited' => 'required|boolean',
-            'limit' => 'regex:/(^[0-9]+$)+/',
+            'valid_from' => 'required|date|date_format:Y-m-d H:i:s',
+            'valid_to' => 'required|date|date_format:Y-m-d H:i:s|after:valid_from',
+            'is_limited' => 'boolean',
+            'limit' => 'required|regex:/(^[0-9]+$)+/',
             'code' => 'string',
-            'voucher_job_id' => 'required|regex:/(^[0-9]+$)+/'
+            'voucher_job_id' => 'regex:/(^[0-9]+$)+/'
         ];
     }
 

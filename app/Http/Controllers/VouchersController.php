@@ -15,7 +15,6 @@ use Voucher\Validators\VoucherValidator;
 use Voucher\Validators\VoucherJobValidator;
 use Voucher\Voucher\Voucher;
 use Illuminate\Support\Facades\Input;
-use League\Csv\Writer;
 use Log;
 
 class VouchersController extends Controller
@@ -105,7 +104,7 @@ class VouchersController extends Controller
                 $voucherCode = $this->repository->getVoucherCodeByStatus("new");
                 $firstTwoLetter = substr($inputs['title'],0,2);
                 $inputs['code'] = $firstTwoLetter . $voucherCode['data']['voucher_code'];
-                $voucher = $this->repository->createOrUpdate(null,$inputs);
+                $voucher = $this->repository->create($inputs);
                 $updateVoucherCode = $this->repository->updateVoucherCodeStatusByID($voucherCode['data']['id']);
                 if ($voucher && $updateVoucherCode)
                 {

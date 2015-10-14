@@ -14,7 +14,7 @@ interface IVouchersRepository
 
     public function getVoucherByCode($code);
 
-    public function createOrUpdate($id, $input);
+    public function create($input);
 
     public function getByJobIdAndLimit($params);
 
