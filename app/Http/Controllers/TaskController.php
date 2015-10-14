@@ -205,7 +205,6 @@ class TaskController extends Controller
         $messages = VoucherValidator::getMessages();
 
         try {
-
             $validator = Validator::make($fields, $rules, $messages);
 
             if ($validator->fails()) {
@@ -222,13 +221,12 @@ class TaskController extends Controller
                 $i = 0;
                 $voucher_code = '';
                 while ($i < $fields['total']) {
-
                     for ($j = 0; $j < 8; $j++) {
                         $voucher_code .= $characters[rand(0, strlen($characters) - 1)];
                     }
                     $code = $this->voucher_codes_repo->isNotExistingVoucherCode($voucher_code);
                     if ($code) {
-                        $data = ['code' => $voucher_code, 'status' => 'new'];
+                        $data = ['voucher_code' => $voucher_code, 'voucher_status' => 'new'];
                         $this->voucher_codes_repo->insertVoucherCode($data);
                         $i += 1;
                     }
