@@ -13,9 +13,9 @@ class DatabaseSeeder extends Seeder {
 	public function run()
 	{
 		Model::unguard();
-        $this->call('VouchersSeeder');
-		$this->call('VoucherLogsSeeder');
 		$this->call('VoucherJobsSeeder');
+		$this->call('VouchersSeeder');
+		$this->call('VoucherLogsSeeder');
 		$this->call('VoucherJobsParamsMetadataSeeder');
 		Model::reguard();
 	}
