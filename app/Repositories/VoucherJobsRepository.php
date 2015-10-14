@@ -3,7 +3,7 @@
 use Voucher\Models\VoucherJob;
 use Voucher\Transformers\VoucherJobTransformer;
 
-class VoucherJobsRepository extends AbstractRepository
+class VoucherJobsRepository extends AbstractRepository implements IVoucherJobsRepository
 {
     protected $model;
 

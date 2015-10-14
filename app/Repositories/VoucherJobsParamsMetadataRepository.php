@@ -3,7 +3,7 @@
 use Voucher\Models\VoucherJobParamMetadata;
 use Voucher\Transformers\VoucherJobParamMetadataTransformer;
 
-class VoucherJobsParamsMetadataRepository extends AbstractRepository
+class VoucherJobsParamsMetadataRepository extends AbstractRepository implements IVoucherJobsParamsMetadataRepository
 {
     protected $model;
 

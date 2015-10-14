@@ -11,13 +11,14 @@ use Voucher\Transformers\VoucherJobParamMetadataTransformer;
 use Voucher\Transformers\VoucherJobTransformer;
 use Voucher\Voucher\Event;
 
-class VouchersRepository extends AbstractRepository
+class VouchersRepository extends AbstractRepository implements IVouchersRepository
 {
     protected $model;
 
     protected $log_model;
-    protected $error;
+
     protected $voucherMetadata;
+    
     public function __construct(Voucher $voucher, VoucherLog $voucherLog, VoucherJobParamMetadata $voucherMetadataModel)
     {
         $this->model = $voucher;

@@ -20,7 +20,7 @@ class VoucherCodesRepository extends AbstractRepository implements IVoucherCodes
     public function isNotExistingVoucherCode($code)
     {
         try {
-            $code = $this->model->where('code', $code)->get();
+            $code = $this->model->where('voucher_code', $code)->get();
 
             if ($code->isEmpty()) {
                 return true;
@@ -37,8 +37,8 @@ class VoucherCodesRepository extends AbstractRepository implements IVoucherCodes
         try {
             $voucherCodeObject = new VoucherCode();
 
-            $voucherCodeObject->voucher_code = $data['code'];
-            $voucherCodeObject->code_status = $data['status'];
+            $voucherCodeObject->voucher_code = $data['voucher_code'];
+            $voucherCodeObject->code_status = $data['voucher_status'];
             $voucherCodeObject->save();
 
         } catch (\Exception $e) {
