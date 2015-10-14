@@ -1,10 +1,4 @@
 <?php namespace Voucher\Repositories;
-/**
- * Created by PhpStorm.
- * User: Tech-1
- * Date: 10/13/15
- * Time: 12:24 PM
- */
 
 interface IVouchersRepository
 {
@@ -20,9 +14,9 @@ interface IVouchersRepository
 
     public function getByJobIdAndLimit($params);
 
-    public function generateVoucherWithStoredProcedure($params);
-
     public function insertVoucherJob($status);
 
     public function insertVoucherJobParamMetadata($data);
+
+    public function setVoucherStatusToClaiming($data);
 }

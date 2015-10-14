@@ -1,16 +1,10 @@
-<?php
-/**
- * Created by PhpStorm.
- * User: tech7
- * Date: 10/14/15
- * Time: 8:17 AM
- */
-
-namespace Voucher\Repositories;
+<?php namespace Voucher\Repositories;
 
 interface IVoucherJobsRepository
 {
     public function getJobs();
 
     public function updateJobStatus($params);
+
+    public function issueCodesFromVoucherCodesTableToVouchersTable($params);
 }

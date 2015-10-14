@@ -12,7 +12,17 @@ class VoucherJobsParamsMetadataRepository extends AbstractRepository implements 
         $this->model = $voucher_jobs_params_metadata;
     }
 
-    public function getJobParams($job)
+    /**
+     * Retrieves voucher issuing job parameters by job id.
+     *
+     * @param $job
+     *
+     * @return mixed
+     *
+     * @throws \Exception
+     */
+
+    public function getJobParameters($job)
     {
         try {
             $params = $this->model->where('voucher_job_id', '=', $job['id'])
