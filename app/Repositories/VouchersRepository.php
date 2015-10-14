@@ -1,7 +1,6 @@
 <?php namespace Voucher\Repositories;
 
 use Illuminate\Pagination\Paginator;
-use Illuminate\Support\Facades\DB;
 use Voucher\Models\Voucher;
 use Voucher\Models\VoucherJobParamMetadata;
 use Voucher\Models\VoucherLog;
@@ -11,7 +10,6 @@ use Voucher\Models\VoucherJob;
 use Voucher\Transformers\VoucherJobParamMetadataTransformer;
 use Voucher\Transformers\VoucherJobTransformer;
 use Voucher\Transformers\VoucherCodeTransformer;
-use Voucher\Voucher\Event;
 
 class VouchersRepository extends AbstractRepository implements IVouchersRepository
 {
@@ -20,15 +18,26 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
     protected $log_model;
 
     protected $voucherMetadata;
+
     protected $voucherCode;
-    public function __construct(Voucher $voucher,
-                                VoucherLog $voucherLog,
-                                VoucherJobParamMetadata $voucherMetadataModel,
-                                VoucherCode $voucherCodeModel )
+
+    public function __construct(
+
+        Voucher $voucher,
+
+        VoucherLog $voucherLog,
+
+        VoucherJobParamMetadata $voucherMetadataModel,
+
+        VoucherCode $voucherCodeModel
+    )
     {
         $this->model = $voucher;
+
         $this->log_model = $voucherLog;
+
         $this->voucherMetadata = $voucherMetadataModel;
+
         $this->voucherCode = $voucherCodeModel;
     }
 
@@ -76,6 +85,13 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
         }
     }
 
+    /**
+     * Retrieves a voucher and its attributes by its code.
+     *
+     * @param $code
+     * @return bool
+     * @throws \Exception
+     */
     public function getVoucherByCode($code)
     {
         try {
@@ -172,44 +188,44 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
         }
     }
 
-    public function getByJobIdAndLimit($params)
+    /**
+     * Retrieves vouchers for csv generation by job id and limit
+     *
+     * @param $params
+     * @return mixed
+     * @throws \Exception
+     */
+    public function getVouchersByJobIdAndLimit($params)
     {
         try {
             $vouchers = $this->model->where('voucher_job_id', '=', $params['job_id'])
                 ->skip($params['start'])
-                ->take($params['limit']);
+                ->take($params['limit'])
+                ->get();
 
             return self::transform($vouchers, new VoucherTransformer());
-
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
         }
     }
 
-    public function generateVoucherWithStoredProcedure($params)
+    /**
+     * Sets the voucher status a user uses in subscribing to claiming,
+     * until subscription is processed.
+     *
+     * @param $data
+     * @return bool
+     * @throws \Exception
+     */
+    public function setVoucherStatusToClaiming($data)
     {
         try {
-            $vouchers = DB::statement(
-                DB::raw(
-                    'CALL generate_voucher("' .
-                    $params["status"] . '","' .
-                    $params["category"] . '","' .
-                    $params["title"] . '","' .
-                    $params["location"] . '","' .
-                    $params["description"] . '",' .
-                    $params["duration"] . ',"' .
-                    $params["period"] . '","' .
-                    $params["valid_from"] . '","' .
-                    $params["valid_to"] . '","' .
-                    $params["is_limited"] . '",' .
-                    $params["limit"] . ',"' .
-                    $params["brand"] . '",' .
-                    $params["total"] . ',' .
-                    $params["job_id"].
-                    ')'
-                ));
-            return $vouchers;
-        } catch (\Exception $e){
+            $voucher = $this->model->findOrFail($data['voucher_id']);
+            $voucher->status = $data['voucher_status'];
+            $voucher->save();
+
+            return true;
+        } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
         }
     }
