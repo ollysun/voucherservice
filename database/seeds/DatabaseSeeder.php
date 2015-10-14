@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder {
 		$this->call('VoucherJobsSeeder');
 		$this->call('VouchersSeeder');
 		$this->call('VoucherLogsSeeder');
-		$this->call('VoucherJobsParamsMetadataSeeder');
+		$this->call('VoucherJobParamMetadatasSeeder');
 		Model::reguard();
 	}
 

@@ -1,234 +1,38 @@
 <?php
 
-use Illuminate\Database\Seeder;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
-class VoucherJobParamMetadatasSeeder extends Seeder
+class CreateVoucherJobParamMetadatasTable extends Migration
 {
     /**
-     * Run the database seeds.
+     * Run the migrations.
      *
      * @return void
      */
-    public function run()
+    public function up()
     {
-        DB::table('voucher_job_param_metadatas')
-            ->insert([
-                [
-                    'id' => 1,
-                    'voucher_job_id' => 1,
-                    'key' => 'status',
-                    'value' => 'active',
-                    'created_at' => '0000-00-00 00:00:00',
-                    'updated_at' => '0000-00-00 00:00:00'
-                ],
-                [
-                    'id' => 2,
-                    'voucher_job_id' => 1,
-                    'key' => 'category',
-                    'value' => 'new',
-                    'created_at' => '0000-00-00 00:00:00',
-                    'updated_at' => '0000-00-00 00:00:00'
-                ],
-                [
-                    'id' => 3,
-                    'voucher_job_id' => 1,
-                    'key' => 'title',
-                    'value' => 'INTERNAL',
-                    'created_at' => '0000-00-00 00:00:00',
-                    'updated_at' => '0000-00-00 00:00:00'
-                ],
-                [
-                    'id' => 4,
-                    'voucher_job_id' => 1,
-                    'key' => 'location',
-                    'value' => 'tetete',
-                    'created_at' => '0000-00-00 00:00:00',
-                    'updated_at' => '0000-00-00 00:00:00'
-                ],
-                [
-                    'id' => 5,
-                    'voucher_job_id' => 1,
-                    'key' => 'description',
-                    'value' => 'fhfsd',
-                    'created_at' => '0000-00-00 00:00:00',
-                    'updated_at' => '0000-00-00 00:00:00'
-                ],
-                [
-                    'id' => 6,
-                    'voucher_job_id' => 1,
-                    'key' => 'duration',
-                    'value' => '1',
-                    'created_at' => '0000-00-00 00:00:00',
-                    'updated_at' => '0000-00-00 00:00:00'
-                ],
-                [
-                    'id' => 7,
-                    'voucher_job_id' => 1,
-                    'key' => 'period',
-                    'value' => 'month',
-                    'created_at' => '0000-00-00 00:00:00',
-                    'updated_at' => '0000-00-00 00:00:00'
-                ],
-                [
-                    'id' => 8,
-                    'voucher_job_id' => 1,
-                    'key' => 'valid_from',
-                    'value' => '2015-10-08 00:00:00',
-                    'created_at' => '0000-00-00 00:00:00',
-                    'updated_at' => '0000-00-00 00:00:00'
-                ],
-                [
-                    'id' => 9,
-                    'voucher_job_id' => 1,
-                    'key' => 'valid_to',
-                    'value' => '2015-11-08 00:00:00',
-                    'created_at' => '0000-00-00 00:00:00',
-                    'updated_at' => '0000-00-00 00:00:00'
-                ],
-                [
-                    'id' => 10,
-                    'voucher_job_id' => 1,
-                    'key' => 'is_limited',
-                    'value' => '0',
-                    'created_at' => '0000-00-00 00:00:00',
-                    'updated_at' => '0000-00-00 00:00:00'
-                ],
-                [
-                    'id' => 11,
-                    'voucher_job_id' => 1,
-                    'key' => 'limit',
-                    'value' => '3',
-                    'created_at' => '0000-00-00 00:00:00',
-                    'updated_at' => '0000-00-00 00:00:00'
-                ],
-                [
-                    'id' => 12,
-                    'voucher_job_id' => 1,
-                    'key' => 'brand',
-                    'value' => 'IN',
-                    'created_at' => '0000-00-00 00:00:00',
-                    'updated_at' => '0000-00-00 00:00:00'
-                ],
-                [
-                    'id' => 13,
-                    'voucher_job_id' => 1,
-                    'key' => 'total',
-                    'value' => '30000',
-                    'created_at' => '0000-00-00 00:00:00',
-                    'updated_at' => '0000-00-00 00:00:00'
-                ],
-                [
-                    'id' => 14,
-                    'voucher_job_id' => null,
-                    'key' => '',
-                    'value' => null,
-                    'created_at' => '0000-00-00 00:00:00',
-                    'updated_at' => '0000-00-00 00:00:00'
-                ],
-                [
-                    'id' => 15,
-                    'voucher_job_id' => 2,
-                    'key' => 'status',
-                    'value' => 'active',
-                    'created_at' => '0000-00-00 00:00:00',
-                    'updated_at' => '0000-00-00 00:00:00'
-                ],
-                [
-                    'id' => 16,
-                    'voucher_job_id' => 2,
-                    'key' => 'category',
-                    'value' => 'new',
-                    'created_at' => '0000-00-00 00:00:00',
-                    'updated_at' => '0000-00-00 00:00:00'
-                ],
-                [
-                    'id' => 17,
-                    'voucher_job_id' => 2,
-                    'key' => 'title',
-                    'value' => 'INTERNAL',
-                    'created_at' => '0000-00-00 00:00:00',
-                    'updated_at' => '0000-00-00 00:00:00'
-                ],
-                [
-                    'id' => 18,
-                    'voucher_job_id' => 2,
-                    'key' => 'location',
-                    'value' => 'Lagos',
-                    'created_at' => '0000-00-00 00:00:00',
-                    'updated_at' => '0000-00-00 00:00:00'
-                ],
-                [
-                    'id' => 19,
-                    'voucher_job_id' => 2,
-                    'key' => 'description',
-                    'value' => 'fhfsd',
-                    'created_at' => '0000-00-00 00:00:00',
-                    'updated_at' => '0000-00-00 00:00:00'
-                ],
-                [
-                    'id' => 20,
-                    'voucher_job_id' => 2,
-                    'key' => 'duration',
-                    'value' => '1',
-                    'created_at' => '0000-00-00 00:00:00',
-                    'updated_at' => '0000-00-00 00:00:00'
-                ],
-                [
-                    'id' => 21,
-                    'voucher_job_id' => 2,
-                    'key' => 'period',
-                    'value' => 'month',
-                    'created_at' => '0000-00-00 00:00:00',
-                    'updated_at' => '0000-00-00 00:00:00'
-                ],
-                [
-                    'id' => 22,
-                    'voucher_job_id' => 2,
-                    'key' => 'valid_from',
-                    'value' => '2015-10-08 00:00:00',
-                    'created_at' => '0000-00-00 00:00:00',
-                    'updated_at' => '0000-00-00 00:00:00'
-                ],
-                [
-                    'id' => 23,
-                    'voucher_job_id' => 2,
-                    'key' => 'valid_to',
-                    'value' => '2015-11-08 00:00:00',
-                    'created_at' => '0000-00-00 00:00:00',
-                    'updated_at' => '0000-00-00 00:00:00'
-                ],
-                [
-                    'id' => 24,
-                    'voucher_job_id' => 2,
-                    'key' => 'is_limited',
-                    'value' => '0',
-                    'created_at' => '0000-00-00 00:00:00',
-                    'updated_at' => '0000-00-00 00:00:00'
-                ],
-                [
-                    'id' => 25,
-                    'voucher_job_id' => 2,
-                    'key' => 'limit',
-                    'value' => '10',
-                    'created_at' => '0000-00-00 00:00:00',
-                    'updated_at' => '0000-00-00 00:00:00'
-                ],
-                [
-                    'id' => 26,
-                    'voucher_job_id' => 2,
-                    'key' => 'brand',
-                    'value' => 'IN',
-                    'created_at' => '0000-00-00 00:00:00',
-                    'updated_at' => '0000-00-00 00:00:00'
-                ],
-                [
-                    'id' => 27,
-                    'voucher_job_id' => 2,
-                    'key' => 'total',
-                    'value' => '20',
-                    'created_at' => '0000-00-00 00:00:00',
-                    'updated_at' => '0000-00-00 00:00:00'
-                ]
-            ]);
+        Schema::create('voucher_job_param_metadatas', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
+            $table->charset = 'utf8';
+            $table->collate = 'utf8_unicode_ci';
+
+            $table->increments('id')->unsigned();
+            $table->integer('voucher_job_id')->unsigned()->index('voucher_job_id')->nullable();
+            $table->foreign('voucher_job_id')->references('id')->on('voucher_jobs');
+            $table->string('key', 30)->index('voucher_job_param_metadatas_key');
+            $table->text('value')->nullable();
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::drop('voucher_job_param_metadatas');
     }
 }

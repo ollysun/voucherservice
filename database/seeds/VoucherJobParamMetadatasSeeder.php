@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class VoucherJobsParamsMetadataSeeder extends Seeder
+class VoucherJobParamMetadatasSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,7 +11,7 @@ class VoucherJobsParamsMetadataSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('voucher_jobs_params_metadata')
+        DB::table('voucher_job_param_metadatas')
             ->insert([
                 [
                     'id' => 1,
