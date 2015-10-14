@@ -5,10 +5,12 @@ use Illuminate\Support\Facades\DB;
 use Voucher\Models\Voucher;
 use Voucher\Models\VoucherJobParamMetadata;
 use Voucher\Models\VoucherLog;
+use Voucher\Models\VoucherCode;
 use Voucher\Transformers\VoucherTransformer;
 use Voucher\Models\VoucherJob;
 use Voucher\Transformers\VoucherJobParamMetadataTransformer;
 use Voucher\Transformers\VoucherJobTransformer;
+use Voucher\Transformers\VoucherCodeTransformer;
 use Voucher\Voucher\Event;
 
 class VouchersRepository extends AbstractRepository implements IVouchersRepository
@@ -18,12 +20,16 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
     protected $log_model;
 
     protected $voucherMetadata;
-    
-    public function __construct(Voucher $voucher, VoucherLog $voucherLog, VoucherJobParamMetadata $voucherMetadataModel)
+    protected $voucherCode;
+    public function __construct(Voucher $voucher,
+                                VoucherLog $voucherLog,
+                                VoucherJobParamMetadata $voucherMetadataModel,
+                                VoucherCode $voucherCodeModel )
     {
         $this->model = $voucher;
         $this->log_model = $voucherLog;
         $this->voucherMetadata = $voucherMetadataModel;
+        $this->voucherCode = $voucherCodeModel;
     }
 
     public function getVouchers($data)
@@ -85,6 +91,32 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
         }
     }
 
+    public function getVoucherCodeByStatus($status)
+    {
+        $voucherCodeByStatus = $this->voucherCode->where('code_status', $status)->first();
+        try {
+            if (!is_null($voucherCodeByStatus)) {
+                return self::transform($voucherCodeByStatus, new VoucherCodeTransformer());
+            } else {
+                return false;
+            }
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
+
+    public function updateVoucherCodeStatusByID($id)
+    {
+        try{
+            $vouchersCodeObject = $this->voucherCode->find($id);
+            $vouchersCodeObject->code_status = "used";
+            $vouchersCodeObject->save();
+            return $vouchersCodeObject;
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
+
     public function createOrUpdate($id = null, $input)
     {
         try{
@@ -106,6 +138,7 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
             $vouchersObject->category = $input['category'];
             $vouchersObject->type = $input['type'];
             $vouchersObject->code = $input['code'];
+            $vouchersObject->voucher_job_id = $input['voucher_job_id'];
             $vouchersObject->save();
 
             return self::transform( $vouchersObject, new VoucherTransformer());
@@ -176,7 +209,7 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
             }else
             {
                 $voucherJob->status = 'error';
-                $voucherJob->comments = 'Error processing the Voucher';
+                $voucherJob->comments = 'Error processing the VoucherJob';
             }
             $voucherJob->save();
             return self::transform($voucherJob, new VoucherJobTransformer());
@@ -188,12 +221,18 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
     public function insertVoucherJobParamMetadata($data)
     {
         try{
-            $value_job = $data['voucher_job_id'];
+            $voucher_job_id = $data['voucher_job_id'];
+            $listKeys = [
+                'type', 'status' , 'category',
+                'title', 'location', 'description', 'duration ',
+                'period', 'is_limited','limit',
+                'brand', ' total','valid_from', 'valid_to','code'
+            ];
             foreach($data['arrayCombineKeyValue'] as $key => $value)
             {
                 $voucherMetadata = $this->voucherMetadata;
-                if (in_array($key, $data['arrayCombineKeyValue'])) {
-                    $voucherMetadata->voucher_job_id = $value_job;
+                if (in_array($key, $listKeys)) {
+                    $voucherMetadata->voucher_job_id = $voucher_job_id;
                     $voucherMetadata->key = trim($key);
                     $voucherMetadata->value = trim($value);
                     $voucherMetadata->save();
