@@ -13,7 +13,8 @@ use Voucher\Models\Voucher;
 class VoucherTransformer extends TransformerAbstract
 {
     protected $availableIncludes = [
-        'voucherLogs'
+        'voucherLogs',
+        'voucherJobs'
     ];
 
     public static function transform(Voucher $voucher)
@@ -33,6 +34,7 @@ class VoucherTransformer extends TransformerAbstract
             'valid_to' => $voucher->valid_to,
             'is_limited' => (boolean) $voucher->is_limited,
             'limit' => (int) $voucher->limit,
+//            'total_redeemed' => (int) $voucher->total_redeemed,
             'created_at' => $voucher->created_at,
             'updated_at' => $voucher->updated_at,
             '_links' => [
@@ -50,7 +52,13 @@ class VoucherTransformer extends TransformerAbstract
 
     public function includeVoucherLogs(Voucher $voucher)
     {
-        $voucherLogs = $voucher->voucherLog();
+        $voucherLogs = $voucher->voucherLog;
         return $this->collection($voucherLogs, new VoucherLogTransformer());
+    }
+
+    public function includeVoucherJobs(Voucher $voucher)
+    {
+        $voucherJobs = $voucher->voucherJob;
+        return $this->item($voucherJobs, new VoucherJobTransformer());
     }
 }
