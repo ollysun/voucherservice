@@ -1,12 +1,4 @@
-<?php
-/**
- * Created by PhpStorm.
- * User: Tech-1
- * Date: 10/8/15
- * Time: 3:28 PM
- */
-
-namespace Voucher\Http\Controllers;
+<?php namespace Voucher\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -28,7 +20,9 @@ class VouchersController extends Controller
     public function __construct(Request $request, VouchersRepository $repository, Voucher $voucher)
     {
         parent::__construct($request);
+
         $this->repository = $repository;
+
         $this->voucher = $voucher;
     }
 

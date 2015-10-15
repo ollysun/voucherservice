@@ -86,7 +86,7 @@ class TaskController extends Controller
                 ];
 
                 $this->voucher_jobs_repo->updateJobStatus($job_status);
-                $job_params = $this->voucher_jobs_params_repo->getJobParameters($job);
+                $job_params = $this->voucher_jobs_params_repo->getJobParams($job);
                 $params = [];
 
                 foreach ($job_params as $job_param) {
@@ -107,7 +107,7 @@ class TaskController extends Controller
                     $vouchers = $this->voucher_repo->getVouchersByJobIdAndLimit($loop_params);
                     $csv_file = $this->generateCsvFromVouchers($vouchers, $loop_params['voucher_set']++);
                     $this->uploadS3($csv_file);
-                    $this->notify($vouchers);
+                    $this->notify($job);
 
                     if (count($vouchers['data']) < $loop_params['limit']) {
                         $loop_params['start'] = -1;
@@ -131,7 +131,6 @@ class TaskController extends Controller
             return $this->respondSuccess('Successfully issued Voucher Codes.');
 
         } catch (\Exception $e) {
-
             $job_status = [
                 'job_id' => $job['id'],
                 'status' => 'error',
@@ -150,10 +149,11 @@ class TaskController extends Controller
     /**
      * Generates a csv file from the issued codes.
      *
-     * @param $vouchers
+     * @param $vouchers $set
      * @return \Illuminate\Http\Response|string
+     * @throws \Exception
      */
-    public function generateCsvFromVouchers($vouchers, $set)
+    protected function generateCsvFromVouchers($vouchers, $set)
     {
         try {
             $voucher_file = $vouchers['data'][0]['title'].'_'.date('Y_m_d_H_i_s', time()). '_set_'. $set;
@@ -173,25 +173,25 @@ class TaskController extends Controller
             return $voucher_file;
         }
         catch (\Exception $e) {
-            Log::error(SELF::LOGTITLE, array_merge(
-                ['error' => $e->getMessage()],
-                $this->log
-            ));
-            return $this->errorInternalError('Error generating CSV file : '.$e->getMessage());
+            throw new \Exception('Error generating CSV file : '.$e->getMessage());
         }
     }
 
-    public function uploadS3($file_name)
+    /**
+     * Uploads generated csv files to S3 bucket.
+     *
+     * @param $file_name
+     * @return string
+     * @throws \Exception
+     */
+    protected function uploadS3($file_name)
     {
         try {
             $bucket = getenv('AWS_S3_BUCKET');
-
             $file_path = storage_path('vouchers');
             $key_name = getenv('AWS_S3_BUCKET_FOLDER').'/'.$file_name;
-
-
             $s3 = new S3Client(Config::get('s3'));
-            // Upload a file.
+
             $result = $s3->putObject(array(
                 'Bucket' => $bucket,
                 'Key' => $key_name,
@@ -199,30 +199,39 @@ class TaskController extends Controller
             ));
 
             echo $result['ObjectURL'];
-            //@TODO remove file from storage path after s3 uploaded successfully - Chizzy
-
             unlink($file_path . '/' . $file_name . '.csv');
         }
         catch (\Exception $e) {
-            return ('S3 Upload error:'. $e->getMessage());
+            throw new \Exception('S3 Upload error:'. $e->getMessage());
         }
     }
 
+    /**
+     * Sends notification about a completed voucher job.
+     *
+     * @param $job
+     * @return bool|string
+     * @throws \Exception
+     */
     public function notify($job)
     {
         try {
-            //@TODO implement Voucher Notification Chizzy
             $notify = new VoucherNotification(1, 'Generate Voucher Initiated', [1]);
-            $notify->__set('job_id', $job['data']['id']);
-            $notify->__set('job_status', $job['data']['status']);
+            $notify->__set('job_id', $job['id']);
+            $notify->__set('job_status', $job['status']);
 
             Notification::send($notify);
-        }
-        catch (\Exception $e) {
-            return $e->getMessage();
+            return true;
+        } catch (\Exception $e) {
+            throw new \Exception('Failed while sending notification:'. $e->getMessage());
         }
     }
 
+    /**
+     * Generates voucher codes.
+     *
+     * @return array|\Illuminate\Http\Response
+     */
     public function generateVoucherCodes()
     {
         $fields = $this->request->all();
@@ -231,7 +240,6 @@ class TaskController extends Controller
 
         try {
             $validator = Validator::make($fields, $rules, $messages);
-
             if ($validator->fails()) {
                 Log::error(SELF::LOGTITLE, array_merge(
                     [
@@ -242,7 +250,7 @@ class TaskController extends Controller
                 return $this->errorWrongArgs($validator->errors());
 
             } else {
-                $characters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
                 $i = 0;
                 $voucher_code = '';
                 while ($i < $fields['total']) {
@@ -251,7 +259,10 @@ class TaskController extends Controller
                     }
                     $code = $this->voucher_codes_repo->isNotExistingVoucherCode($voucher_code);
                     if ($code) {
-                        $data = ['voucher_code' => $voucher_code, 'voucher_status' => 'new'];
+                        $data = [
+                            'voucher_code' => $voucher_code,
+                            'voucher_status' => 'new'
+                        ];
                         $this->voucher_codes_repo->insertVoucherCode($data);
                         $i += 1;
                     }
@@ -259,11 +270,9 @@ class TaskController extends Controller
                 }
                 return $this->respondCreated(['Voucher Codes have been generated.']);
             }
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             $notify = new VoucherNotification(1, 'Generate Voucher Codes Initiated', [1374135]);
             $notify->error = $e->getMessage();
-
             Notification::send($notify);
 
             Log::error(SELF::LOGTITLE, array_merge(
@@ -272,6 +281,7 @@ class TaskController extends Controller
                 ],
                 $this->log
             ));
+            return $this->errorInternalError($e->getMessage());
         }
     }
 }

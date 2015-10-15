@@ -113,7 +113,7 @@ class Voucher
                 'voucher_status' => $voucher['voucher_status'],
                 'subscription_duration' => $voucher['duration']. ''. $voucher['period'],
             ];
-            $this->subscribe($subscription_data);
+            $this->sendSubscribeRequest($subscription_data);
             return true;
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
@@ -123,13 +123,12 @@ class Voucher
     /**
      * Checks if a voucher code exist and still valid.
      *
-     * @param $data
+     * @param $post_data
      * @return mixed
      * @throws \Exception
      */
     protected function isVoucherExistsAndValid($post_data)
     {
-
         $voucher = $this->voucher_repository->getVoucherByCode($post_data['code']);
 
         $data = [
@@ -150,7 +149,7 @@ class Voucher
                     $code_redeem_count = $this->voucher_logs_repository->getVoucherRedeemedCount($voucher['data']['id']);
 
                     if ($voucher['data']['limit'] > $code_redeem_count) {
-                        if($voucher['data']['limit'] ==  ($code_redeem_count + 1)) {
+                        if ($voucher['data']['limit'] ==  ($code_redeem_count + 1)) {
                             $voucher['data']['voucher_status'] = "claimed";
                         } else {
                             $voucher['data']['voucher_status'] = "claiming";
@@ -184,7 +183,7 @@ class Voucher
     {
         $subscription = $this->subscriptions_api->subscriptionApi('/subscriptions/'. $user_data['user_id'], 'get');
 
-        if($subscription) {
+        if ($subscription) {
             switch ($voucher_data['category']) {
                 case 'new_expire':
                     if (!$subscription['data']['is_active']){
@@ -199,14 +198,13 @@ class Voucher
                     break;
 
                 case 'active':
-                    if($plan = $this->plans_api->plansApi('/plans/'. $subscription['data']['plan_id'], 'get')) {
+                    if ($plan = $this->plans_api->plansApi('/plans/'. $subscription['data']['plan_id'], 'get')) {
                         if ($subscription['data']['is_active'] && !$plan['data']['is_recurring']) {
                             return $subscription['data'];
                         }
                         break;
                     }
             }
-
         } else {
             if ($voucher_data['category'] == 'new' || $voucher_data['category'] == 'new_expire') {
                 $subscription = [
@@ -225,7 +223,6 @@ class Voucher
             'action' => 'attempt',
             'comments'   => 'User is not eligible to use the voucher code.',
         ];
-
         $this->voucher_logs_repository->addVoucherLog($data);
         throw new \Exception('You are not eligible to use this voucher code.');
     }
@@ -238,7 +235,7 @@ class Voucher
      * @return bool
      * @throws \Exception
      */
-    protected function subscribe($data)
+    protected function sendSubscribeRequest($data)
     {
         $subscribe_response = $this->sqs_client->sendMessage(array(
             'QueueUrl' => $this->config['endpoint_url'],
@@ -248,23 +245,20 @@ class Voucher
         $log_data = [
             'voucher_id' => $data['voucher_id'],
             'user_id'   => $data['user_id'],
-            'platform'  => $data['platform'],
-            'action' => 'success',
-            'comments' => 'User successfully subscribed using a valid voucher code.',
+            'platform'  => $data['platform']
         ];
 
         if ($subscribe_response->get('MessageId')) {
-
             $this->voucher_repository->updateVoucherStatus($data);
+            $log_data['comments'] = 'Successfully subscribed using a valid voucher code.';
+            $log_data['action'] = "success";
             $this->voucher_logs_repository->addVoucherLog($log_data);
             return true;
-
         } else {
-            $log_data['comments'] = 'User used a valid voucher code, but something went wrong on queuing the subscribe request.';
-            $log_data['comments'] = "attempt";
-
+            $log_data['comments'] = 'Something went wrong on queueing the subscribe by voucher request.';
+            $log_data['action'] = "attempt";
             $this->voucher_logs_repository->addVoucherLog($log_data);
-            throw new \Exception($log_data['comments']);
+            throw new \Exception('Something went wrong, please try again in a later time.');
         }
     }
 }

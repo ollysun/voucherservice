@@ -8,20 +8,47 @@ use Voucher\Models\VoucherLog;
 use Voucher\Models\VoucherCode;
 use Voucher\Transformers\VoucherTransformer;
 use Voucher\Models\VoucherJob;
-use Voucher\Transformers\VoucherJobParamMetadataTransformer;
 use Voucher\Transformers\VoucherJobTransformer;
 use Voucher\Transformers\VoucherCodeTransformer;
 
 class VouchersRepository extends AbstractRepository implements IVouchersRepository
 {
+    /**
+     * voucher model
+     *
+     * @var Voucher
+     */
     protected $model;
 
+    /**
+     * voucher log model
+     *
+     * @var
+     */
     protected $log_model;
 
+    /**
+     * Voucher parameters metadata model
+     *
+     * @var
+     */
     protected $voucherMetadata;
 
+    /**
+     * VoucherCode model
+     *
+     * @var
+     */
     protected $voucherCode;
 
+    /**
+     * Creates a new vouchers repository instance.
+     *
+     * @param Voucher $voucher
+     * @param VoucherLog $voucherLog
+     * @param VoucherJobParamMetadata $voucherMetadataModel
+     * @param VoucherCode $voucherCodeModel
+     */
     public function __construct(
 
         Voucher $voucher,
@@ -42,6 +69,13 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
         $this->voucherCode = $voucherCodeModel;
     }
 
+    /**
+     * Retrieves all available vouchers in the vouchers table.
+     *
+     * @param $data
+     * @return null
+     * @throws \Exception
+     */
     public function getVouchers($data)
     {
         try {
@@ -84,6 +118,13 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
         }
     }
 
+    /**
+     * Gets a voucher by id in the vouchers table.
+     *
+     * @param $id
+     * @return null
+     * @throws \Exception
+     */
     public function getVoucherById($id)
     {
         try {
@@ -135,6 +176,13 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
         }
     }
 
+    /**
+     * Gets a any single voucher with status new.
+     *
+     * @param $status
+     * @return bool
+     * @throws \Exception
+     */
     public function getVoucherCodeByStatus($status)
     {
         $voucherCodeByStatus = $this->voucherCode->where('code_status', $status)->first();
@@ -149,12 +197,20 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
         }
     }
 
+    /**
+     * Updates a used voucher code status by voucher id.
+     *
+     * @param $id
+     * @return mixed
+     * @throws \Exception
+     */
     public function updateVoucherCodeStatusByID($id)
     {
         try {
             $vouchersCodeObject = $this->voucherCode->find($id);
             $vouchersCodeObject->code_status = "used";
             $vouchersCodeObject->save();
+
             return $vouchersCodeObject;
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
@@ -210,7 +266,6 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
             $vouchersObject->save();
 
             return self::transform( $vouchersObject, new VoucherTransformer());
-
         }catch (\Exception $ex) {
             throw new \Exception($ex->getMessage());
         }
@@ -244,8 +299,7 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
     }
 
     /**
-     * Sets the voucher status a user uses in subscribing to claiming,
-     * until subscription is processed.
+     * Sets a voucher status after successful redeem.
      *
      * @param $data
      * @return bool
@@ -264,6 +318,13 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
         }
     }
 
+    /**
+     * Adds a new voucher job to be processed.
+     *
+     * @param $status
+     * @return mixed
+     * @throws \Exception
+     */
     public function insertVoucherJob($status)
     {
         try {
@@ -271,10 +332,10 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
             if ($status == 'new') {
                 $voucherJob->status = 'new';
                 $voucherJob->comments = 'New VoucherJob Inserted';
-            } elseif($status == 'processing') {
+            } elseif ($status == 'processing') {
                 $voucherJob->status = 'processing';
                 $voucherJob->comments = 'Processing VoucherJob.........';
-            } elseif($status == 'completed') {
+            } elseif ($status == 'completed') {
                 $voucherJob->status = 'completed';
                 $voucherJob->comments = 'VoucherJob Complete processing';
             } else {
@@ -288,6 +349,14 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
         }
     }
 
+    /**
+     *  Adds list of parameters for a voucher job process.
+     *
+     * @param $data
+     * @param $voucher_job_id
+     * @return bool
+     * @throws \Exception
+     */
     public function insertVoucherJobParamMetadata($data, $voucher_job_id)
     {
         try{
