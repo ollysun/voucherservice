@@ -1,22 +1,15 @@
 <?php
 
 return array(
-    'aws_credentials' => array(
+    'client' => 'sqs', // enable SQS queue logging
+    'endpoint_url' => getenv('SQS_VOUCHER_TO_SUBSCRIPTION'), // Queue name from laravel queue config
+    'aws_ec2_instanceid' => (getenv('AWS_EC2_INSTANCE_ID')) ? getenv('AWS_EC2_INSTANCE_ID') : '',
+    'aws' => array(
         'credentials' => array(
-            'key' => env('AWS_CREDENTIAL_KEY', ''),
-            'secret' => env('AWS_CREDENTIAL_SECRET', ''),
+            'key' => getenv('AWS_CREDENTIAL_KEY'),
+            'secret' => getenv('AWS_CREDENTIAL_SECRET')
         ),
-        'region' => env('AWS_REGION', 'eu-west-1'),
-        'version' => env('AWS_VERSION', '2012-11-05')
-    ),
-
-    'incoming_queue' => array(
-        'sqs_endpoint_url' => env('INCOMING_SQS_SUBSCRIPTION_ENDPOINT'),
-        'max_num_messages' => env('INCOMING_MAX_MESSAGES', 10),
-        'sleep_time_when_no_messages' => env('INCOMING_SLEEP_WHEN_EMPTY', 5)
-    ),
-
-    'outgoing_queue' => array(
-        'sqs_endpoint_url' => env('OUTGOING_SQS_VOUCHER_ENDPOINT'),
-    ),
+        'region' => 'eu-west-1',
+        'version' => '2012-11-05'
+    )
 );

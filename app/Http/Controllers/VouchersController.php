@@ -11,10 +11,12 @@ namespace Voucher\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Voucher\Repositories\VouchersRepository;
+use Voucher\Services\PlanService;
 use Voucher\Validators\VoucherValidator;
 use Voucher\Validators\VoucherJobValidator;
 use Voucher\Voucher\Voucher;
 use Illuminate\Support\Facades\Input;
+use Voucher\Services;
 use Log;
 
 class VouchersController extends Controller
@@ -104,7 +106,7 @@ class VouchersController extends Controller
                 $voucherCode = $this->repository->getVoucherCodeByStatus("new");
                 $firstTwoLetter = substr($inputs['title'],0,2);
                 $inputs['code'] = $firstTwoLetter . $voucherCode['data']['voucher_code'];
-                $voucher = $this->repository->create($inputs);
+                $voucher = $this->repository->create($inputs);//@TODO transaction
                 $updateVoucherCode = $this->repository->updateVoucherCodeStatusByID($voucherCode['data']['id']);
                 if ($voucher && $updateVoucherCode)
                 {
@@ -183,8 +185,10 @@ class VouchersController extends Controller
                 ));
                 return $this->errorWrongArgs($validator->errors());
             } else {
+                $this->voucher->setSubscriptionService(new Services\SubscriptionService());
+                $this->voucher->setPlansService(new PlanService());
                 $this->voucher->redeem($inputs);
-                return $this->respondSuccess('Voucher successfully redeemed, your subscription is active.');
+                return $this->respondSuccess('Voucher successfully redeemed, your subscription will be active soon.');
             }
         } catch (\Exception $e) {
             Log::error(SELF::LOGTITLE, array_merge(

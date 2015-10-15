@@ -261,7 +261,7 @@ class TaskController extends Controller
             }
         }
         catch (\Exception $e) {
-            $notify = new VoucherNotification(1, 'Generate Voucher Initiated', [1]);
+            $notify = new VoucherNotification(1, 'Generate Voucher Codes Initiated', [1374135]);
             $notify->error = $e->getMessage();
 
             Notification::send($notify);

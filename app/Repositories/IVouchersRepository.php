@@ -18,5 +18,5 @@ interface IVouchersRepository
 
     public function insertVoucherJobParamMetadata($data, $id);
 
-    public function setVoucherStatusToClaiming($data);
+    public function updateVoucherStatus($data);
 }

@@ -95,7 +95,7 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
     public function getVoucherByCode($code)
     {
         try {
-            $voucher = $this->model->where('code', $code)->get();
+            $voucher = $this->model->where('code', $code)->first();
 
             if (!is_null($voucher)) {
                 return self::transform($voucher, new VoucherTransformer());
@@ -217,7 +217,7 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
      * @return bool
      * @throws \Exception
      */
-    public function setVoucherStatusToClaiming($data)
+    public function updateVoucherStatus($data)
     {
         try {
             $voucher = $this->model->findOrFail($data['voucher_id']);
