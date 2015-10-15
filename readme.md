@@ -69,7 +69,7 @@ AWS_VERSION=2012-11-05
 
 ANALYTICS_SQS_ENDPOINT=https://sqs.eu-west-1.amazonaws.com/695925038353/v3-analytics
 
-INCOMING_SQS_VOUCHER_ENDPOINT=https://sqs.eu-west-1.amazonaws.com/695925038353/voucher-dev
+SQS_VOUCHER_TO_SUBSCRIPTION=https://sqs.eu-west-1.amazonaws.com/695925038353/voucher-dev
 
 PLANS_API_URL = http://www.plans.local
 
