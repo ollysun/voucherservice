@@ -34,7 +34,7 @@ class VoucherTransformer extends TransformerAbstract
             'valid_to' => $voucher->valid_to,
             'is_limited' => (boolean) $voucher->is_limited,
             'limit' => (int) $voucher->limit,
-//            'total_redeemed' => (int) $voucher->total_redeemed,
+            'total_redeemed' => (int) $voucher->total_redeemed,
             'created_at' => $voucher->created_at,
             'updated_at' => $voucher->updated_at,
             '_links' => [
