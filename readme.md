@@ -77,5 +77,7 @@ SUBSCRIPTION_API_URL = http://www.subscription.local
 
 
 NOTIFICATIONS_SQS_ENDPOINT_HIGH=https://sqs.eu-west-1.amazonaws.com/695925038353/notifications_high
+
 NOTIFICATIONS_SQS_ENDPOINT_NORMAL=https://sqs.eu-west-1.amazonaws.com/695925038353/notifications_normal
+
 NOTIFICATIONS_SQS_ENDPOINT_LOW=https://sqs.eu-west-1.amazonaws.com/695925038353/notifications_low
