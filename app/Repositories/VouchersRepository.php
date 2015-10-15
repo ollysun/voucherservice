@@ -87,14 +87,15 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
     public function getVoucherById($id)
     {
         try {
-            $voucher = $this->model->where($id, 'id')
+            $voucher = $this->model
                 ->select([
                     DB::raw('vouchers.*'),
                     DB::raw('sum(case when `action` = \'success\' then 1 else 0 end) as `total_redeemed`')
                 ])
+                ->where('vouchers.id', $id)
                 ->leftJoin('voucher_logs', 'voucher_logs.voucher_id', '=', 'vouchers.id')
-                ->groupBy('voucher_id');
-
+                ->groupBy('voucher_id')
+                ->first();
             if (!is_null($voucher)) {
                 return self::transform($voucher, new VoucherTransformer());
             } else {

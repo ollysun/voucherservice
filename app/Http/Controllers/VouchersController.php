@@ -147,7 +147,8 @@ class VouchersController extends Controller
                 ));
                 return $this->errorWrongArgs($validator->errors());
             } else {
-                if (!$this->repository->getVoucherById($voucher_id)) {
+                $voucher = $this->repository->getVoucherById($voucher_id);
+                if (!$voucher) {
                     return $this->errorNotFound('Check Id, voucher detail not found');
                 } else {
                     $data = ['id'=>$fields['id'],'status'=>$fields['status'],'title'=>$fields['title'],'location'=>$fields['location'],'description'=>$fields['description']];
