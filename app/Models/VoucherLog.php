@@ -2,13 +2,6 @@
 
 use Illuminate\Database\Eloquent\Model;
 
-/**
- * Created by PhpStorm.
- * User: tech7
- * Date: 10/8/15
- * Time: 3:08 PM
- */
-
 class VoucherLog extends Model
 {
     /**
