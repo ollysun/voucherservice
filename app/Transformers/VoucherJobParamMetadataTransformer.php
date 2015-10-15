@@ -41,7 +41,7 @@ class VoucherJobParamMetadataTransformer extends TransformerAbstract {
 
     public function includeVoucherJob(VoucherJobParamMetadata $voucherJobMetadata)
     {
-        $voucherJob = $voucherJobMetadata->voucherJob();
+        $voucherJob = $voucherJobMetadata->voucherJob;
         return $this->collection($voucherJob, new VoucherJobTransformer());
     }
 }

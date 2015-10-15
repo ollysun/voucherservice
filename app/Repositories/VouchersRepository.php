@@ -1,6 +1,7 @@
 <?php namespace Voucher\Repositories;
 
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\DB;
 use Voucher\Models\Voucher;
 use Voucher\Models\VoucherJobParamMetadata;
 use Voucher\Models\VoucherLog;
@@ -51,15 +52,28 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
             );
 
             if (is_null($data['query'])) {
-                $vouchers = $this->model->orderBy($data['sort'], $data['order'])
+                $vouchers = $this->model
+                    ->select([
+                            DB::raw('vouchers.*'),
+                            DB::raw('sum(case when `action` = \'success\' then 1 else 0 end) as `total_redeemed`')
+                        ])
+                    ->leftJoin('voucher_logs', 'voucher_logs.voucher_id', '=', 'vouchers.id')
+                    ->groupBy('voucher_id')
+                    ->orderBy($data['sort'], $data['order'])
                     ->paginate($data['limit']);
-
             } else {
                 $vouchers = $this->model->where('code', 'like', '%'.$data['query'].'%')
+                    ->select([
+                        DB::raw('vouchers.*'),
+                        DB::raw('sum(case when `action` = \'success\' then 1 else 0 end) as `total_redeemed`')
+                    ])
+                    ->leftJoin('voucher_logs', 'voucher_logs.voucher_id', '=', 'vouchers.id')
+                    ->groupBy('voucher_id')
                     ->orderBy($data['sort'], $data['order'])
                     ->paginate($data['limit']);
             }
-            if ($vouchers->isEmpty()) {
+
+            if (!$vouchers) {
                 return null;
             } else {
                 $list_vouchers = self::setPaginationLinks($vouchers, $data);
@@ -73,8 +87,15 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
     public function getVoucherById($id)
     {
         try {
-            $voucher = $this->model->find($id);
-
+            $voucher = $this->model
+                ->select([
+                    DB::raw('vouchers.*'),
+                    DB::raw('sum(case when `action` = \'success\' then 1 else 0 end) as `total_redeemed`')
+                ])
+                ->where('vouchers.id', $id)
+                ->leftJoin('voucher_logs', 'voucher_logs.voucher_id', '=', 'vouchers.id')
+                ->groupBy('voucher_id')
+                ->first();
             if (!is_null($voucher)) {
                 return self::transform($voucher, new VoucherTransformer());
             } else {
@@ -95,7 +116,14 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
     public function getVoucherByCode($code)
     {
         try {
-            $voucher = $this->model->where('code', $code)->first();
+            $voucher = $this->model->where('code', $code)
+                ->select([
+                    DB::raw('vouchers.*'),
+                    DB::raw('sum(case when `action` = \'success\' then 1 else 0 end) as `total_redeemed`')
+                ])
+                ->leftJoin('voucher_logs', 'voucher_logs.voucher_id', '=', 'vouchers.id')
+                ->groupBy('voucher_id')
+                ->first();
 
             if (!is_null($voucher)) {
                 return self::transform($voucher, new VoucherTransformer());
@@ -199,6 +227,12 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
     {
         try {
             $vouchers = $this->model->where('voucher_job_id', '=', $params['job_id'])
+                ->select([
+                    DB::raw('vouchers.*'),
+                    DB::raw('sum(case when `action` = \'success\' then 1 else 0 end) as `total_redeemed`')
+                ])
+                ->leftJoin('voucher_logs', 'voucher_logs.voucher_id', '=', 'vouchers.id')
+                ->groupBy('voucher_id')
                 ->skip($params['start'])
                 ->take($params['limit'])
                 ->get();

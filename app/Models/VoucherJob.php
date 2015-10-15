@@ -9,4 +9,9 @@ class VoucherJob extends Model
     {
         return $this->hasMany('Voucher\Models\VoucherJobParamMetadata');
     }
+
+    public function voucher()
+    {
+        return $this->hasMany('Voucher\Models\Voucher');
+    }
 }

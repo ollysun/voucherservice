@@ -20,4 +20,14 @@ class Voucher extends Model
     {
         return $this->hasMany('Voucher\Models\VoucherLog');
     }
+
+    /**
+     * Get the Voucher_Job record associated with the Voucher.
+     *
+     * Voucher belongsTo relationship with Voucher_Job
+     */
+    public function voucherJob()
+    {
+        return $this->belongsTo('Voucher\Models\VoucherJob');
+    }
 }
