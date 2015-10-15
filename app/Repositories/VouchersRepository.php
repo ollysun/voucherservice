@@ -57,7 +57,7 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
                             DB::raw('vouchers.*'),
                             DB::raw('sum(case when `action` = \'success\' then 1 else 0 end) as `total_redeemed`')
                         ])
-                    ->join('voucher_logs', 'voucher_logs.voucher_id', '=', 'vouchers.id')
+                    ->leftJoin('voucher_logs', 'voucher_logs.voucher_id', '=', 'vouchers.id')
                     ->groupBy('voucher_id')
                     ->orderBy($data['sort'], $data['order'])
                     ->paginate($data['limit']);
@@ -67,7 +67,7 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
                         DB::raw('vouchers.*'),
                         DB::raw('sum(case when `action` = \'success\' then 1 else 0 end) as `total_redeemed`')
                     ])
-                    ->join('voucher_logs', 'voucher_logs.voucher_id', '=', 'vouchers.id')
+                    ->leftJoin('voucher_logs', 'voucher_logs.voucher_id', '=', 'vouchers.id')
                     ->groupBy('voucher_id')
                     ->orderBy($data['sort'], $data['order'])
                     ->paginate($data['limit']);
@@ -92,7 +92,7 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
                     DB::raw('vouchers.*'),
                     DB::raw('sum(case when `action` = \'success\' then 1 else 0 end) as `total_redeemed`')
                 ])
-                ->join('voucher_logs', 'voucher_logs.voucher_id', '=', 'vouchers.id')
+                ->leftJoin('voucher_logs', 'voucher_logs.voucher_id', '=', 'vouchers.id')
                 ->groupBy('voucher_id');
 
             if (!is_null($voucher)) {
@@ -120,7 +120,7 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
                     DB::raw('vouchers.*'),
                     DB::raw('sum(case when `action` = \'success\' then 1 else 0 end) as `total_redeemed`')
                 ])
-                ->join('voucher_logs', 'voucher_logs.voucher_id', '=', 'vouchers.id')
+                ->leftJoin('voucher_logs', 'voucher_logs.voucher_id', '=', 'vouchers.id')
                 ->groupBy('voucher_id')
                 ->first();
 
@@ -230,7 +230,7 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
                     DB::raw('vouchers.*'),
                     DB::raw('sum(case when `action` = \'success\' then 1 else 0 end) as `total_redeemed`')
                 ])
-                ->join('voucher_logs', 'voucher_logs.voucher_id', '=', 'vouchers.id')
+                ->leftJoin('voucher_logs', 'voucher_logs.voucher_id', '=', 'vouchers.id')
                 ->groupBy('voucher_id')
                 ->skip($params['start'])
                 ->take($params['limit'])
