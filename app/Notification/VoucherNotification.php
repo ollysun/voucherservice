@@ -1,4 +1,6 @@
-<? namespace Voucher\Notification;
+<?php
+namespace Voucher\Notification;
+
 use Iroko\Notify\Messages\Notification;
 
 class VoucherNotification extends Notification
@@ -21,7 +23,7 @@ class VoucherNotification extends Notification
                 throw new \Exception('Property can\'t be set');
             }
         } catch (\Exception $e) {
-            return $e->getMessage();
+            throw new \Exception($e->getMessage());
         }
     }
 }
