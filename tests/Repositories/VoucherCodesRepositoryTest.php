@@ -37,12 +37,35 @@ class VoucherCodesRepositoryTest extends TestCase
 
     public function testIsNotExistingVoucherCodeErrorException()
     {
-//        $this->setExpectedException('\Exception');
-
-        $this->model = $this->getMock('Voucher\Models\VoucherCodes', ['where']);
-        $this->model->expects($this->any())->method('where')->willThrowException(new \Exception());
-
+        $this->model = \Mockery::mock(VoucherCode::class);
         $this->repository = new VoucherCodesRepository($this->model);
+
+        $this->model->shouldReceive('where')
+            ->atLeast(1)
+            ->andThrow(new \Exception("Mock Exception"));
+
+        $this->setExpectedException('\Exception');
         $this->repository->isNotExistingVoucherCode('xxxxxxxx9');
+    }
+
+    public function testInsertVoucherCode()
+    {
+        $data = [
+            'voucher_status' => 'new',
+            'voucher_code' => 'abc123'
+        ];
+
+        $code = $this->repository->insertVoucherCode($data);
+        $this->assertEquals('abc123', $code['data']['voucher_code']);
+    }
+
+    public function testInsertVoucherCodeErrorException()
+    {
+        $data = [
+            'voucher_status' => 'new'
+        ];
+
+        $this->setExpectedException('\Exception');
+        $this->repository->insertVoucherCode($data);
     }
 }
