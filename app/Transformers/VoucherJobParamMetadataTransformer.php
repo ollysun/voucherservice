@@ -23,7 +23,7 @@ class VoucherJobParamMetadataTransformer extends TransformerAbstract {
             'id' => (int) $voucherJobMetadata->id,
             'voucher_job_id' => (int) $voucherJobMetadata->voucher_job_id,
             'key' => (string) $voucherJobMetadata->key,
-            'value' => (int) $voucherJobMetadata->value,
+            'value' => (string) $voucherJobMetadata->value,
             'created_at' => $voucherJobMetadata->created_at,
             'updated_at' => $voucherJobMetadata->updated_at,
             '_links' => [

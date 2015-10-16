@@ -6,5 +6,5 @@ interface IVoucherJobsRepository
 
     public function updateJobStatus($params);
 
-    public function issueCodesFromVoucherCodesTableToVouchersTable($params);
+    public function addVouchers($params);
 }

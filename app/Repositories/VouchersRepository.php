@@ -321,13 +321,7 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
     public function getVouchersByJobIdAndLimit($params)
     {
         try {
-            $vouchers = $this->model->where('voucher_job_id', '=', $params['job_id'])
-                ->select([
-                    DB::raw('vouchers.*'),
-                    DB::raw('sum(case when `action` = \'success\' then 1 else 0 end) as `total_redeemed`')
-                ])
-                ->leftJoin('voucher_logs', 'voucher_logs.voucher_id', '=', 'vouchers.id')
-                ->groupBy('voucher_id')
+            $vouchers = $this->model->where('voucher_job_id', '=', $params['voucher_job_id'])
                 ->skip($params['start'])
                 ->take($params['limit'])
                 ->get();

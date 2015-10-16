@@ -58,9 +58,9 @@ class VoucherJobsRepository extends AbstractRepository implements IVoucherJobsRe
     public function updateJobStatus($params)
     {
         try {
-            $job = $this->model->find($params['job_id']);
-            $job->comments = (isset($params['comment'])? $params['comment'] : null);
-            $job->status = (isset($params['status'])? $params['status'] : null);
+            $job = $this->model->find($params['voucher_job_id']);
+            $job->comments = (isset($params['comment'])? $params['comment'] : $job->comments);
+            $job->status = (isset($params['status'])? $params['status'] : $job->status);
             $job->save();
             return true;
 
@@ -77,7 +77,7 @@ class VoucherJobsRepository extends AbstractRepository implements IVoucherJobsRe
      * @return mixed
      * @throws \Exception
      */
-    public function issueCodesFromVoucherCodesTableToVouchersTable($params)
+    public function addVouchers($params)
     {
         try {
             $vouchers = DB::statement(
@@ -91,12 +91,11 @@ class VoucherJobsRepository extends AbstractRepository implements IVoucherJobsRe
                     $params["duration"] . ',"' .
                     $params["period"] . '","' .
                     $params["valid_from"] . '","' .
-                    $params["valid_to"] . '","' .
-                    $params["is_limited"] . '",' .
+                    $params["valid_to"] . '",' .
                     $params["limit"] . ',"' .
                     $params["brand"] . '",' .
                     $params["total"] . ',' .
-                    $params["job_id"].
+                    $params["voucher_job_id"].
                     ')'
                 )
             );
