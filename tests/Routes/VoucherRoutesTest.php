@@ -204,7 +204,7 @@ class VoucherRoutesTest extends TestCase
             "voucher_job_id" => 1
         ];
 
-        $this->call('PUT','/vouchers/3', $data, [], [], $this->authHeader);
+        $this->call('PUT', '/vouchers/3', $data, [], [], $this->authHeader);
         $this->assertResponseStatus(Response::HTTP_OK);
     }
 
@@ -222,7 +222,7 @@ class VoucherRoutesTest extends TestCase
             "voucher_job_id" => 1
         ];
 
-        $this->call('PUT','/vouchers/q', $data, [], [], $this->authHeader);
+        $this->call('PUT', '/vouchers/q', $data, [], [], $this->authHeader);
         $this->assertResponseStatus(Response::HTTP_BAD_REQUEST);
     }
 
@@ -244,7 +244,7 @@ class VoucherRoutesTest extends TestCase
             "code" => "fd1127",
             "voucher_job_id" => 1
         ];
-        $this->call('PUT','/plans/2000000000000', $data, [], [], $this->authHeader);
+        $this->call('PUT', '/plans/2000000000000', $data, [], [], $this->authHeader);
         $this->assertResponseStatus(Response::HTTP_NOT_FOUND);
     }
 
