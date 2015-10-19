@@ -111,7 +111,7 @@ class Voucher
                 'voucher_id' => $voucher['id'],
                 'code' => $voucher['code'],
                 'voucher_status' => $voucher['voucher_status'],
-                'subscription_duration' => $voucher['duration']. ''. $voucher['period'],
+                'subscription_duration' => $voucher['duration'].' '. $voucher['period'],
             ];
             $this->sendSubscribeRequest($subscription_data);
             return true;
@@ -146,10 +146,8 @@ class Voucher
                 $now = DateTime::createFromFormat('Y-m-d H:i:s', Carbon::now());
                 
                 if ($expires_on >= $now) {
-                    $code_redeem_count = $this->voucher_logs_repository->getVoucherRedeemedCount($voucher['data']['id']);
-
-                    if ($voucher['data']['limit'] > $code_redeem_count) {
-                        if ($voucher['data']['limit'] ==  ($code_redeem_count + 1)) {
+                    if ($voucher['data']['limit'] > $voucher['data']['total_redeemed']) {
+                        if ($voucher['data']['limit'] ==  ($voucher['data']['total_redeemed'] + 1)) {
                             $voucher['data']['voucher_status'] = "claimed";
                         } else {
                             $voucher['data']['voucher_status'] = "claiming";
