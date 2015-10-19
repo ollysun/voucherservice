@@ -305,7 +305,31 @@ class VouchersRepositoryTest extends TestCase
             $this->voucher_code_model
         );
 
-        $result = $this->repository->getVoucherCodeByStatus('new');
-        dd($result);
+        $this->repository->getVoucherCodeByStatus('new');
+    }
+
+    public function testUpdateVoucherCodeStatusByID()
+    {
+        $this->voucher_code_model->insert(['id' => '9990', 'voucher_code' => '123456789abc', 'code_status' => 'new']);
+
+        $result = $this->repository->updateVoucherCodeStatusByID('9990');
+        $this->assertEquals('used', $result['data']['code_status']);
+        $this->assertEquals('123456789abc', $result['data']['voucher_code']);
+    }
+
+    public function testUpdateVoucherCodeStatusByIDErrorException()
+    {
+        $this->setExpectedException('\Exception');
+        $this->voucher_code_model = $this->getMock(VoucherCode::class, ['find']);
+        $this->voucher_code_model->expects($this->any())->method('find')->willThrowException(new \Exception());
+
+        $this->repository = new VouchersRepository(
+            $this->voucher_model,
+            $this->voucher_log_model,
+            $this->voucher_param_model,
+            $this->voucher_code_model
+        );
+
+        $this->repository->updateVoucherCodeStatusByID('9990');
     }
 }
