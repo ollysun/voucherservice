@@ -28,6 +28,12 @@ class VoucherRoutesTest extends TestCase
         $this->assertResponseStatus(Response::HTTP_OK);
     }
 
+    public function testVouchersGetIncludeLogs()
+    {
+        $this->get('/vouchers?include=voucherLogs', $this->authHeader);
+        $this->assertResponseStatus(Response::HTTP_OK);
+    }
+
     public function testVouchersInvalidArgsErrorLogsGet()
     {
         $this->get('/vouchers?limit=$$$$$4', $this->authHeader);
