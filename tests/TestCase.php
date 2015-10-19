@@ -2,8 +2,6 @@
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 
-
-
 class TestCase extends Laravel\Lumen\Testing\TestCase
 {
     protected $authHeader;
