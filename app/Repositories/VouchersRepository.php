@@ -110,7 +110,7 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
                     ->paginate($data['limit']);
             }
 
-            if (!$vouchers) {
+            if ($vouchers->isEmpty()) {
                 return null;
             } else {
                 $list_vouchers = self::setPaginationLinks($vouchers, $data);
