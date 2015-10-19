@@ -14,7 +14,6 @@ class VoucherTransformer extends TransformerAbstract
 {
     protected $availableIncludes = [
         'voucherLogs',
-        'voucherJobs'
     ];
 
     public static function transform(Voucher $voucher)
@@ -54,11 +53,5 @@ class VoucherTransformer extends TransformerAbstract
     {
         $voucherLogs = $voucher->voucherLog;
         return $this->collection($voucherLogs, new VoucherLogTransformer());
-    }
-
-    public function includeVoucherJobs(Voucher $voucher)
-    {
-        $voucherJobs = $voucher->voucherJob;
-        return $this->item($voucherJobs, new VoucherJobTransformer());
     }
 }
