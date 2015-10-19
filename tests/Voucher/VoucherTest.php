@@ -16,8 +16,6 @@ class VoucherTest extends TestCase
 
     protected $voucher_log_repo;
 
-    protected $voucherBusinessNotification;
-
     public function setUp()
     {
         $this->voucher_repo = new VouchersRepository(new Voucher(), new VoucherLog(), new VoucherJobParamMetadata(), new VoucherCode());
@@ -27,6 +25,11 @@ class VoucherTest extends TestCase
         parent::setUp();
     }
 
+    /**
+     * TesCase for a voucher code that was claimed successfully.
+     *
+     * @throws Exception
+     */
     public function testRedeem()
     {
         $this->voucher_repo->create([
@@ -49,6 +52,37 @@ class VoucherTest extends TestCase
         $this->assertEquals(true, $result);
     }
 
+    /**
+     * TestCase for a voucher code that has a claiming status.
+     * @throws Exception
+     */
+    public function testRedeemWithClaimingStatus()
+    {
+        $this->voucher_repo->create([
+            'valid_from' => '2015-1-1 20:11:1',
+            'valid_to' => date('Y-m-d H:i:s', strtotime('+ 1 day')),
+            'limit' => 11,
+            'type' => 'time',
+            'code' => 'XAD34E13'
+        ]);
+
+        $inputs = [
+            'code' => 'XAD34E13',
+            'user_id' => 122333,
+            'platform' => 1,
+        ];
+
+        $voucher =  new VoucherService($this->voucher_repo, $this->voucher_log_repo);
+        $voucher->setSubscriptionService(new \Voucher\Services\SubscriptionService());
+        $result = $voucher->redeem($inputs);
+        $this->assertEquals(true, $result);
+    }
+
+    /**
+     * TestCase for a voucher code that does not exist.
+     *
+     * @throws Exception
+     */
     public function testRedeemWithNoneExistingCodeException()
     {
         $this->voucher_repo->create([
@@ -71,6 +105,11 @@ class VoucherTest extends TestCase
         $voucher->redeem($inputs);
     }
 
+    /**
+     * TestCase for voucher code with has already been used.
+     *
+     * @throws Exception
+     */
     public function testRedeemWithUsedCodeException()
     {
         $this->voucher_repo->create([
@@ -94,6 +133,11 @@ class VoucherTest extends TestCase
         $voucher->redeem($inputs);
     }
 
+    /**
+     * TestCase for voucher code which has expired.
+     *
+     * @throws Exception
+     */
     public function testRedeemWithExpiredCodeException()
     {
         $this->voucher_repo->create([
@@ -117,6 +161,10 @@ class VoucherTest extends TestCase
         $voucher->redeem($inputs);
     }
 
+    /**
+     * TestCase for voucher with usage limit reached.
+     * @throws Exception
+     */
     public function testRedeemWithUsageLimitReachedException()
     {
         $inputs = [
@@ -148,4 +196,255 @@ class VoucherTest extends TestCase
         $voucher->redeem($inputs);
     }
 
+    /**
+     * TestCase for a voucher code with expired category.
+     *
+     * @throws Exception
+     */
+    public function testRedeemWithExpiredCategoryCode()
+    {
+        $this->voucher_repo->create([
+            'valid_from' => '2015-1-1 20:11:1',
+            'valid_to' => date('Y-m-d H:i:s', strtotime('+ 1 day')),
+            'limit' => 1,
+            'type' => 'time',
+            'code' => 'XAD34E1',
+            'category' => 'expired'
+        ]);
+
+        $inputs = [
+            'code' => 'XAD34E1',
+            'user_id' => 122333,
+            'platform' => 1,
+        ];
+
+        $mocked_sub_service = $this->getMock('Voucher\Services\SubscriptionService', ['subscriptionApi']);
+        $mocked_sub_service->expects($this->any())->method('subscriptionApi')->willReturn(
+            [
+                'data' => [
+                    'plan_id' => 1,
+                    'is_active' => false,
+                    'customer_id' => '12323232323',
+                ]
+            ]
+        );
+        $voucher =  new VoucherService($this->voucher_repo, $this->voucher_log_repo);
+        $voucher->setSubscriptionService($mocked_sub_service);
+        $result = $voucher->redeem($inputs);
+        $this->assertEquals(true, $result);
+    }
+
+    /**
+     * TestCase for a voucher code with expired category but used
+     * by a user with active subscription.
+     *
+     * @throws Exception
+     */
+    public function testRedeemWithExpiredCategoryCodeButActiveSubscriptionException()
+    {
+        $this->voucher_repo->create([
+            'valid_from' => '2015-1-1 20:11:1',
+            'valid_to' => date('Y-m-d H:i:s', strtotime('+ 1 day')),
+            'limit' => 1,
+            'type' => 'time',
+            'code' => 'XAD34E1',
+            'category' => 'expired'
+        ]);
+
+        $inputs = [
+            'code' => 'XAD34E1',
+            'user_id' => 122333,
+            'platform' => 1,
+        ];
+
+        $mocked_sub_service = $this->getMock('Voucher\Services\SubscriptionService', ['subscriptionApi']);
+        $mocked_sub_service->expects($this->any())->method('subscriptionApi')->willReturn(
+            [
+                'data' => [
+                    'plan_id' => 1,
+                    'is_active' => true,
+                    'customer_id' => '12323232323',
+                ]
+            ]
+        );
+        $this->setExpectedException('\Exception');
+        $voucher =  new VoucherService($this->voucher_repo, $this->voucher_log_repo);
+        $voucher->setSubscriptionService($mocked_sub_service);
+        $voucher->redeem($inputs);
+    }
+
+    /**
+     * TestCase for a voucher code with new_expired category.
+     *
+     * @throws Exception
+     */
+    public function testRedeemWithNewExpiredCategoryCode()
+    {
+        $this->voucher_repo->create([
+            'valid_from' => '2015-1-1 20:11:1',
+            'valid_to' => date('Y-m-d H:i:s', strtotime('+ 1 day')),
+            'limit' => 1,
+            'type' => 'time',
+            'code' => 'XAD34E1',
+            'category' => 'new_expired'
+        ]);
+
+        $inputs = [
+            'code' => 'XAD34E1',
+            'user_id' => 122333,
+            'platform' => 1,
+        ];
+
+        $mocked_sub_service = $this->getMock('Voucher\Services\SubscriptionService', ['subscriptionApi']);
+        $mocked_sub_service->expects($this->any())->method('subscriptionApi')->willReturn(
+            [
+                'data' => [
+                    'plan_id' => 1,
+                    'is_active' => false,
+                    'customer_id' => '12323232323',
+                ]
+            ]
+        );
+        $voucher =  new VoucherService($this->voucher_repo, $this->voucher_log_repo);
+        $voucher->setSubscriptionService($mocked_sub_service);
+        $result = $voucher->redeem($inputs);
+        $this->assertEquals(true, $result);
+    }
+
+    /**
+     * TestCase for a voucher code with new_expired category but was used
+     * by a user with active subscription.
+     *
+     * @throws Exception
+     */
+    public function testRedeemWithNewExpiredCategoryCodeButActiveSubscriptionException()
+    {
+        $this->voucher_repo->create([
+            'valid_from' => '2015-1-1 20:11:1',
+            'valid_to' => date('Y-m-d H:i:s', strtotime('+ 1 day')),
+            'limit' => 1,
+            'type' => 'time',
+            'code' => 'XAD34E1',
+            'category' => 'new_expired'
+        ]);
+
+        $inputs = [
+            'code' => 'XAD34E1',
+            'user_id' => 122333,
+            'platform' => 1,
+        ];
+
+        $mocked_sub_service = $this->getMock('Voucher\Services\SubscriptionService', ['subscriptionApi']);
+        $mocked_sub_service->expects($this->any())->method('subscriptionApi')->willReturn(
+            [
+                'data' => [
+                    'plan_id' => 1,
+                    'is_active' => true,
+                    'customer_id' => '12323232323',
+                ]
+            ]
+        );
+        $this->setExpectedException('\Exception');
+        $voucher =  new VoucherService($this->voucher_repo, $this->voucher_log_repo);
+        $voucher->setSubscriptionService($mocked_sub_service);
+        $voucher->redeem($inputs);
+    }
+
+    /**
+     * TestCase for voucher code with an active category
+     *
+     * @throws Exception
+     */
+    public function testRedeemWithActiveCategoryCode()
+    {
+        $this->voucher_repo->create([
+            'valid_from' => '2015-1-1 20:11:1',
+            'valid_to' => date('Y-m-d H:i:s', strtotime('+ 1 day')),
+            'limit' => 1,
+            'type' => 'time',
+            'code' => 'XAD34E1',
+            'category' => 'active'
+        ]);
+
+        $inputs = [
+            'code' => 'XAD34E1',
+            'user_id' => 122333,
+            'platform' => 1,
+        ];
+
+        $mocked_sub_service = $this->getMock('Voucher\Services\SubscriptionService', ['subscriptionApi']);
+        $mocked_sub_service->expects($this->any())->method('subscriptionApi')->willReturn(
+            [
+                'data' => [
+                    'plan_id' => 1,
+                    'is_active' => true,
+                    'customer_id' => '12323232323',
+                ]
+            ]
+        );
+
+        $mocked_plan_service = $this->getMock('Voucher\Services\PlanService', ['plansApi']);
+        $mocked_plan_service->expects($this->any())->method('plansApi')->willReturn(
+            [
+                'data' => [
+                    'is_recurring' => false,
+                ]
+            ]
+        );
+        $voucher =  new VoucherService($this->voucher_repo, $this->voucher_log_repo);
+        $voucher->setSubscriptionService($mocked_sub_service);
+        $voucher->setPlansService($mocked_plan_service);
+        $result = $voucher->redeem($inputs);
+        $this->assertEquals(true, $result);
+    }
+
+    /**
+     * TestCase when a voucher code has an active category for non-recurring plan,
+     * but used by a user with a recurring active plan.
+     *
+     * @throws Exception
+     */
+    public function testRedeemWithActiveCategoryCodeButHasRecurringPlanException()
+    {
+        $this->voucher_repo->create([
+            'valid_from' => '2015-1-1 20:11:1',
+            'valid_to' => date('Y-m-d H:i:s', strtotime('+ 1 day')),
+            'limit' => 1,
+            'type' => 'time',
+            'code' => 'XAD34E1',
+            'category' => 'active'
+        ]);
+
+        $inputs = [
+            'code' => 'XAD34E1',
+            'user_id' => 122333,
+            'platform' => 1,
+        ];
+
+        $mocked_sub_service = $this->getMock('Voucher\Services\SubscriptionService', ['subscriptionApi']);
+        $mocked_sub_service->expects($this->any())->method('subscriptionApi')->willReturn(
+            [
+                'data' => [
+                    'plan_id' => 1,
+                    'is_active' => true,
+                    'customer_id' => '12323232323',
+                ]
+            ]
+        );
+
+        $mocked_plan_service = $this->getMock('Voucher\Services\PlanService', ['plansApi']);
+        $mocked_plan_service->expects($this->any())->method('plansApi')->willReturn(
+            [
+                'data' => [
+                    'is_recurring' => true,
+                ]
+            ]
+        );
+
+        $this->setExpectedException('\Exception');
+        $voucher =  new VoucherService($this->voucher_repo, $this->voucher_log_repo);
+        $voucher->setSubscriptionService($mocked_sub_service);
+        $voucher->setPlansService($mocked_plan_service);
+        $voucher->redeem($inputs);
+    }
 }
