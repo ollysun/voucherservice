@@ -1,6 +1,7 @@
 <?php namespace Voucher\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Voucher\Repositories\VouchersRepository;
 use Voucher\Services\PlanService;
@@ -98,17 +99,34 @@ class VouchersController extends Controller
                 return $this->errorWrongArgs($validator->errors());
             } else {
                 $voucherCode = $this->repository->getVoucherCodeByStatus("new");
-                $firstTwoLetter = substr($inputs['title'],0,2);
-                $inputs['code'] = $firstTwoLetter . $voucherCode['data']['voucher_code'];
-                $voucher = $this->repository->create($inputs);//@TODO transaction
-                $updateVoucherCode = $this->repository->updateVoucherCodeStatusByID($voucherCode['data']['id']);
-                if ($voucher && $updateVoucherCode)
-                {
-                    Log::info(SELF::LOGTITLE, array_merge(
-                        ['success' => 'Voucher successfully created'],
+                if (!$voucherCode) {
+                    Log::error(SELF::LOGTITLE, array_merge(
+                        [
+                            'error' => 'No voucher codes were found.'
+                        ],
                         $this->log
                     ));
-                    return $this->respondCreated($voucher);
+                    return $this->errorNotFound('No voucher codes were found.');
+                } else {
+                    $firstTwoLetter = substr($inputs['title'], 0, 2);
+                    $inputs['code'] = $firstTwoLetter . $voucherCode['data']['voucher_code'];
+
+                    DB::begintransaction();
+                    try {
+                        $voucher = $this->repository->create($inputs);//@TODO transaction
+                        $this->repository->updateVoucherCodeStatusByID($voucherCode['data']['id']);
+                        Log::info(SELF::LOGTITLE, array_merge(
+                            ['success' => 'Voucher successfully created'],
+                            $this->log
+                        ));
+                        $response = $this->respondCreated($voucher);
+
+                    } catch (\Exception $e) {
+                        DB::rollback();
+                        throw new \Exception($e->getMessage());
+                    }
+                    DB::commit();
+                    return $response;
                 }
             }
         } catch (\Exception $e) {
