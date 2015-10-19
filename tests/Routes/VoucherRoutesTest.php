@@ -28,6 +28,12 @@ class VoucherRoutesTest extends TestCase
         $this->assertResponseStatus(Response::HTTP_OK);
     }
 
+    public function testVouchersGetIncludeLogs()
+    {
+        $this->get('/vouchers?include=voucherLogs', $this->authHeader);
+        $this->assertResponseStatus(Response::HTTP_OK);
+    }
+
     public function testVouchersInvalidArgsErrorLogsGet()
     {
         $this->get('/vouchers?limit=$$$$$4', $this->authHeader);
@@ -36,7 +42,22 @@ class VoucherRoutesTest extends TestCase
 
     public function testVouchersNotFoundErrorLogsGet()
     {
-        $this->get('/vouchers?query=@@@@@@@@@@@@@', $this->authHeader);
+        $this->repository = $this->getMockBuilder('Voucher\Repositories\VouchersRepository')
+            ->setConstructorArgs(array(
+                $this->voucherWithExceptionMock,
+                $this->voucherLogWithExceptionMock,
+                $this->voucherJobParamMetadataWithExceptionMock,
+                $this->voucherCodeWithExceptionMock
+            ))
+            ->setMethods(array('getVouchers'))
+            ->getMock();
+
+        $this->repository->expects($this->any())
+            ->method('getVouchers')
+            ->willReturn(null);
+
+        $this->app->instance('Voucher\Repositories\VouchersRepository', $this->repository);
+        $this->get('/vouchers', $this->authHeader);
         $this->assertResponseStatus(Response::HTTP_NOT_FOUND);
     }
 
@@ -63,6 +84,9 @@ class VoucherRoutesTest extends TestCase
 
     public function testVouchersPost()
     {
+        //Create a voucher code before the test
+        $this->call("POST", "/vouchers/generateCodes", ['total' => 1], [], [], $this->authHeader);
+
         $data = [
             "type" => "time",
             "status" => "claimed",
@@ -76,12 +100,36 @@ class VoucherRoutesTest extends TestCase
             "limit" => 1200,
             "valid_from" => "2015-10-13 02:02:02",
             "valid_to" => "2015-10-15 02:02:02",
-            "code" => "fd1127",
             "voucher_job_id" => 1
         ];
 
         $this->call("POST", "/vouchers", $data, [], [], $this->authHeader);
         $this->assertResponseStatus(Response::HTTP_CREATED);
+    }
+
+    public function testVouchersPostCodeNotFound()
+    {
+        $voucher_codes_model = new VoucherCode();
+        $voucher_codes_model->truncate();
+
+        $data = [
+            "type" => "time",
+            "status" => "claimed",
+            "category" => "new",
+            "title" => "INTERNAL",
+            "location" => "Nigeria",
+            "description" => "A voucher",
+            "duration" => 4,
+            "period" => "month",
+            "is_limited" => true,
+            "limit" => 1200,
+            "valid_from" => "2015-10-13 02:02:02",
+            "valid_to" => "2015-10-15 02:02:02",
+            "voucher_job_id" => 1
+        ];
+
+        $this->call("POST", "/vouchers", $data, [], [], $this->authHeader);
+        $this->assertResponseStatus(Response::HTTP_NOT_FOUND);
     }
 
     public function testVouchersPostInvalidArgument()
@@ -105,6 +153,50 @@ class VoucherRoutesTest extends TestCase
 
         $this->call("POST", "/vouchers", $data, [], [], $this->authHeader);
         $this->assertResponseStatus(Response::HTTP_BAD_REQUEST);
+    }
+
+    public function testVouchersPostTransactionFail()
+    {
+        //Create a voucher code before the test
+        $this->call("POST", "/vouchers/generateCodes", ['total' => 1], [], [], $this->authHeader);
+
+        $data = [
+            "type" => "time",
+            "status" => "claimed",
+            "category" => "new",
+            "title" => "INTERNAL",
+            "location" => "Nigeria",
+            "description" => "A voucher",
+            "duration" => 4,
+            "period" => "month",
+            "is_limited" => true,
+            "limit" => 1200,
+            "valid_from" => "2015-10-13 02:02:02",
+            "valid_to" => "2015-10-15 02:02:02",
+            "voucher_job_id" => 1
+        ];
+
+        $code = [
+            'data' => [
+                'voucher_code' => 'asdf1234'
+            ]
+        ];
+        $this->repository = $this->getMock(
+            'Voucher\Repositories\VouchersRepository',
+            ['create', 'getVoucherCodeByStatus'],
+            [
+                $this->voucherWithExceptionMock,
+                $this->voucherLogWithExceptionMock,
+                $this->voucherJobParamMetadataWithExceptionMock,
+                $this->voucherCodeWithExceptionMock
+            ]
+        );
+        $this->repository->expects($this->any())->method('getVoucherCodeByStatus')->willReturn($code);
+        $this->repository->expects($this->any())->method('create')->will($this->throwException(new \Exception));
+
+        $this->app->instance('Voucher\Repositories\VouchersRepository', $this->repository);
+        $this->call("POST", "/vouchers", $data, [], [], $this->authHeader);
+        $this->assertResponseStatus(Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 
     public function testVouchersInternalErrorExceptionPost()
@@ -162,8 +254,31 @@ class VoucherRoutesTest extends TestCase
             "voucher_job_id" => 1
         ];
 
-        $this->call('PUT','/vouchers/3', $data, [], [], $this->authHeader);
+        $this->call('PUT', '/vouchers/3', $data, [], [], $this->authHeader);
         $this->assertResponseStatus(Response::HTTP_OK);
+    }
+
+    public function testVoucherPutVoucherNotFound()
+    {
+        $data = [
+            "type" => "time",
+            "status" => "claimed",
+            "category" => "new",
+            "title" => "INTERNAL",
+            "location" => "Nigeria",
+            "description" => "A voucher",
+            "duration" => 4,
+            "period" => "month",
+            "is_limited" => true,
+            "limit" => 1200,
+            "valid_from" => "2015-10-13 02:02:02",
+            "valid_to" => "2015-10-15 02:02:02",
+            "code" => "fd1127",
+            "voucher_job_id" => 1
+        ];
+
+        $this->call('PUT', '/vouchers/333333333333', $data, [], [], $this->authHeader);
+        $this->assertResponseStatus(Response::HTTP_NOT_FOUND);
     }
 
     public function testVoucherPutThrowInvalidArgsException()
@@ -180,7 +295,7 @@ class VoucherRoutesTest extends TestCase
             "voucher_job_id" => 1
         ];
 
-        $this->call('PUT','/vouchers/q', $data, [], [], $this->authHeader);
+        $this->call('PUT', '/vouchers/q', $data, [], [], $this->authHeader);
         $this->assertResponseStatus(Response::HTTP_BAD_REQUEST);
     }
 
@@ -202,7 +317,7 @@ class VoucherRoutesTest extends TestCase
             "code" => "fd1127",
             "voucher_job_id" => 1
         ];
-        $this->call('PUT','/plans/2000000000000', $data, [], [], $this->authHeader);
+        $this->call('PUT', '/plans/2000000000000', $data, [], [], $this->authHeader);
         $this->assertResponseStatus(Response::HTTP_NOT_FOUND);
     }
 
@@ -243,19 +358,73 @@ class VoucherRoutesTest extends TestCase
         $this->assertResponseStatus(Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 
-//    public function testRedeemVouchersPost()
-//    {
-//        $data = [
-//            "platform" => "mobile",
-//            "code" => "fd1127",
-//            "user_id" => 1
-//        ];
-//        $this->call("POST", "/vouchers/redeem", $data, [], [], $this->authHeader);
-//        $this->assertResponseStatus(Response::HTTP_CREATED);
-//    }
+    public function testRedeemVouchersPost()
+    {
+        $data = [
+            "platform" => "mobile",
+            "code" => "fd1127",
+            "user_id" => 1
+        ];
+        $voucherRepositoryMock = \Mockery::mock(\Voucher\Repositories\VouchersRepository::class);
+        $voucherLogsRepositoryMock = \Mockery::mock(\Voucher\Repositories\VoucherLogsRepository::class);
+
+        $this->repository = $this->getMockBuilder('Voucher\Voucher\Voucher')
+            ->setConstructorArgs(array(
+                $voucherRepositoryMock,
+                $voucherLogsRepositoryMock
+            ))
+            ->setMethods(array('redeem'))
+            ->getMock();
+
+        $this->repository->expects($this->any())
+            ->method('redeem')
+            ->willReturn(true);
+
+        $this->app->instance('Voucher\Voucher\Voucher', $this->repository);
+        $this->call("POST", "/vouchers/redeem", $data, [], [], $this->authHeader);
+        $this->assertResponseStatus(Response::HTTP_OK);
+    }
+
+    public function testRedeemVouchersPostFail()
+    {
+        $data = [
+            "platform" => "mobile",
+            "code" => "fd1127",
+            "user_id" => "asdf"
+        ];
+
+        $this->call("POST", "/vouchers/redeem", $data, [], [], $this->authHeader);
+        $this->assertResponseStatus(Response::HTTP_BAD_REQUEST);
+    }
+
+    public function testRedeemVouchersPostInternalErrorException()
+    {
+        $data = [
+            "platform" => "mobile",
+            "code" => "fd1127",
+            "user_id" => "asdf"
+        ];
+
+        $errors = \Voucher\Validators\VoucherValidator::getVoucherRules();
+        $message_bag = \Voucher\Validators\VoucherValidator::getMessages();
+
+        \Illuminate\Support\Facades\Validator::shouldReceive('make')
+            ->once()
+            ->andReturn(Mockery::mock([
+                'fails' => 'true',
+                'messages' => $message_bag,
+                'errors' => $errors
+            ]));
+
+        $this->call("POST", "/vouchers/redeem", $data, [], [], $this->authHeader);
+        $this->assertResponseStatus(Response::HTTP_INTERNAL_SERVER_ERROR);
+    }
 
     public function testBulkCreateVoucherPost()
     {
+        //Create a voucher code before the test
+        $this->call("POST", "/vouchers/generateCodes", ['total' => 2], [], [], $this->authHeader);
+
         $data = [
             "type" => "time",
             "status" => "claimed",
@@ -298,8 +467,11 @@ class VoucherRoutesTest extends TestCase
         $this->assertResponseStatus(Response::HTTP_BAD_REQUEST);
     }
 
-    public function testBulkCreateVoucherPostInternalErrorExceptionPost()
+    public function testBulkCreateVoucherPostTransactionFail()
     {
+        //Create a voucher code before the test
+        $this->call("POST", "/vouchers/generateCodes", ['total' => 2], [], [], $this->authHeader);
+
         $data = [
             "type" => "time",
             "status" => "claimed",
@@ -307,26 +479,28 @@ class VoucherRoutesTest extends TestCase
             "title" => "INTERNAL",
             "location" => "Nigeria",
             "description" => "A voucher",
-            "duration" => "welcome",
+            "duration" => 4,
             "period" => "day",
             "is_limited" => true,
-            "limit" => 'weell',
+            "limit" => 0,
             "brand" => "type",
             "total" => 10,
             "valid_from" => "2015-10-13 02:02:02",
             "valid_to" => "2015-10-15 02:02:02"
         ];
-        $this->repository = $this->getMockBuilder('Voucher\Repositories\VouchersRepository')
-            ->setConstructorArgs(array(
+
+        $this->repository = $this->getMock(
+            'Voucher\Repositories\VouchersRepository',
+            ['insertVoucherJob'],
+            [
                 $this->voucherWithExceptionMock,
                 $this->voucherLogWithExceptionMock,
                 $this->voucherJobParamMetadataWithExceptionMock,
                 $this->voucherCodeWithExceptionMock
-            ))
-            ->setMethods(array('insertVoucherJobParamMetadata'))
-            ->getMock();
+            ]
+        );
         $this->repository->expects($this->any())
-            ->method('insertVoucherJobParamMetadata')
+            ->method('insertVoucherJob')
             ->will($this->throwException(new \Exception));
 
         $this->app->instance('Voucher\Repositories\VouchersRepository', $this->repository);
@@ -334,5 +508,21 @@ class VoucherRoutesTest extends TestCase
         $this->assertResponseStatus(Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 
+    public function testBulkCreateVoucherPostInternalErrorExceptionPost()
+    {
+        $errors = \Voucher\Validators\VoucherValidator::getVoucherRules();
+        $message_bag = \Voucher\Validators\VoucherValidator::getMessages();
 
+        \Illuminate\Support\Facades\Validator::shouldReceive('make')
+            ->once()
+            ->andReturn(Mockery::mock([
+                'fails' => 'true',
+                'messages' => $message_bag,
+                'errors' => $errors
+            ]));
+
+        $this->call("POST", "/vouchers/bulk", [], [], [], $this->authHeader);
+
+        $this->assertResponseStatus(Response::HTTP_INTERNAL_SERVER_ERROR);
+    }
 }
