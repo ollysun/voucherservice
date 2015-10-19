@@ -148,28 +148,4 @@ class VoucherTest extends TestCase
         $voucher->redeem($inputs);
     }
 
-//    public function testIsVoucherExistsAndValidWithException()
-//    {
-//
-//    }
-//
-//    public function testIsVoucherValidForUser()
-//    {
-//
-//    }
-//
-//    public function testIsVoucherValidForUserWithException()
-//    {
-//
-//    }
-//
-//    public function testSendSubscribeRequest()
-//    {
-//
-//    }
-//
-//    public function testSendSubscribeRequestWithFailedRequest()
-//    {
-//
-//    }
 }
