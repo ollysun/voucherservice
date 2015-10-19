@@ -50,22 +50,14 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
      * @param VoucherCode $voucherCodeModel
      */
     public function __construct(
-
         Voucher $voucher,
-
         VoucherLog $voucherLog,
-
         VoucherJobParamMetadata $voucherMetadataModel,
-
         VoucherCode $voucherCodeModel
-    )
-    {
+    ) {
         $this->model = $voucher;
-
         $this->log_model = $voucherLog;
-
         $this->voucherMetadata = $voucherMetadataModel;
-
         $this->voucherCode = $voucherCodeModel;
     }
 
@@ -211,7 +203,7 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
             $vouchersCodeObject->code_status = "used";
             $vouchersCodeObject->save();
 
-            return $vouchersCodeObject;
+            return self::transform($vouchersCodeObject, new VoucherCodeTransformer());
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
         }
