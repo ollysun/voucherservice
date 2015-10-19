@@ -6,6 +6,7 @@ use Voucher\Models\Voucher;
 use Voucher\Models\VoucherJobParamMetadata;
 use Voucher\Models\VoucherLog;
 use Voucher\Models\VoucherCode;
+use Voucher\Transformers\VoucherJobParamMetadataTransformer;
 use Voucher\Transformers\VoucherTransformer;
 use Voucher\Models\VoucherJob;
 use Voucher\Transformers\VoucherJobTransformer;
@@ -50,22 +51,14 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
      * @param VoucherCode $voucherCodeModel
      */
     public function __construct(
-
         Voucher $voucher,
-
         VoucherLog $voucherLog,
-
         VoucherJobParamMetadata $voucherMetadataModel,
-
         VoucherCode $voucherCodeModel
-    )
-    {
+    ) {
         $this->model = $voucher;
-
         $this->log_model = $voucherLog;
-
         $this->voucherMetadata = $voucherMetadataModel;
-
         $this->voucherCode = $voucherCodeModel;
     }
 
@@ -211,7 +204,7 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
             $vouchersCodeObject->code_status = "used";
             $vouchersCodeObject->save();
 
-            return $vouchersCodeObject;
+            return self::transform($vouchersCodeObject, new VoucherCodeTransformer());
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
         }
@@ -241,7 +234,7 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
             $voucher->category = (isset($input['category']) ? $input['category'] : 'new');
             $voucher->type = (isset($input['type']) ? $input['type'] : '');
             $voucher->code = (isset($input['code']) ? $input['code'] : '');
-            $voucher->voucher_job_id = (isset($input['voucher_job_id']) ? $input['voucher_job_id'] : NULL);
+            $voucher->voucher_job_id = (isset($input['voucher_job_id']) ? $input['voucher_job_id'] : null);
             $voucher->save();
 
             return self::transform($voucher, new VoucherTransformer());
@@ -263,50 +256,37 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
         try {
             $voucher = $this->model->find($id);
 
-            $voucher->valid_from = (
-            isset($input['valid_from']) ? $input['valid_from'] : $voucher->valid_from
-            );
-            $voucher->valid_to = (
-            isset($input['valid_to']) ? $input['valid_to'] : $voucher->valid_to
-            );
-            $voucher->status = (
-            isset($input['status']) ? $input['status'] : $voucher->status
-            );
-            $voucher->title = (
-            isset($input['title']) ? $input['title'] : $voucher->title
-            );
-            $voucher->description = (
-            isset($input['description']) ? $input['description'] : $voucher->description
-            );
-            $voucher->location = (
-            isset($input['location']) ? $input['location'] : $voucher->location
-            );
+            $voucher->valid_from = (isset($input['valid_from']) ?
+                $input['valid_from'] : $voucher->valid_from);
+            $voucher->valid_to = (isset($input['valid_to']) ?
+                $input['valid_to'] : $voucher->valid_to);
+            $voucher->status = (isset($input['status']) ?
+                $input['status'] : $voucher->status);
+            $voucher->title = (isset($input['title']) ?
+                $input['title'] : $voucher->title);
+            $voucher->description = (isset($input['description']) ?
+                $input['description'] : $voucher->description);
+            $voucher->location = (isset($input['location']) ?
+                $input['location'] : $voucher->location);
             //$vouchersObject->is_limited = $input['is_limited'];
-            $voucher->limit = (
-            isset($input['limit']) ? $input['limit'] : $voucher->limit
-            );
-            $voucher->period = (
-            isset($input['period']) ? $input['period'] : $voucher->period
-            );
-            $voucher->duration = (
-            isset($input['duration']) ? $input['duration'] : $voucher->duration
-            );
-            $voucher->category = (
-            isset($input['category']) ? $input['category'] : $voucher->category
-            );
-            $voucher->type = (
-            isset($input['type']) ? $input['type'] : $voucher->type
-            );
-            $voucher->code = (
-            isset($input['code']) ? $input['code'] : $voucher->code
-            );
-            $voucher->voucher_job_id = (
-            isset($input['voucher_job_id']) ? $input['voucher_job_id'] : $voucher->voucher_job_id
-            );
+            $voucher->limit = (isset($input['limit']) ?
+                $input['limit'] : $voucher->limit);
+            $voucher->period = (isset($input['period']) ?
+                $input['period'] : $voucher->period);
+            $voucher->duration = (isset($input['duration']) ?
+                $input['duration'] : $voucher->duration);
+            $voucher->category = (isset($input['category']) ?
+                $input['category'] : $voucher->category);
+            $voucher->type = (isset($input['type']) ?
+                $input['type'] : $voucher->type);
+            $voucher->code = (isset($input['code']) ?
+                $input['code'] : $voucher->code);
+            $voucher->voucher_job_id = (isset($input['voucher_job_id']) ?
+                $input['voucher_job_id'] : $voucher->voucher_job_id);
             $voucher->save();
 
             return self::transform($voucher, new VoucherTransformer());
-        }catch (\Exception $ex) {
+        } catch (\Exception $ex) {
             throw new \Exception($ex->getMessage());
         }
     }
@@ -393,17 +373,18 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
      */
     public function insertVoucherJobParamMetadata($data, $voucher_job_id)
     {
-        try{
-            foreach($data as $key => $value)
-            {
+        try {
+            foreach ($data as $key => $value) {
                 $voucherMetadata = new VoucherJobParamMetadata();
                 $voucherMetadata->voucher_job_id = $voucher_job_id;
                 $voucherMetadata->key = trim($key);
                 $voucherMetadata->value = trim($value);
                 $voucherMetadata->save();
+
+                self::transform($voucherMetadata, new VoucherJobParamMetadataTransformer());
             }
             return true;
-        }catch (\Exception $ex) {
+        } catch (\Exception $ex) {
             throw new \Exception($ex->getMessage());
         }
     }
