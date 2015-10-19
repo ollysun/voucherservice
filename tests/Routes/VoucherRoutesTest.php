@@ -252,6 +252,29 @@ class VoucherRoutesTest extends TestCase
         $this->assertResponseStatus(Response::HTTP_OK);
     }
 
+    public function testVoucherPutVoucherNotFound()
+    {
+        $data = [
+            "type" => "time",
+            "status" => "claimed",
+            "category" => "new",
+            "title" => "INTERNAL",
+            "location" => "Nigeria",
+            "description" => "A voucher",
+            "duration" => 4,
+            "period" => "month",
+            "is_limited" => true,
+            "limit" => 1200,
+            "valid_from" => "2015-10-13 02:02:02",
+            "valid_to" => "2015-10-15 02:02:02",
+            "code" => "fd1127",
+            "voucher_job_id" => 1
+        ];
+
+        $this->call('PUT', '/vouchers/333333333333', $data, [], [], $this->authHeader);
+        $this->assertResponseStatus(Response::HTTP_NOT_FOUND);
+    }
+
     public function testVoucherPutThrowInvalidArgsException()
     {
         $data = [
