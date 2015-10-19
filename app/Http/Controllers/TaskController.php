@@ -27,26 +27,16 @@ class TaskController extends Controller
     protected $voucher_codes_repo;
 
     public function __construct(
-
         Request $request,
-
         VouchersRepository $voucher_repo,
-
         VoucherJobsRepository $voucher_jobs_repo,
-
         VoucherJobParamMetadatasRepository $voucher_jobs_params_repo,
-
         VoucherCodesRepository $voucher_codes_repo
-    )
-    {
+    ) {
         parent::__construct($request);
-
         $this->voucher_jobs_repo = $voucher_jobs_repo;
-
         $this->voucher_jobs_params_repo = $voucher_jobs_params_repo;
-
         $this->voucher_repo = $voucher_repo;
-
         $this->voucher_codes_repo = $voucher_codes_repo;
     }
 
@@ -80,7 +70,6 @@ class TaskController extends Controller
 
         try {
             foreach ($jobs['data'] as $job) {
-
                 $params = [];
                 $params['voucher_job_id'] = $job['id'];
                 $params['status'] = 'processing';
@@ -102,7 +91,6 @@ class TaskController extends Controller
                 ];
 
                 while ($loop_params['start'] > 0) {
-
                     $vouchers = $this->voucher_repo->getVouchersByJobIdAndLimit($loop_params);
                     $csv_file = $this->generateCsvFromVouchers($vouchers, $loop_params['voucher_set']++);
                     $s3 = $this->uploadS3($csv_file);
@@ -156,18 +144,17 @@ class TaskController extends Controller
             fputcsv($fp, array('Voucher Code', 'Duration'));
 
             foreach ($vouchers['data'] as $voucher) {
-                fputcsv($fp,
-                        array(
-                            $voucher['code'],
-                            $voucher['duration']. ' '. $voucher['period']
-                        )
-
+                fputcsv(
+                    $fp,
+                    [
+                        $voucher['code'],
+                        $voucher['duration']. ' '. $voucher['period']
+                    ]
                 );
             }
             fclose($fp);
             return $voucher_file;
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             throw new \Exception('Error generating CSV file : '.$e->getMessage());
         }
     }
@@ -182,7 +169,6 @@ class TaskController extends Controller
     protected function uploadS3($file_name)
     {
         try {
-
             $bucket = getenv('AWS_S3_BUCKET');
 
             $filepath = storage_path('vouchers').'/'.$file_name.'.csv';
@@ -198,8 +184,7 @@ class TaskController extends Controller
 
             unlink($filepath);
             return $file_name;
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             throw new \Exception('S3 Upload error:'. $e->getMessage());
         }
     }
@@ -207,14 +192,16 @@ class TaskController extends Controller
     /**
      * Sends notification about a completed voucher job.
      *
-     * @param $job
+     * @param $s3
      * @return bool|string
      * @throws \Exception
+     * @internal param $job
      */
     public function notify($s3)
     {
         try {
-            $notify = new VoucherBusinessNotification(1, 'Bulk Voucher Requested Processed', [1]);//send business users user_id's
+            //send business users user_id's
+            $notify = new VoucherBusinessNotification(1, 'Bulk Voucher Requested Processed', [1]);
             $notify->__set('file_name', $s3);
             //$notify->__set('s3_url', $s3['s3_url']);
 
