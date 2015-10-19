@@ -138,7 +138,7 @@ class Voucher
             'action' => 'attempt'
         ];
 
-        if (!empty($voucher['data'])) {
+        if ($voucher['data']) {
             if ($voucher['data']['status'] == 'active' || $voucher['data']['status'] == 'claiming') {
                 $data['voucher_id'] = $voucher['data']['id'];
 
