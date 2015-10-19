@@ -269,4 +269,43 @@ class VouchersRepositoryTest extends TestCase
         );
         $this->repository->getVoucherByCode('123456789abc');
     }
+
+    public function testGetVoucherCodeByStatus()
+    {
+        $this->voucher_code_model->insert(['voucher_code' => '123456789abc', 'code_status' => 'new']);
+        $this->voucher_code_model->insert(['voucher_code' => '123456789abcd', 'code_status' => 'used']);
+
+        $result = $this->repository->getVoucherCodeByStatus('new');
+        $this->assertEquals('new', $result['data']['code_status']);
+        $this->assertEquals('123456789abc', $result['data']['voucher_code']);
+
+        $result = $this->repository->getVoucherCodeByStatus('used');
+        $this->assertEquals('used', $result['data']['code_status']);
+        $this->assertEquals('123456789abcd', $result['data']['voucher_code']);
+    }
+
+    public function testGetVoucherCodeByStatusFalse()
+    {
+        $this->voucher_code_model->truncate();
+
+        $result = $this->repository->getVoucherCodeByStatus('new');
+        $this->assertFalse($result);
+    }
+
+    public function testGetVoucherCodeByStatusErrorException()
+    {
+        $this->setExpectedException('\Exception');
+        $this->voucher_code_model = $this->getMock(VoucherCode::class, ['first']);
+        $this->voucher_code_model->expects($this->any())->method('first')->willThrowException(new \Exception());
+
+        $this->repository = new VouchersRepository(
+            $this->voucher_model,
+            $this->voucher_log_model,
+            $this->voucher_param_model,
+            $this->voucher_code_model
+        );
+
+        $result = $this->repository->getVoucherCodeByStatus('new');
+        dd($result);
+    }
 }
