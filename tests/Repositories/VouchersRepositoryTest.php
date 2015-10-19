@@ -332,4 +332,47 @@ class VouchersRepositoryTest extends TestCase
 
         $this->repository->updateVoucherCodeStatusByID('9990');
     }
+
+    public function testCreate()
+    {
+        $voucher_job_model = new \Voucher\Models\VoucherJob();
+        $voucher_job_model->insert(['id' => 9990, 'status' => 'new', 'comments' => 'a comment']);
+
+        $data = [
+            'id' => 9999,
+            'code' => '12345678abc',
+            'type' => 'time',
+            'status' => 'active',
+            'category' => 'new',
+            'title' => 'INTERNAL',
+            'location' => 'Nigeria',
+            'description' => 'description',
+            'duration' => 3,
+            'period' => 'day',
+            'valid_from' => '2015-10-08 00:00:00',
+            'valid_to' => '2015-12-30 00:00:00',
+            'is_limited' => 0,
+            'limit' => 2,
+            'voucher_job_id' => 9990
+        ];
+
+        $result = $this->repository->create($data);
+        $this->assertEquals($data['code'], $result['data']['code']);
+    }
+
+    public function testCreateErrorException()
+    {
+        $this->setExpectedException('\Exception');
+        $this->voucher_model = $this->getMock(Voucher::class, ['save']);
+        $this->voucher_model->expects($this->any())->method('save')->willThrowException(new \Exception());
+
+        $this->repository = new VouchersRepository(
+            $this->voucher_model,
+            $this->voucher_log_model,
+            $this->voucher_param_model,
+            $this->voucher_code_model
+        );
+
+        $this->repository->create('');
+    }
 }
