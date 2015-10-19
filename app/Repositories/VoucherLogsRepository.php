@@ -33,9 +33,9 @@ class VoucherLogsRepository extends AbstractRepository
     {
         try {
             $log = $this->model;
-            $log->voucher_id = (isset($data['voucher_id']) ? $data['voucher_id'] : NULL);
-            $log->user_id = (isset($data['user_id']) ? $data['user_id'] : NULL);
-            $log->action = (isset($data['action']) ? $data['action'] : NULL);
+            $log->voucher_id = (isset($data['voucher_id']) ? $data['voucher_id'] : null);
+            $log->user_id = (isset($data['user_id']) ? $data['user_id'] : null);
+            $log->action = (isset($data['action']) ? $data['action'] : null);
             $log->platform = (isset($data['platform']) ? $data['platform'] : 'mobile');
             $log->comments = (isset($data['comments']) ? $data['comments'] : ' ');
             $log->save();

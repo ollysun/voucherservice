@@ -101,7 +101,7 @@ class VoucherJobsRepository extends AbstractRepository implements IVoucherJobsRe
             );
 
             return $vouchers;
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
         }
     }
