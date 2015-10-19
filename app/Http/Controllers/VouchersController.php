@@ -29,16 +29,15 @@ class VouchersController extends Controller
 
     public function index()
     {
-        $fields['query'] = Input::get('query', null);
-        $fields['sort'] = Input::get('sort', 'created_at');
-        $fields['order'] = Input::get('order', 'ASC');
-        $fields['limit'] = Input::get('limit', 5);
-        $fields['offset'] = Input::get('offset', 1);
-
-        $rules = VoucherValidator::getParamsRules();
-        $messages = VoucherValidator::getMessages();
-
         try {
+            $fields['query'] = Input::get('query', null);
+            $fields['sort'] = Input::get('sort', 'created_at');
+            $fields['order'] = Input::get('order', 'ASC');
+            $fields['limit'] = Input::get('limit', 5);
+            $fields['offset'] = Input::get('offset', 1);
+
+            $rules = VoucherValidator::getParamsRules();
+            $messages = VoucherValidator::getMessages();
             $validator = Validator::make($fields, $rules, $messages);
 
             if ($validator->fails()) {
@@ -63,7 +62,7 @@ class VouchersController extends Controller
                 } else {
                     Log::info(SELF::LOGTITLE, array_merge(
                         [
-                            'success' => 'Vouchers successfully retrieved.'
+                            'Create Successful' => 'Voucher successfully created'
                         ],
                         $this->log
                     ));
@@ -142,19 +141,21 @@ class VouchersController extends Controller
 
     public function update($voucher_id)
     {
-        $fields = $this->request->all();
-        $fields['id'] = $voucher_id;
-
-        $rules = array_merge(
-            VoucherValidator::getUpdateRules(),
-            VoucherValidator::getIdRules()
-        );
-        $messages = VoucherValidator::getMessages();
         try {
+            $fields = $this->request->all();
+            $fields['id'] = $voucher_id;
+
+            $rules = array_merge(
+                VoucherValidator::getUpdateRules(),
+                VoucherValidator::getIdRules()
+            );
+            $messages = VoucherValidator::getMessages();
             $validator = Validator::make($fields, $rules, $messages);
             if ($validator->fails()) {
                 Log::error(SELF::LOGTITLE, array_merge(
-                    ['error' => $validator->errors()],
+                    [
+                        'error' => $validator->errors()
+                    ],
                     $this->log
                 ));
                 return $this->errorWrongArgs($validator->errors());
@@ -163,11 +164,17 @@ class VouchersController extends Controller
                 if (!$voucher) {
                     return $this->errorNotFound('Check Id, voucher detail not found');
                 } else {
-                    $data = ['id'=>$fields['id'],'status'=>$fields['status'],'title'=>$fields['title'],'location'=>$fields['location'],'description'=>$fields['description']];
+                    $data = [
+                        'id' => $fields['id'],
+                        'status' => $fields['status'],
+                        'title' => $fields['title'],
+                        'location' => $fields['location'],
+                        'description' => $fields['description']
+                    ];
                     $voucher_update =  $this->repository->update($voucher_id, $data);
                     Log::info(SELF::LOGTITLE, array_merge(
                         [
-                            'successfully Update' => 'Voucher successfully update'
+                            'Update Successful' => 'Voucher successfully updated'
                         ],
                         $this->log
                     ));
@@ -191,9 +198,11 @@ class VouchersController extends Controller
             $messages = VoucherValidator::getMessages();
 
             $validator = Validator::make($inputs, $rules, $messages);
-            if ($validator->fails()){
+            if ($validator->fails()) {
                 Log::error(SELF::LOGTITLE, array_merge(
-                    ['error' => $validator->errors()],
+                    [
+                        'error' => $validator->errors()
+                    ],
                     $this->log
                 ));
                 return $this->errorWrongArgs($validator->errors());
@@ -214,38 +223,38 @@ class VouchersController extends Controller
 
     public function bulkCreate()
     {
-        $fields = $this->request->all();
-        $rules = array_merge(
-            VoucherValidator::getVoucherRules(),
-            VoucherJobValidator::getBrandAndTotalRules()
-        );
-        $messages = VoucherValidator::getMessages();
-        $validator = Validator::make($fields, $rules, $messages);
-        try{
-            if ($validator->fails())
-            {
+        try {
+            $fields = $this->request->all();
+            $rules = array_merge(
+                VoucherValidator::getVoucherRules(),
+                VoucherJobValidator::getBrandAndTotalRules()
+            );
+            $messages = VoucherValidator::getMessages();
+            $validator = Validator::make($fields, $rules, $messages);
+            if ($validator->fails()) {
                 Log::error(SELF::LOGTITLE, array_merge(
                     ['error' => $validator->errors()],
                     $this->log
                 ));
                 return $this->errorWrongArgs($validator->errors());
-            }else {
-
+            } else {
                 $voucherJob = $this->repository->insertVoucherJob('new');
 
                 $this->repository->insertVoucherJobParamMetadata($fields, $voucherJob['data']['id']);
                 Log::info(SELF::LOGTITLE, array_merge(
                     [
-                        'successfully Update' => 'Vouchers will be created and notified to Business team soon!'
+                        'Update Successful' => 'Vouchers will be created and notified to Business team soon!'
                     ],
                     $this->log
                 ));
-                return $this->respondWithArray(array("Bulk Voucher order is created, you will be notified once vouchers are generated!"));
+                return $this->respondWithArray(['Bulk Voucher order is created, you will be notified once'
+                    .' vouchers are generated!']);
             }
-        }catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             Log::error(SELF::LOGTITLE, array_merge(
-                ['error' => $e->getMessage()],
+                [
+                    'error' => $e->getMessage()
+                ],
                 $this->log
             ));
             return $this->errorInternalError($e->getMessage());
