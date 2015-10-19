@@ -81,4 +81,44 @@ class VoucherJobsRepositoryTest extends TestCase
         $this->setExpectedException('\Exception');
         $this->repository->updateJobStatus($data);
     }
+
+    public function testAddVouchers()
+    {
+        //Add Voucher Job before test
+        DB::table('voucher_jobs')
+            ->insert([
+                'id' => 9999,
+                'status' => 'new',
+                'comments' => 'a comment'
+            ]);
+
+        $data = [
+            'status' => 'active',
+            'category' => 'new',
+            'title' => 'INTERNAL',
+            'location' => 'Nigeria',
+            'description' => 'a description',
+            'duration' => 3,
+            'period' => 'day',
+            'valid_from' => '2015-10-08 00:00:00',
+            'valid_to' => '2015-12-30 00:00:00',
+            'limit' => '1',
+            'brand' => 'a brand',
+            'total' => '2',
+            'voucher_job_id' => 9999
+        ];
+
+        $result = $this->repository->addVouchers($data);
+        $this->assertTrue($result);
+    }
+
+    public function testAddVouchersErrorException()
+    {
+        $data = [
+            'status' => 'old'
+        ];
+
+        $this->setExpectedException('\Exception');
+        $this->repository->addVouchers($data);
+    }
 }
