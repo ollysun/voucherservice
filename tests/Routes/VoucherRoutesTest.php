@@ -36,7 +36,22 @@ class VoucherRoutesTest extends TestCase
 
     public function testVouchersNotFoundErrorLogsGet()
     {
-        $this->get('/vouchers?query=@@@@@@@@@@@@@', $this->authHeader);
+        $this->repository = $this->getMockBuilder('Voucher\Repositories\VouchersRepository')
+            ->setConstructorArgs(array(
+                $this->voucherWithExceptionMock,
+                $this->voucherLogWithExceptionMock,
+                $this->voucherJobParamMetadataWithExceptionMock,
+                $this->voucherCodeWithExceptionMock
+            ))
+            ->setMethods(array('getVouchers'))
+            ->getMock();
+
+        $this->repository->expects($this->any())
+            ->method('getVouchers')
+            ->willReturn(null);
+
+        $this->app->instance('Voucher\Repositories\VouchersRepository', $this->repository);
+        $this->get('/vouchers', $this->authHeader);
         $this->assertResponseStatus(Response::HTTP_NOT_FOUND);
     }
 
