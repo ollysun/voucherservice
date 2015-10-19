@@ -238,17 +238,25 @@ class VouchersController extends Controller
                 ));
                 return $this->errorWrongArgs($validator->errors());
             } else {
-                $voucherJob = $this->repository->insertVoucherJob('new');
-
-                $this->repository->insertVoucherJobParamMetadata($fields, $voucherJob['data']['id']);
-                Log::info(SELF::LOGTITLE, array_merge(
-                    [
-                        'Update Successful' => 'Vouchers will be created and notified to Business team soon!'
-                    ],
-                    $this->log
-                ));
-                return $this->respondWithArray(['Bulk Voucher order is created, you will be notified once'
-                    .' vouchers are generated!']);
+                DB::begintransaction();
+                try {
+                    $voucherJob = $this->repository->insertVoucherJob('new');
+                    $this->repository->insertVoucherJobParamMetadata($fields, $voucherJob['data']['id']);
+                    Log::info(SELF::LOGTITLE, array_merge(
+                        [
+                            'Create Successful' => 'Vouchers will be created and notified to Business team soon!'
+                        ],
+                        $this->log
+                    ));
+                    $response = $this->respondCreated([
+                        'Bulk Voucher order is created, you will be notified once vouchers are generated!'
+                    ]);
+                } catch (\Exception $e) {
+                    DB::rollback();
+                    throw new \Exception($e->getMessage());
+                }
+                DB::commit();
+                return $response;
             }
         } catch (\Exception $e) {
             Log::error(SELF::LOGTITLE, array_merge(
