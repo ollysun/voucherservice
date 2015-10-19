@@ -144,7 +144,7 @@ class Voucher
 
                 $expires_on = DateTime::createFromFormat('Y-m-d H:i:s', $voucher['data']['valid_to']);
                 $now = DateTime::createFromFormat('Y-m-d H:i:s', Carbon::now());
-                
+
                 if ($expires_on >= $now) {
                     if ($voucher['data']['limit'] > $voucher['data']['total_redeemed']) {
                         if ($voucher['data']['limit'] ==  ($voucher['data']['total_redeemed'] + 1)) {
@@ -183,7 +183,7 @@ class Voucher
 
         if ($subscription) {
             switch ($voucher_data['category']) {
-                case 'new_expire':
+                case 'new_expired':
                     if (!$subscription['data']['is_active']){
                         return $subscription['data'];
                     }
