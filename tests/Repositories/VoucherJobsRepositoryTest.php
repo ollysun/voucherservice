@@ -28,11 +28,45 @@ class VoucherJobsRepositoryTest extends TestCase
         $this->assertNotNull($result['data'][0]['id']);
     }
 
-//    public function testGetJobsFalse()
-//    {
-//        $this->model->truncate();
-//
-//        $result = $this->repository->getJobs();
-//        $this->assertEmpty($result);
-//    }
+    public function testGetJobsFalse()
+    {
+        //Ensure there is no data in table
+        $this->model->get();
+        $this->model->update(["status" => "completed"]);
+
+        $result = $this->repository->getJobs();
+        $this->assertFalse($result);
+    }
+
+    public function testGetJobsErrorException()
+    {
+        $this->model = \Mockery::mock(VoucherJob::class);
+        $this->repository = new VoucherJobsRepository($this->model);
+
+        $this->model->shouldReceive('where')
+            ->atLeast(1)
+            ->andThrow(new \Exception("Mock Exception"));
+
+        $this->setExpectedException('\Exception');
+        $this->repository->getJobs();
+    }
+
+    public function testUpdateJobStatus()
+    {
+        DB::table('voucher_jobs')
+            ->insert([
+                'id' => 9999,
+                'status' => 'new',
+                'comments' => 'a comment'
+            ]);
+
+        $data = [
+            'voucher_job_id' => 9999,
+            'comments' => 'test comment',
+            'status' => 'processing'
+        ];
+
+        $result = $this->repository->updateJobStatus($data);
+        $this->assertTrue($result);
+    }
 }
