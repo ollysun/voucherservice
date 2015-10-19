@@ -69,4 +69,16 @@ class VoucherJobsRepositoryTest extends TestCase
         $result = $this->repository->updateJobStatus($data);
         $this->assertTrue($result);
     }
+
+    public function testUpdateJobStatusErrorException()
+    {
+        $data = [
+            'voucher_job_id' => '999a',
+            'comments' => 'test comment',
+            'status' => 'processing'
+        ];
+
+        $this->setExpectedException('\Exception');
+        $this->repository->updateJobStatus($data);
+    }
 }
