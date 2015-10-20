@@ -533,4 +533,75 @@ class VouchersRepositoryTest extends TestCase
 
         $this->repository->updateVoucherStatus([]);
     }
+
+    public function testInsertVoucherJobNew()
+    {
+        $result = $this->repository->insertVoucherJob('new');
+        $this->assertEquals('new', $result['data']['status']);
+    }
+
+    public function testInsertVoucherJobProcessing()
+    {
+        $result = $this->repository->insertVoucherJob('processing');
+        $this->assertEquals('processing', $result['data']['status']);
+    }
+
+    public function testInsertVoucherJobCompleted()
+    {
+        $result = $this->repository->insertVoucherJob('completed');
+        $this->assertEquals('completed', $result['data']['status']);
+    }
+
+    public function testInsertVoucherJobErrorException()
+    {
+        $this->setExpectedException('\Exception');
+        $this->voucher_job_model = $this->getMock(VoucherJob::class, ['save']);
+        $this->voucher_job_model->expects($this->any())->method('save')->willThrowException(new \Exception());
+
+        $this->repository = new VouchersRepository(
+            $this->voucher_model,
+            $this->voucher_log_model,
+            $this->voucher_param_model,
+            $this->voucher_code_model,
+            $this->voucher_job_model
+        );
+
+        $this->repository->insertVoucherJob([]);
+    }
+
+    public function testInsertVoucherJobParamMetadata()
+    {
+        $this->voucher_job_model = new VoucherJob();
+        $this->voucher_job_model->insert(['id' => 9990, 'status' => 'new', 'comments' => 'a comment']);
+
+        $data = [
+            'status' => 'active',
+            'category' => 'new'
+        ];
+
+        $result = $this->repository->insertVoucherJobParamMetadata($data, 9990);
+        $this->assertTrue($result);
+    }
+
+    public function testInsertVoucherJobParamMetadataErrorException()
+    {
+        $this->setExpectedException('\Exception');
+        $this->voucher_param_model = $this->getMock(VoucherJobParamMetadata::class, ['save']);
+        $this->voucher_param_model->expects($this->any())->method('save')->willThrowException(new \Exception());
+
+        $this->repository = new VouchersRepository(
+            $this->voucher_model,
+            $this->voucher_log_model,
+            $this->voucher_param_model,
+            $this->voucher_code_model,
+            $this->voucher_job_model
+        );
+
+        $data = [
+            'status' => 'active',
+            'category' => 'new'
+        ];
+
+        $this->repository->insertVoucherJobParamMetadata($data, 9990);
+    }
 }
