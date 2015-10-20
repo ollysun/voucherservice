@@ -45,23 +45,4 @@ class VoucherLogsRepository extends AbstractRepository
             throw new \Exception($e->getMessage());
         }
     }
-
-    /**
-     * Retrieves the total count a voucher code was successfully redeemed.
-     *
-     * @param $voucher_id
-     * @throws \Exception
-     */
-    public function getVoucherRedeemedCount($voucher_id)
-    {
-        try {
-            $count = $this->model->where('voucher_id', $voucher_id)
-                ->where('action', 'success')
-                ->count();
-
-            return $count;
-        } catch (\Exception $e) {
-            throw new \Exception($e->getMessage());
-        }
-    }
 }
