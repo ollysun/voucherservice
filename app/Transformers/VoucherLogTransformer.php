@@ -20,7 +20,7 @@ class VoucherLogTransformer extends TransformerAbstract
     {
         return [
             'id' => (int) $voucherLog->id,
-            'voucher_id' => (int) $voucherLog->voucher_id,
+            'voucher_id' => (int) $voucherLog->voucher->id,
             'user_id' => (string) $voucherLog->user_id,
             'action' => (string) $voucherLog->action,
             'platform' => (string) $voucherLog->action,
