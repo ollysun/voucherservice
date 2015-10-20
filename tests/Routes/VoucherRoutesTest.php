@@ -85,7 +85,7 @@ class VoucherRoutesTest extends TestCase
     public function testVouchersPost()
     {
         //Create a voucher code before the test
-        $this->call("POST", "/vouchers/generateCodes", ['total' => 1], [], [], $this->authHeader);
+        $this->call("POST", "/vouchers/generateCodes", ['total' => 2], [], [], $this->authHeader);
 
         $data = [
             "type" => "time",
@@ -441,6 +441,7 @@ class VoucherRoutesTest extends TestCase
             "valid_from" => "2015-10-13 02:02:02",
             "valid_to" => "2015-10-15 02:02:02"
         ];
+
         $this->call("POST", "/vouchers/bulk", $data, [], [], $this->authHeader);
         $this->assertResponseStatus(Response::HTTP_CREATED);
     }
