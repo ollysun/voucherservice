@@ -227,7 +227,7 @@ class VoucherRoutesTest extends TestCase
         ];
 
         $this->voucher_code_repo->insertVoucherCode($insert_code);
-        
+
         $data = [
             "type" => "time",
             "status" => "claimed",

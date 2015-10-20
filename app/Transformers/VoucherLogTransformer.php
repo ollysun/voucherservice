@@ -12,9 +12,9 @@ use Voucher\Models\VoucherLog;
 
 class VoucherLogTransformer extends TransformerAbstract
 {
-    protected $availableIncludes = [
-        'voucher'
-    ];
+//    protected $availableIncludes = [
+//        'voucher'
+//    ];
 
     public static function transform(VoucherLog $voucherLog)
     {
@@ -40,9 +40,9 @@ class VoucherLogTransformer extends TransformerAbstract
         ];
     }
 
-    public function includeVoucher(VoucherLog $voucherLog)
-    {
-        $voucher = $voucherLog->voucher;
-        return $this->item($voucher, new VoucherTransformer());
-    }
+//    public function includeVoucher(VoucherLog $voucherLog)
+//    {
+//        $voucher = $voucherLog->voucher;
+//        return $this->item($voucher, new VoucherTransformer());
+//    }
 }

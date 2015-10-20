@@ -104,14 +104,14 @@ class Voucher
             $subscription = $this->isVoucherValidForUser($data, $voucher);
 
             $subscription_data = [
-                'user_id'   => $data['user_id'],
-                'platform'  => $data['platform'],
+                'user_id' => $data['user_id'],
+                'platform' => $data['platform'],
                 'customer_id' => $subscription['customer_id'],
                 'plan_id' => $subscription['plan_id'],
                 'voucher_id' => $voucher['id'],
                 'code' => $voucher['code'],
                 'voucher_status' => $voucher['voucher_status'],
-                'subscription_duration' => $voucher['duration'].' '. $voucher['period'],
+                'subscription_duration' => $voucher['duration'] . ' ' . $voucher['period'],
             ];
             $this->sendSubscribeRequest($subscription_data);
             return true;
@@ -132,7 +132,7 @@ class Voucher
         $voucher = $this->voucher_repository->getVoucherByCode($post_data['code']);
 
         $data = [
-            'voucher_id' => NULL,
+            'voucher_id' => null,
             'user_id' => $post_data['user_id'],
             'platform' => $post_data['platform'],
             'action' => 'attempt'
@@ -147,7 +147,7 @@ class Voucher
 
                 if ($expires_on >= $now) {
                     if ($voucher['data']['limit'] > $voucher['data']['total_redeemed']) {
-                        if ($voucher['data']['limit'] ==  ($voucher['data']['total_redeemed'] + 1)) {
+                        if ($voucher['data']['limit'] == ($voucher['data']['total_redeemed'] + 1)) {
                             $voucher['data']['voucher_status'] = "claimed";
                         } else {
                             $voucher['data']['voucher_status'] = "claiming";
@@ -166,7 +166,7 @@ class Voucher
             $data['comments'] = 'User tried redeeming a non existing voucher code.';
         }
         $this->voucher_logs_repository->addVoucherLog($data);
-        throw new \Exception('The voucher code is invalid. '. $data['comments']);
+        throw new \Exception('The voucher code is invalid. ' . $data['comments']);
     }
 
     /**
@@ -179,24 +179,24 @@ class Voucher
      */
     protected function isVoucherValidForUser($user_data, $voucher_data)
     {
-        $subscription = $this->subscriptions_api->subscriptionApi('/subscriptions/'. $user_data['user_id'], 'get');
+        $subscription = $this->subscriptions_api->subscriptionApi('/subscriptions/' . $user_data['user_id'], 'get');
 
         if ($subscription) {
             switch ($voucher_data['category']) {
                 case 'new_expired':
-                    if (!$subscription['data']['is_active']){
+                    if (!$subscription['data']['is_active']) {
                         return $subscription['data'];
                     }
                     break;
 
                 case 'expired':
-                    if (!$subscription['data']['is_active']){
+                    if (!$subscription['data']['is_active']) {
                         return $subscription['data'];
                     }
                     break;
 
                 case 'active':
-                    if ($plan = $this->plans_api->plansApi('/plans/'. $subscription['data']['plan_id'], 'get')) {
+                    if ($plan = $this->plans_api->plansApi('/plans/' . $subscription['data']['plan_id'], 'get')) {
                         if ($subscription['data']['is_active'] && !$plan['data']['is_recurring']) {
                             return $subscription['data'];
                         }
@@ -206,9 +206,9 @@ class Voucher
         } else {
             if ($voucher_data['category'] == 'new' || $voucher_data['category'] == 'new_expire') {
                 $subscription = [
-                    'customer_id' => NULL,
-                    'plan_id' => NULL,
-                    'subscription_platform_id'  => NULL,
+                    'customer_id' => null,
+                    'plan_id' => null,
+                    'subscription_platform_id' => null,
                 ];
                 return $subscription;
             }
@@ -219,7 +219,7 @@ class Voucher
             'user_id' => $user_data['user_id'],
             'platform' => $user_data['platform'],
             'action' => 'attempt',
-            'comments'   => 'User is not eligible to use the voucher code.',
+            'comments' => 'User is not eligible to use the voucher code.',
         ];
         $this->voucher_logs_repository->addVoucherLog($data);
         throw new \Exception('You are not eligible to use this voucher code.');
@@ -242,8 +242,8 @@ class Voucher
 
         $log_data = [
             'voucher_id' => $data['voucher_id'],
-            'user_id'   => $data['user_id'],
-            'platform'  => $data['platform']
+            'user_id' => $data['user_id'],
+            'platform' => $data['platform']
         ];
 
         if ($subscribe_response->get('MessageId')) {
