@@ -13,15 +13,15 @@ use Voucher\Models\VoucherJobParamMetadata;
 
 class VoucherJobParamMetadataTransformer extends TransformerAbstract {
 
-    protected $availableIncludes = [
-        'voucherJob'
-    ];
+//    protected $availableIncludes = [
+//        'voucherJob'
+//    ];
 
     public static function transform(VoucherJobParamMetadata $voucherJobMetadata)
     {
         return [
             'id' => (int) $voucherJobMetadata->id,
-            'voucher_job_id' => (int) $voucherJobMetadata->voucher_job_id,
+            'voucher_job_id' => (int) $voucherJobMetadata->voucherJob->id,
             'key' => (string) $voucherJobMetadata->key,
             'value' => (string) $voucherJobMetadata->value,
             'created_at' => $voucherJobMetadata->created_at,
@@ -39,9 +39,9 @@ class VoucherJobParamMetadataTransformer extends TransformerAbstract {
         ];
     }
 
-    public function includeVoucherJob(VoucherJobParamMetadata $voucherJobMetadata)
-    {
-        $voucherJob = $voucherJobMetadata->voucherJob;
-        return $this->collection($voucherJob, new VoucherJobTransformer());
-    }
+//    public function includeVoucherJob(VoucherJobParamMetadata $voucherJobMetadata)
+//    {
+//        $voucherJob = $voucherJobMetadata->voucherJob;
+//        return $this->collection($voucherJob, new VoucherJobTransformer());
+//    }
 }

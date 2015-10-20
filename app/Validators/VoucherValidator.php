@@ -11,7 +11,7 @@ class VoucherValidator extends IlluminateValidator
             'sort' => 'in:created_at,updated_at,user_id,type,status,category,is_limited,valid_from,valid_to',
             'limit' => 'regex:/(^[0-9]+$)+/',
             'order' => 'in:ASC,DESC',
-            'offset' =>'regex:/(^[0-9]+$)+/'
+            'offset' => 'regex:/(^[0-9]+$)+/'
         ];
     }
 
@@ -36,7 +36,7 @@ class VoucherValidator extends IlluminateValidator
     public static function getUpdateRules()
     {
         return [
-            'id' =>'required|regex:/(^[0-9]+$)+/',
+            'id' => 'required|regex:/(^[0-9]+$)+/',
             'status' => 'string|in:active,claiming,claimed,deleted,expired,inactive',
             'title' => 'string|in:INTERNAL,VODAFONE_GHANA_STAFF_MOBILE,VODAFONE_GHANA_CUSTOMER_MOBILE,VODAFONE_GHANA_STAFF_FIXEDLINE',
             'location' => 'string',
@@ -47,28 +47,21 @@ class VoucherValidator extends IlluminateValidator
     public static function getIdRules()
     {
         return [
-            'id'=> 'required|regex:/(^[0-9]+$)+/',
-        ];
-    }
-
-    public static function getUserIdRules()
-    {
-        return [
-            'user_id'=> 'required|regex:/(^[0-9]+$)+/',
+            'id' => 'required|regex:/(^[0-9]+$)+/',
         ];
     }
 
     public static function getVoucherCodeRules()
     {
         return [
-            'total'=> 'required|integer|min:1',
+            'total' => 'required|integer|min:1',
         ];
     }
 
     public static function getRedeemRules()
     {
         return [
-            'user_id'=> 'required|regex:/(^[0-9]+$)+/',
+            'user_id' => 'required|regex:/(^[0-9]+$)+/',
             'platform' => 'required|string|in:web,cms,mobile',
             'code' => 'required|string'
         ];
@@ -77,11 +70,11 @@ class VoucherValidator extends IlluminateValidator
     public static function getMessages()
     {
         return [
-            'query.string'   =>  'The search query can only contain numbers or alphabets.',
-            'sort.in'    =>  'The sort parameter is invalid.',
-            'limit.regex' =>  'Pagination limit must be an integer.',
+            'query.string' => 'The search query can only contain numbers or alphabets.',
+            'sort.in' => 'The sort parameter is invalid.',
+            'limit.regex' => 'Pagination limit must be an integer.',
             'order.in' => 'order can only be ASC or DESC',
-            'offset.regex'    =>  'Pagination offset must be an integer.',
+            'offset.regex' => 'Pagination offset must be an integer.',
             'type.required' => 'The Voucher Type is required',
             'type.string' => 'The Voucher Type can only be a string',
             'type.in' => 'The Voucher Type is invalid',
@@ -109,10 +102,10 @@ class VoucherValidator extends IlluminateValidator
             'is_limited.boolean' => 'The Voucher is-limited must be boolean',
             'id.required' => 'The Voucher Id is required',
             'id.regex' => 'The Voucher Id can only be an integer',
-            'id.exists'  =>  'The specified Voucher Id does not exist',
+            'id.exists' => 'The specified Voucher Id does not exist',
             'user_id.required' => 'The User Id is required',
             'user_id.regex' => 'The User Id can only be an integer',
-            'user_id.exists'  =>  'The specified User Id does not exist',
+            'user_id.exists' => 'The specified User Id does not exist',
             'platform.required' => 'The Platform is required',
             'platform.string' => 'The Platform can only be a string',
             'platform.in' => 'The Platform is invalid',
