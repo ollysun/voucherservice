@@ -2,6 +2,7 @@
 
 use Voucher\Models\Voucher;
 use Voucher\Models\VoucherCode;
+use Voucher\Models\VoucherJob;
 use Voucher\Models\VoucherJobParamMetadata;
 use Voucher\Models\VoucherLog;
 use Voucher\Repositories\VouchersRepository;
@@ -12,6 +13,7 @@ class VouchersRepositoryTest extends TestCase
     protected $voucher_log_model;
     protected $voucher_param_model;
     protected $voucher_code_model;
+    protected $voucher_job_model;
     protected $repository;
 
     public function setUp()
@@ -21,18 +23,20 @@ class VouchersRepositoryTest extends TestCase
         $this->voucher_log_model = new VoucherLog();
         $this->voucher_param_model = new VoucherJobParamMetadata();
         $this->voucher_code_model = new VoucherCode();
+        $this->voucher_job_model = new VoucherJob();
         $this->repository = new VouchersRepository(
             $this->voucher_model,
             $this->voucher_log_model,
             $this->voucher_param_model,
-            $this->voucher_code_model
+            $this->voucher_code_model,
+            $this->voucher_job_model
         );
     }
 
     public function testGetVouchers()
     {
-        $voucher_job_model = new \Voucher\Models\VoucherJob();
-        $voucher_job_model->insert(['id' => 9990, 'status' => 'new', 'comments' => 'a comment']);
+        $this->voucher_job_model = new VoucherJob();
+        $this->voucher_job_model->insert(['id' => 9990, 'status' => 'new', 'comments' => 'a comment']);
 
         $data = [
             'id' => 9999,
@@ -75,8 +79,8 @@ class VouchersRepositoryTest extends TestCase
 
     public function testGetVouchersQueryNotNull()
     {
-        $voucher_job_model = new \Voucher\Models\VoucherJob();
-        $voucher_job_model->insert(['id' => 9990, 'status' => 'new', 'comments' => 'a comment']);
+        $this->voucher_job_model = new VoucherJob();
+        $this->voucher_job_model->insert(['id' => 9990, 'status' => 'new', 'comments' => 'a comment']);
 
         $data = [
             'id' => 9999,
@@ -149,15 +153,16 @@ class VouchersRepositoryTest extends TestCase
             $this->voucher_model,
             $this->voucher_log_model,
             $this->voucher_param_model,
-            $this->voucher_code_model
+            $this->voucher_code_model,
+            $this->voucher_job_model
         );
         $this->repository->getVouchers($params);
     }
 
     public function testGetVoucherById()
     {
-        $voucher_job_model = new \Voucher\Models\VoucherJob();
-        $voucher_job_model->insert(['id' => 9990, 'status' => 'new', 'comments' => 'a comment']);
+        $this->voucher_job_model = new VoucherJob();
+        $this->voucher_job_model->insert(['id' => 9990, 'status' => 'new', 'comments' => 'a comment']);
 
         $data = [
             'id' => 9999,
@@ -207,15 +212,16 @@ class VouchersRepositoryTest extends TestCase
             $this->voucher_model,
             $this->voucher_log_model,
             $this->voucher_param_model,
-            $this->voucher_code_model
+            $this->voucher_code_model,
+            $this->voucher_job_model
         );
         $this->repository->getVoucherById('xyz123');
     }
 
     public function testGetVoucherByCode()
     {
-        $voucher_job_model = new \Voucher\Models\VoucherJob();
-        $voucher_job_model->insert(['id' => 9990, 'status' => 'new', 'comments' => 'a comment']);
+        $this->voucher_job_model = new VoucherJob();
+        $this->voucher_job_model->insert(['id' => 9990, 'status' => 'new', 'comments' => 'a comment']);
 
         $data = [
             'id' => 9999,
@@ -265,7 +271,8 @@ class VouchersRepositoryTest extends TestCase
             $this->voucher_model,
             $this->voucher_log_model,
             $this->voucher_param_model,
-            $this->voucher_code_model
+            $this->voucher_code_model,
+            $this->voucher_job_model
         );
         $this->repository->getVoucherByCode('123456789abc');
     }
@@ -302,7 +309,8 @@ class VouchersRepositoryTest extends TestCase
             $this->voucher_model,
             $this->voucher_log_model,
             $this->voucher_param_model,
-            $this->voucher_code_model
+            $this->voucher_code_model,
+            $this->voucher_job_model
         );
 
         $this->repository->getVoucherCodeByStatus('new');
@@ -327,7 +335,8 @@ class VouchersRepositoryTest extends TestCase
             $this->voucher_model,
             $this->voucher_log_model,
             $this->voucher_param_model,
-            $this->voucher_code_model
+            $this->voucher_code_model,
+            $this->voucher_job_model
         );
 
         $this->repository->updateVoucherCodeStatusByID('9990');
@@ -335,8 +344,8 @@ class VouchersRepositoryTest extends TestCase
 
     public function testCreate()
     {
-        $voucher_job_model = new \Voucher\Models\VoucherJob();
-        $voucher_job_model->insert(['id' => 9990, 'status' => 'new', 'comments' => 'a comment']);
+        $this->voucher_job_model = new VoucherJob();
+        $this->voucher_job_model->insert(['id' => 9990, 'status' => 'new', 'comments' => 'a comment']);
 
         $data = [
             'id' => 9999,
@@ -370,7 +379,8 @@ class VouchersRepositoryTest extends TestCase
             $this->voucher_model,
             $this->voucher_log_model,
             $this->voucher_param_model,
-            $this->voucher_code_model
+            $this->voucher_code_model,
+            $this->voucher_job_model
         );
 
         $this->repository->create('');
@@ -378,8 +388,8 @@ class VouchersRepositoryTest extends TestCase
 
     public function testUpdate()
     {
-        $voucher_job_model = new \Voucher\Models\VoucherJob();
-        $voucher_job_model->insert(['id' => 9990, 'status' => 'new', 'comments' => 'a comment']);
+        $this->voucher_job_model = new VoucherJob();
+        $this->voucher_job_model->insert(['id' => 9990, 'status' => 'new', 'comments' => 'a comment']);
 
         $data = [
             'id' => 9999,
@@ -414,7 +424,8 @@ class VouchersRepositoryTest extends TestCase
             $this->voucher_model,
             $this->voucher_log_model,
             $this->voucher_param_model,
-            $this->voucher_code_model
+            $this->voucher_code_model,
+            $this->voucher_job_model
         );
 
         $this->repository->update('', []);
@@ -422,8 +433,8 @@ class VouchersRepositoryTest extends TestCase
 
     public function testGetVouchersByJobIdAndLimit()
     {
-        $voucher_job_model = new \Voucher\Models\VoucherJob();
-        $voucher_job_model->insert(['id' => 9990, 'status' => 'new', 'comments' => 'a comment']);
+        $this->voucher_job_model = new VoucherJob();
+        $this->voucher_job_model->insert(['id' => 9990, 'status' => 'new', 'comments' => 'a comment']);
 
         $data = [
             'id' => 9999,
@@ -465,7 +476,8 @@ class VouchersRepositoryTest extends TestCase
             $this->voucher_model,
             $this->voucher_log_model,
             $this->voucher_param_model,
-            $this->voucher_code_model
+            $this->voucher_code_model,
+            $this->voucher_job_model
         );
 
         $this->repository->getVouchersByJobIdAndLimit([]);
@@ -473,8 +485,8 @@ class VouchersRepositoryTest extends TestCase
 
     public function testUpdateVoucherStatus()
     {
-        $voucher_job_model = new \Voucher\Models\VoucherJob();
-        $voucher_job_model->insert(['id' => 9990, 'status' => 'new', 'comments' => 'a comment']);
+        $this->voucher_job_model = new VoucherJob();
+        $this->voucher_job_model->insert(['id' => 9990, 'status' => 'new', 'comments' => 'a comment']);
 
         $data = [
             'id' => 9999,
@@ -515,7 +527,8 @@ class VouchersRepositoryTest extends TestCase
             $this->voucher_model,
             $this->voucher_log_model,
             $this->voucher_param_model,
-            $this->voucher_code_model
+            $this->voucher_code_model,
+            $this->voucher_job_model
         );
 
         $this->repository->updateVoucherStatus([]);
