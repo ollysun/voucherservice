@@ -6,6 +6,7 @@ use Voucher\Models\Voucher;
 use Voucher\Models\VoucherLog;
 use Voucher\Models\VoucherJobParamMetadata;
 use Voucher\Models\VoucherCode;
+use Voucher\Models\VoucherJob;
 use Voucher\Voucher\Voucher as VoucherService;
 
 class VoucherTest extends TestCase
@@ -18,7 +19,13 @@ class VoucherTest extends TestCase
 
     public function setUp()
     {
-        $this->voucher_repo = new VouchersRepository(new Voucher(), new VoucherLog(), new VoucherJobParamMetadata(), new VoucherCode());
+        $this->voucher_repo = new VouchersRepository(
+            new Voucher(),
+            new VoucherLog(),
+            new VoucherJobParamMetadata(),
+            new VoucherCode(),
+            new VoucherJob()
+        );
 
         $this->voucher_log_repo = new VoucherLogsRepository(new VoucherLog());
 

@@ -5,6 +5,7 @@ use Voucher\Models\VoucherLog;
 use Voucher\Models\VoucherCode;
 use Voucher\Models\VoucherJobParamMetadata;
 use Voucher\Repositories\VoucherCodesRepository;
+use Voucher\Models\VoucherJob;
 use Voucher\Validators\VoucherValidator;
 use Illuminate\Support\Facades\Validator;
 
@@ -20,6 +21,8 @@ class VoucherRoutesTest extends TestCase
 
     protected $voucher_code_model;
 
+    protected $voucher_job_model;
+
     protected $voucher_code_repo;
 
     public function setUp()
@@ -29,6 +32,7 @@ class VoucherRoutesTest extends TestCase
         $this->voucher_log_model = new VoucherLog();
         $this->voucher_code_model = new VoucherCode();
         $this->voucher_job_params_model = new VoucherJobParamMetadata();
+        $this->voucher_job_model = new VoucherJob();
         $this->voucher_code_repo = new VoucherCodesRepository($this->voucher_code_model);
     }
 
@@ -57,7 +61,8 @@ class VoucherRoutesTest extends TestCase
                 $this->voucher_model,
                 $this->voucher_log_model,
                 $this->voucher_job_params_model,
-                $this->voucher_code_model
+                $this->voucher_code_model,
+                $this->voucher_job_model
             ))
             ->setMethods(array('getVouchers'))
             ->getMock();
@@ -76,7 +81,8 @@ class VoucherRoutesTest extends TestCase
                 $this->voucher_model,
                 $this->voucher_log_model,
                 $this->voucher_job_params_model,
-                $this->voucher_code_model
+                $this->voucher_code_model,
+                $this->voucher_job_model
             ))
             ->setMethods(array('getVouchers'))
             ->getMock();
@@ -201,7 +207,8 @@ class VoucherRoutesTest extends TestCase
                 $this->voucher_model,
                 $this->voucher_log_model,
                 $this->voucher_job_params_model,
-                $this->voucher_code_model
+                $this->voucher_code_model,
+                $this->voucher_job_model
             ]
         );
         $this->repository->expects($this->any())->method('getVoucherCodeByStatus')->willReturn($code);
@@ -242,7 +249,8 @@ class VoucherRoutesTest extends TestCase
                 $this->voucher_model,
                 $this->voucher_log_model,
                 $this->voucher_job_params_model,
-                $this->voucher_code_model
+                $this->voucher_code_model,
+                $this->voucher_job_model
             ))
             ->setMethods(array('create'))
             ->getMock();
@@ -340,7 +348,8 @@ class VoucherRoutesTest extends TestCase
                 $this->voucher_model,
                 $this->voucher_log_model,
                 $this->voucher_job_params_model,
-                $this->voucher_code_model
+                $this->voucher_code_model,
+                $this->voucher_job_model
             ))
             ->setMethods(array('update'))
             ->getMock();
@@ -483,7 +492,8 @@ class VoucherRoutesTest extends TestCase
                 $this->voucher_model,
                 $this->voucher_log_model,
                 $this->voucher_job_params_model,
-                $this->voucher_code_model
+                $this->voucher_code_model,
+                $this->voucher_job_model
             ]
         );
         $this->repository->expects($this->any())->method('insertVoucherJob')->will($this->throwException(new \Exception));
