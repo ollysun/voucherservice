@@ -43,23 +43,33 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
     protected $voucherCode;
 
     /**
+     * VoucherJob model
+     *
+     * @var
+     */
+    protected $voucherJob;
+
+    /**
      * Creates a new vouchers repository instance.
      *
      * @param Voucher $voucher
      * @param VoucherLog $voucherLog
      * @param VoucherJobParamMetadata $voucherMetadataModel
      * @param VoucherCode $voucherCodeModel
+     * @param VoucherJob $voucherJob
      */
     public function __construct(
         Voucher $voucher,
         VoucherLog $voucherLog,
         VoucherJobParamMetadata $voucherMetadataModel,
-        VoucherCode $voucherCodeModel
+        VoucherCode $voucherCodeModel,
+        VoucherJob $voucherJob
     ) {
         $this->model = $voucher;
         $this->log_model = $voucherLog;
         $this->voucherMetadata = $voucherMetadataModel;
         $this->voucherCode = $voucherCodeModel;
+        $this->voucherJob = $voucherJob;
     }
 
     /**
@@ -342,7 +352,7 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
     public function insertVoucherJob($status)
     {
         try {
-            $voucherJob = new VoucherJob();
+            $voucherJob = $this->voucherJob;
             if ($status == 'new') {
                 $voucherJob->status = 'new';
                 $voucherJob->comments = 'New VoucherJob Inserted';
@@ -375,7 +385,7 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
     {
         try {
             foreach ($data as $key => $value) {
-                $voucherMetadata = new VoucherJobParamMetadata();
+                $voucherMetadata = $this->voucherMetadata;
                 $voucherMetadata->voucher_job_id = $voucher_job_id;
                 $voucherMetadata->key = trim($key);
                 $voucherMetadata->value = trim($value);

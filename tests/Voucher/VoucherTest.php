@@ -6,6 +6,7 @@ use Voucher\Models\Voucher;
 use Voucher\Models\VoucherLog;
 use Voucher\Models\VoucherJobParamMetadata;
 use Voucher\Models\VoucherCode;
+use Voucher\Models\VoucherJob;
 use Voucher\Voucher\Voucher as VoucherService;
 
 class VoucherTest extends TestCase
@@ -18,7 +19,13 @@ class VoucherTest extends TestCase
 
     public function setUp()
     {
-        $this->voucher_repo = new VouchersRepository(new Voucher(), new VoucherLog(), new VoucherJobParamMetadata(), new VoucherCode());
+        $this->voucher_repo = new VouchersRepository(
+            new Voucher(),
+            new VoucherLog(),
+            new VoucherJobParamMetadata(),
+            new VoucherCode(),
+            new VoucherJob()
+        );
 
         $this->voucher_log_repo = new VoucherLogsRepository(new VoucherLog());
 
@@ -37,7 +44,9 @@ class VoucherTest extends TestCase
             'valid_to' => date('Y-m-d H:i:s', strtotime('+ 1 day')),
             'limit' => 1,
             'type' => 'time',
-            'code' => 'XAD34E1'
+            'code' => 'XAD34E1',
+            'category' => 'new'
+
         ]);
 
         $inputs = [
@@ -46,8 +55,11 @@ class VoucherTest extends TestCase
             'platform' => 1,
         ];
 
+        $mocked_sub_service = $this->getMock('Voucher\Services\SubscriptionService', ['subscriptionApi']);
+        $mocked_sub_service->expects($this->any())->method('subscriptionApi')->willReturn(false);
+
         $voucher =  new VoucherService($this->voucher_repo, $this->voucher_log_repo);
-        $voucher->setSubscriptionService(new \Voucher\Services\SubscriptionService());
+        $voucher->setSubscriptionService($mocked_sub_service);
         $result = $voucher->redeem($inputs);
         $this->assertEquals(true, $result);
     }
@@ -72,8 +84,11 @@ class VoucherTest extends TestCase
             'platform' => 1,
         ];
 
+        $mocked_sub_service = $this->getMock('Voucher\Services\SubscriptionService', ['subscriptionApi']);
+        $mocked_sub_service->expects($this->any())->method('subscriptionApi')->willReturn(false);
+
         $voucher =  new VoucherService($this->voucher_repo, $this->voucher_log_repo);
-        $voucher->setSubscriptionService(new \Voucher\Services\SubscriptionService());
+        $voucher->setSubscriptionService($mocked_sub_service);
         $result = $voucher->redeem($inputs);
         $this->assertEquals(true, $result);
     }
@@ -85,23 +100,18 @@ class VoucherTest extends TestCase
      */
     public function testRedeemWithNoneExistingCodeException()
     {
-        $this->voucher_repo->create([
-            'valid_from' => '2015-1-1 20:11:1',
-            'valid_to' => date('Y-m-d H:i:s', strtotime('+ 1 day')),
-            'limit' => 1,
-            'type' => 'time',
-            'code' => 'XCD34E1QQ'
-        ]);
-
         $inputs = [
-            'code' => 'XCD34E1',
+            'code' => 'TESTCODE',
             'user_id' => 122333,
             'platform' => 1,
         ];
 
         $this->setExpectedException('\Exception');
+        $mocked_sub_service = $this->getMock('Voucher\Services\SubscriptionService', ['subscriptionApi']);
+        $mocked_sub_service->expects($this->any())->method('subscriptionApi')->willReturn(false);
+
         $voucher =  new VoucherService($this->voucher_repo, $this->voucher_log_repo);
-        $voucher->setSubscriptionService(new \Voucher\Services\SubscriptionService());
+        $voucher->setSubscriptionService($mocked_sub_service);
         $voucher->redeem($inputs);
     }
 
@@ -128,8 +138,11 @@ class VoucherTest extends TestCase
         ];
 
         $this->setExpectedException('\Exception');
+        $mocked_sub_service = $this->getMock('Voucher\Services\SubscriptionService', ['subscriptionApi']);
+        $mocked_sub_service->expects($this->any())->method('subscriptionApi')->willReturn(false);
+
         $voucher =  new VoucherService($this->voucher_repo, $this->voucher_log_repo);
-        $voucher->setSubscriptionService(new \Voucher\Services\SubscriptionService());
+        $voucher->setSubscriptionService($mocked_sub_service);
         $voucher->redeem($inputs);
     }
 
@@ -156,8 +169,11 @@ class VoucherTest extends TestCase
         ];
 
         $this->setExpectedException('\Exception');
+        $mocked_sub_service = $this->getMock('Voucher\Services\SubscriptionService', ['subscriptionApi']);
+        $mocked_sub_service->expects($this->any())->method('subscriptionApi')->willReturn(false);
+
         $voucher =  new VoucherService($this->voucher_repo, $this->voucher_log_repo);
-        $voucher->setSubscriptionService(new \Voucher\Services\SubscriptionService());
+        $voucher->setSubscriptionService($mocked_sub_service);
         $voucher->redeem($inputs);
     }
 
@@ -191,8 +207,11 @@ class VoucherTest extends TestCase
         ]);
 
         $this->setExpectedException('\Exception');
+        $mocked_sub_service = $this->getMock('Voucher\Services\SubscriptionService', ['subscriptionApi']);
+        $mocked_sub_service->expects($this->any())->method('subscriptionApi')->willReturn(false);
+
         $voucher =  new VoucherService($this->voucher_repo, $this->voucher_log_repo);
-        $voucher->setSubscriptionService(new \Voucher\Services\SubscriptionService());
+        $voucher->setSubscriptionService($mocked_sub_service);
         $voucher->redeem($inputs);
     }
 
