@@ -85,7 +85,9 @@ class VoucherRoutesTest extends TestCase
     public function testVouchersPost()
     {
         //Create a voucher code before the test
-        $this->call("POST", "/vouchers/generateCodes", ['total' => 2], [], [], $this->authHeader);
+        $me = $this->call("POST", "/vouchers/generateCodes", ['total' => 1], [], [], $this->authHeader);
+
+        var_dump($me);
 
         $data = [
             "type" => "time",

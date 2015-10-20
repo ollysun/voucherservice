@@ -98,6 +98,8 @@ class VouchersController extends Controller
                 return $this->errorWrongArgs($validator->errors());
             } else {
                 $voucherCode = $this->repository->getVoucherCodeByStatus("new");
+
+                dd($voucherCode);
                 if (!$voucherCode) {
                     Log::error(SELF::LOGTITLE, array_merge(
                         [
