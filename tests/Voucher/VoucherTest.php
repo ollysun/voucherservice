@@ -39,14 +39,17 @@ class VoucherTest extends TestCase
      */
     public function testRedeem()
     {
+        $voucher_job_model = new VoucherJob();
+        $voucher_job_model->insert(['id' => 9990, 'status' => 'new', 'comments' => 'a comment']);
+
         $this->voucher_repo->create([
             'valid_from' => '2015-1-1 20:11:1',
             'valid_to' => date('Y-m-d H:i:s', strtotime('+ 1 day')),
             'limit' => 1,
             'type' => 'time',
             'code' => 'XAD34E1',
-            'category' => 'new'
-
+            'category' => 'new',
+            'voucher_job_id' => 9990
         ]);
 
         $inputs = [
@@ -70,12 +73,17 @@ class VoucherTest extends TestCase
      */
     public function testRedeemWithClaimingStatus()
     {
+        $voucher_job_model = new VoucherJob();
+        $voucher_job_model->insert(['id' => 9990, 'status' => 'new', 'comments' => 'a comment']);
+
         $this->voucher_repo->create([
             'valid_from' => '2015-1-1 20:11:1',
             'valid_to' => date('Y-m-d H:i:s', strtotime('+ 1 day')),
             'limit' => 11,
             'type' => 'time',
-            'code' => 'XAD34E13'
+            'code' => 'XAD34E13',
+            'category' => 'new',
+            'voucher_job_id' => 9990
         ]);
 
         $inputs = [
@@ -122,13 +130,17 @@ class VoucherTest extends TestCase
      */
     public function testRedeemWithUsedCodeException()
     {
+        $voucher_job_model = new VoucherJob();
+        $voucher_job_model->insert(['id' => 9990, 'status' => 'new', 'comments' => 'a comment']);
+
         $this->voucher_repo->create([
             'valid_from' => '2015-1-1 20:11:1',
             'valid_to' => date('Y-m-d H:i:s', strtotime('+ 1 day')),
             'limit' => 1,
             'type' => 'time',
-            'status' => 'inactive',
-            'code' => 'XD34E1HH'
+            'code' => 'XAD34E1',
+            'category' => 'new',
+            'voucher_job_id' => 9990
         ]);
 
         $inputs = [
@@ -153,13 +165,17 @@ class VoucherTest extends TestCase
      */
     public function testRedeemWithExpiredCodeException()
     {
+        $voucher_job_model = new VoucherJob();
+        $voucher_job_model->insert(['id' => 9990, 'status' => 'new', 'comments' => 'a comment']);
+
         $this->voucher_repo->create([
             'valid_from' => '2015-1-1 20:11:1',
-            'valid_to' => '2014-1-1 20:11:1',
+            'valid_to' => date('Y-m-d H:i:s', strtotime('+ 1 day')),
             'limit' => 1,
             'type' => 'time',
-            'status' => 'active',
-            'code' => 'XD34E1SS'
+            'code' => 'XAD34E1',
+            'category' => 'new',
+            'voucher_job_id' => 9990
         ]);
 
         $inputs = [
@@ -189,13 +205,17 @@ class VoucherTest extends TestCase
             'platform' => 1,
         ];
 
+        $voucher_job_model = new VoucherJob();
+        $voucher_job_model->insert(['id' => 9990, 'status' => 'new', 'comments' => 'a comment']);
+
         $voucher_insert = $this->voucher_repo->create([
             'valid_from' => '2015-1-1 20:11:1',
             'valid_to' => date('Y-m-d H:i:s', strtotime('+ 1 day')),
             'limit' => 1,
             'type' => 'time',
             'status' => 'active',
-            'code' => 'XD34E1Q11'
+            'code' => 'XD34E1Q11',
+            'voucher_job_id' => 9990
         ]);
 
         $this->voucher_log_repo->addVoucherLog([
@@ -222,13 +242,17 @@ class VoucherTest extends TestCase
      */
     public function testRedeemWithExpiredCategoryCode()
     {
+        $voucher_job_model = new VoucherJob();
+        $voucher_job_model->insert(['id' => 9990, 'status' => 'new', 'comments' => 'a comment']);
+
         $this->voucher_repo->create([
             'valid_from' => '2015-1-1 20:11:1',
             'valid_to' => date('Y-m-d H:i:s', strtotime('+ 1 day')),
             'limit' => 1,
             'type' => 'time',
             'code' => 'XAD34E1',
-            'category' => 'expired'
+            'category' => 'expired',
+            'voucher_job_id' => 9990
         ]);
 
         $inputs = [
@@ -261,13 +285,17 @@ class VoucherTest extends TestCase
      */
     public function testRedeemWithExpiredCategoryCodeButActiveSubscriptionException()
     {
+        $voucher_job_model = new VoucherJob();
+        $voucher_job_model->insert(['id' => 9990, 'status' => 'new', 'comments' => 'a comment']);
+
         $this->voucher_repo->create([
             'valid_from' => '2015-1-1 20:11:1',
             'valid_to' => date('Y-m-d H:i:s', strtotime('+ 1 day')),
             'limit' => 1,
             'type' => 'time',
             'code' => 'XAD34E1',
-            'category' => 'expired'
+            'category' => 'expired',
+            'voucher_job_id' => 9990
         ]);
 
         $inputs = [
@@ -299,13 +327,17 @@ class VoucherTest extends TestCase
      */
     public function testRedeemWithNewExpiredCategoryCode()
     {
+        $voucher_job_model = new VoucherJob();
+        $voucher_job_model->insert(['id' => 9990, 'status' => 'new', 'comments' => 'a comment']);
+
         $this->voucher_repo->create([
             'valid_from' => '2015-1-1 20:11:1',
             'valid_to' => date('Y-m-d H:i:s', strtotime('+ 1 day')),
             'limit' => 1,
             'type' => 'time',
             'code' => 'XAD34E1',
-            'category' => 'new_expired'
+            'category' => 'new_expired',
+            'voucher_job_id' => 9990
         ]);
 
         $inputs = [
@@ -338,13 +370,17 @@ class VoucherTest extends TestCase
      */
     public function testRedeemWithNewExpiredCategoryCodeButActiveSubscriptionException()
     {
+        $voucher_job_model = new VoucherJob();
+        $voucher_job_model->insert(['id' => 9990, 'status' => 'new', 'comments' => 'a comment']);
+
         $this->voucher_repo->create([
             'valid_from' => '2015-1-1 20:11:1',
             'valid_to' => date('Y-m-d H:i:s', strtotime('+ 1 day')),
             'limit' => 1,
             'type' => 'time',
             'code' => 'XAD34E1',
-            'category' => 'new_expired'
+            'category' => 'new_expired',
+            'voucher_job_id' => 9990
         ]);
 
         $inputs = [
@@ -376,13 +412,17 @@ class VoucherTest extends TestCase
      */
     public function testRedeemWithActiveCategoryCode()
     {
+        $voucher_job_model = new VoucherJob();
+        $voucher_job_model->insert(['id' => 9990, 'status' => 'new', 'comments' => 'a comment']);
+
         $this->voucher_repo->create([
             'valid_from' => '2015-1-1 20:11:1',
             'valid_to' => date('Y-m-d H:i:s', strtotime('+ 1 day')),
             'limit' => 1,
             'type' => 'time',
             'code' => 'XAD34E1',
-            'category' => 'active'
+            'category' => 'active',
+            'voucher_job_id' => 9990
         ]);
 
         $inputs = [
@@ -425,13 +465,17 @@ class VoucherTest extends TestCase
      */
     public function testRedeemWithActiveCategoryCodeButHasRecurringPlanException()
     {
+        $voucher_job_model = new VoucherJob();
+        $voucher_job_model->insert(['id' => 9990, 'status' => 'new', 'comments' => 'a comment']);
+
         $this->voucher_repo->create([
             'valid_from' => '2015-1-1 20:11:1',
             'valid_to' => date('Y-m-d H:i:s', strtotime('+ 1 day')),
             'limit' => 1,
             'type' => 'time',
             'code' => 'XAD34E1',
-            'category' => 'active'
+            'category' => 'active',
+            'voucher_job_id' => 9990
         ]);
 
         $inputs = [
