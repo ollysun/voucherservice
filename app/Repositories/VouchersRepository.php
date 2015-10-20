@@ -110,7 +110,7 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
                     ->paginate($data['limit']);
             }
 
-            if (!$vouchers) {
+            if ($vouchers->isEmpty()) {
                 return null;
             } else {
                 $list_vouchers = self::setPaginationLinks($vouchers, $data);
@@ -188,8 +188,8 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
      */
     public function getVoucherCodeByStatus($status)
     {
-        $voucherCodeByStatus = $this->voucherCode->where('code_status', $status)->first();
         try {
+            $voucherCodeByStatus = $this->voucherCode->where('code_status', $status)->first();
             if (!is_null($voucherCodeByStatus)) {
                 return self::transform($voucherCodeByStatus, new VoucherCodeTransformer());
             } else {
