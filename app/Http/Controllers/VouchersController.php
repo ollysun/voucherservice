@@ -99,7 +99,7 @@ class VouchersController extends Controller
             } else {
                 $voucherCode = $this->repository->getVoucherCodeByStatus("new");
 
-                dd($voucherCode);
+             //   dd($voucherCode);
                 if (!$voucherCode) {
                     Log::error(SELF::LOGTITLE, array_merge(
                         [

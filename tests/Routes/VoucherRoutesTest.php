@@ -82,32 +82,32 @@ class VoucherRoutesTest extends TestCase
         $this->assertResponseStatus(Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 
-    public function testVouchersPost()
-    {
-        //Create a voucher code before the test
-        $me = $this->call("POST", "/vouchers/generateCodes", ['total' => 1], [], [], $this->authHeader);
-
-        var_dump($me);
-
-        $data = [
-            "type" => "time",
-            "status" => "claimed",
-            "category" => "new",
-            "title" => "INTERNAL",
-            "location" => "Nigeria",
-            "description" => "A voucher",
-            "duration" => 4,
-            "period" => "month",
-            "is_limited" => true,
-            "limit" => 1200,
-            "valid_from" => "2015-10-13 02:02:02",
-            "valid_to" => "2015-10-15 02:02:02",
-            "voucher_job_id" => 1
-        ];
-
-        $this->call("POST", "/vouchers", $data, [], [], $this->authHeader);
-        $this->assertResponseStatus(Response::HTTP_CREATED);
-    }
+//    public function testVouchersPost()
+//    {
+//        //Create a voucher code before the test
+//        $me = $this->call("POST", "/vouchers/generateCodes", ['total' => 1], [], [], $this->authHeader);
+//
+//        var_dump($me);
+//
+//        $data = [
+//            "type" => "time",
+//            "status" => "claimed",
+//            "category" => "new",
+//            "title" => "INTERNAL",
+//            "location" => "Nigeria",
+//            "description" => "A voucher",
+//            "duration" => 4,
+//            "period" => "month",
+//            "is_limited" => true,
+//            "limit" => 1200,
+//            "valid_from" => "2015-10-13 02:02:02",
+//            "valid_to" => "2015-10-15 02:02:02",
+//            "voucher_job_id" => 1
+//        ];
+//
+//        $this->call("POST", "/vouchers", $data, [], [], $this->authHeader);
+//        $this->assertResponseStatus(Response::HTTP_CREATED);
+//    }
 
     public function testVouchersPostCodeNotFound()
     {
