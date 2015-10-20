@@ -375,4 +375,149 @@ class VouchersRepositoryTest extends TestCase
 
         $this->repository->create('');
     }
+
+    public function testUpdate()
+    {
+        $voucher_job_model = new \Voucher\Models\VoucherJob();
+        $voucher_job_model->insert(['id' => 9990, 'status' => 'new', 'comments' => 'a comment']);
+
+        $data = [
+            'id' => 9999,
+            'code' => '12345678abc',
+            'type' => 'time',
+            'status' => 'active',
+            'category' => 'new',
+            'title' => 'INTERNAL',
+            'location' => 'Nigeria',
+            'description' => 'description',
+            'duration' => 3,
+            'period' => 'day',
+            'valid_from' => '2015-10-08 00:00:00',
+            'valid_to' => '2015-12-30 00:00:00',
+            'is_limited' => 0,
+            'limit' => 2,
+            'voucher_job_id' => 9990
+        ];
+        $this->voucher_model->insert($data);
+
+        $result = $this->repository->update(9999, ['status' => 'claiming']);
+        $this->assertEquals('claiming', $result['data']['status']);
+    }
+
+    public function testUpdateErrorException()
+    {
+        $this->setExpectedException('\Exception');
+        $this->voucher_model = $this->getMock(Voucher::class, ['save']);
+        $this->voucher_model->expects($this->any())->method('save')->willThrowException(new \Exception());
+
+        $this->repository = new VouchersRepository(
+            $this->voucher_model,
+            $this->voucher_log_model,
+            $this->voucher_param_model,
+            $this->voucher_code_model
+        );
+
+        $this->repository->update('', []);
+    }
+
+    public function testGetVouchersByJobIdAndLimit()
+    {
+        $voucher_job_model = new \Voucher\Models\VoucherJob();
+        $voucher_job_model->insert(['id' => 9990, 'status' => 'new', 'comments' => 'a comment']);
+
+        $data = [
+            'id' => 9999,
+            'code' => '12345678abc',
+            'type' => 'time',
+            'status' => 'active',
+            'category' => 'new',
+            'title' => 'INTERNAL',
+            'location' => 'Nigeria',
+            'description' => 'description',
+            'duration' => 3,
+            'period' => 'day',
+            'valid_from' => '2015-10-08 00:00:00',
+            'valid_to' => '2015-12-30 00:00:00',
+            'is_limited' => 0,
+            'limit' => 2,
+            'voucher_job_id' => 9990
+        ];
+        $this->voucher_model->insert($data);
+
+        $params = [
+            'voucher_job_id' => 9990,
+            'start' => 0,
+            'limit' => 1
+        ];
+
+        $result = $this->repository->getVouchersByJobIdAndLimit($params);
+        $this->assertEquals('9990', $result['data'][0]['voucher_job_id']);
+        $this->assertCount($params['limit'], $result['data']);
+    }
+
+    public function testGetVouchersByJobIdAndLimitErrorException()
+    {
+        $this->setExpectedException('\Exception');
+        $this->voucher_model = $this->getMock(Voucher::class, ['save']);
+        $this->voucher_model->expects($this->any())->method('save')->willThrowException(new \Exception());
+
+        $this->repository = new VouchersRepository(
+            $this->voucher_model,
+            $this->voucher_log_model,
+            $this->voucher_param_model,
+            $this->voucher_code_model
+        );
+
+        $this->repository->getVouchersByJobIdAndLimit([]);
+    }
+
+    public function testUpdateVoucherStatus()
+    {
+        $voucher_job_model = new \Voucher\Models\VoucherJob();
+        $voucher_job_model->insert(['id' => 9990, 'status' => 'new', 'comments' => 'a comment']);
+
+        $data = [
+            'id' => 9999,
+            'code' => '12345678abc',
+            'type' => 'time',
+            'status' => 'active',
+            'category' => 'new',
+            'title' => 'INTERNAL',
+            'location' => 'Nigeria',
+            'description' => 'description',
+            'duration' => 3,
+            'period' => 'day',
+            'valid_from' => '2015-10-08 00:00:00',
+            'valid_to' => '2015-12-30 00:00:00',
+            'is_limited' => 0,
+            'limit' => 2,
+            'voucher_job_id' => 9990
+        ];
+        $this->voucher_model->insert($data);
+
+        $params = [
+            'voucher_id' => 9999,
+            'voucher_status' => 'claiming',
+            'limit' => 1
+        ];
+
+        $result = $this->repository->updateVoucherStatus($params);
+        $this->assertTrue($result);
+    }
+
+    public function testUpdateVoucherStatusErrorException()
+    {
+        $this->setExpectedException('\Exception');
+        $this->voucher_model = $this->getMock(Voucher::class, ['save']);
+        $this->voucher_model->expects($this->any())->method('save')->willThrowException(new \Exception());
+
+        $this->repository = new VouchersRepository(
+            $this->voucher_model,
+            $this->voucher_log_model,
+            $this->voucher_param_model,
+            $this->voucher_code_model
+        );
+
+        $this->repository->updateVoucherStatus([]);
+    }
 }
