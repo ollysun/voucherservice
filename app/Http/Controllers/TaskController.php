@@ -85,21 +85,25 @@ class TaskController extends Controller
                 
                 $loop_params = [
                     'limit' => 25000,
-                    'start' => 1,
+                    'start' => 0,
                     'voucher_job_id' => $job['id'],
-                    'voucher_set' => 0
+                    'voucher_set' => 1
                 ];
+                $no_of_loop=ceil($params['total']/$loop_params['limit']);
+                $i=0;
 
-                while ($loop_params['start'] > 0) {
+                while (!($loop_params['start'] < 0) && $loop_params['start'] < $params['total']) {
+
                     $vouchers = $this->voucher_repo->getVouchersByJobIdAndLimit($loop_params);
-                    $csv_file = $this->generateCsvFromVouchers($vouchers, $loop_params['voucher_set']++);
+                    $csv_file = $this->generateCsvFromVouchers($vouchers, $params, $loop_params['voucher_set']++);
                     $s3 = $this->uploadS3($csv_file);
                     $this->notify($s3);
 
-                    if (count($vouchers['data']) < $loop_params['limit']) {
+                    $i++;
+                    if ($i > $no_of_loop) {
                         $loop_params['start'] = -1;
                     } else {
-                        $loop_params['start'] = ($loop_params['limit']) + 1;
+                        $loop_params['start'] = $loop_params['start']+ ($loop_params['limit']) ;
                     }
                 }
 
@@ -136,19 +140,19 @@ class TaskController extends Controller
      * @return \Illuminate\Http\Response|string
      * @throws \Exception
      */
-    protected function generateCsvFromVouchers($vouchers, $set)
+    protected function generateCsvFromVouchers($vouchers, $params, $set)
     {
         try {
-            $voucher_file = $vouchers['data'][0]['title'].'_'.date('Y_m_d_H_i_s', time()). '_Batch_'. $set;
+            $voucher_file = $params['title'].'_'.date('Y_m_d_H_i_s', time()). '_Batch_'. $set;
             $fp = fopen(storage_path('vouchers').'/'.$voucher_file.'.csv', 'w');
             fputcsv($fp, array('Voucher Code', 'Duration'));
 
-            foreach ($vouchers['data'] as $voucher) {
+            foreach ($vouchers as $voucher) {
                 fputcsv(
                     $fp,
                     [
-                        $voucher['code'],
-                        $voucher['duration']. ' '. $voucher['period']
+                        $voucher->code,
+                        $params['duration'].' ' .$params['period']
                     ]
                 );
             }

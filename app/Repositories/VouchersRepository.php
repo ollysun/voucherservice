@@ -314,9 +314,11 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
             $vouchers = $this->model->where('voucher_job_id', '=', $params['voucher_job_id'])
                 ->skip($params['start'])
                 ->take($params['limit'])
+                ->orderBy('id')
+                ->select('code')
                 ->get();
 
-            return self::transform($vouchers, new VoucherTransformer());
+            return $vouchers;//self::transform($vouchers, new VoucherTransformer());
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
         }
