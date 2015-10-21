@@ -138,7 +138,8 @@ class VoucherTest extends TestCase
             'valid_to' => date('Y-m-d H:i:s', strtotime('+ 1 day')),
             'limit' => 1,
             'type' => 'time',
-            'code' => 'XAD34E1',
+            'code' => 'XD34E1HH',
+            'status' => 'claimed',
             'category' => 'new',
             'voucher_job_id' => 9990
         ]);
@@ -170,7 +171,7 @@ class VoucherTest extends TestCase
 
         $this->voucher_repo->create([
             'valid_from' => '2015-1-1 20:11:1',
-            'valid_to' => date('Y-m-d H:i:s', strtotime('+ 1 day')),
+            'valid_to' => '2015-1-2 20:11:1',
             'limit' => 1,
             'type' => 'time',
             'code' => 'XAD34E1',
@@ -179,7 +180,7 @@ class VoucherTest extends TestCase
         ]);
 
         $inputs = [
-            'code' => 'XD34E1SS',
+            'code' => 'XAD34E1',
             'user_id' => 122333,
             'platform' => 1,
         ];
