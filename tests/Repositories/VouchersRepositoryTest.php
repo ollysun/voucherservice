@@ -455,15 +455,19 @@ class VouchersRepositoryTest extends TestCase
         ];
         $this->voucher_model->insert($data);
 
+        $data['code'] = '12345678abd';
+        $data['id'] = '9998';
+        $this->voucher_model->insert($data);
+
         $params = [
             'voucher_job_id' => 9990,
             'start' => 0,
-            'limit' => 1
+            'limit' => 2
         ];
 
         $result = $this->repository->getVouchersByJobIdAndLimit($params);
-        $this->assertEquals('9990', $result['data'][0]['voucher_job_id']);
-        $this->assertCount($params['limit'], $result['data']);
+        $this->assertEquals($data['code'], $result[0]['code']);
+        $this->assertCount($params['limit'], $result);
     }
 
     public function testGetVouchersByJobIdAndLimitErrorException()
