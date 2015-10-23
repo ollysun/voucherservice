@@ -75,7 +75,6 @@ PLANS_API_URL = http://plans.api.v3.irokotv.com
 
 SUBSCRIPTION_API_URL = http://subscription.api.v3.irokotv.com
 
-
 NOTIFICATIONS_SQS_ENDPOINT_HIGH=https://sqs.eu-west-1.amazonaws.com/695925038353/notifications_high
 
 NOTIFICATIONS_SQS_ENDPOINT_NORMAL=https://sqs.eu-west-1.amazonaws.com/695925038353/notifications_normal
