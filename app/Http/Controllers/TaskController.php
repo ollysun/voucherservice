@@ -2,8 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Voucher\Notification\VoucherNotificationIssue;
 use Voucher\Notification\VoucherNotification;
-use Voucher\Notification\VoucherBusinessNotification;
 use Voucher\Validators\TaskValidator;
 use Log;
 use Notification;
@@ -202,13 +202,12 @@ class TaskController extends Controller
     public function notify($s3)
     {
         try {
-            //send business users user_id's
-            $notify = new VoucherBusinessNotification(1, 'Voucher:email', [1]);
+            $notify = new VoucherNotification(1, 'Voucher:email', [1]);
             $notify->__set('file_name', $s3);
             $notify->__set('s3_url', $s3['s3_url']);
-
             Notification::send($notify);
             return true;
+
         } catch (\Exception $e) {
             throw new \Exception('Failed while sending notification:'. $e->getMessage());
         }
@@ -258,7 +257,7 @@ class TaskController extends Controller
                 return $this->respondCreated(['Voucher Codes have been generated.']);
             }
         } catch (\Exception $e) {
-            $notify = new VoucherNotification(1, 'Voucher:email', [1]);
+            $notify = new VoucherNotificationIssue(1, 'Voucher:email', [1]);
             $notify->__set('error', $e->getMessage());
             Notification::send($notify);
 
