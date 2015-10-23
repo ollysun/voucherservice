@@ -2,6 +2,7 @@
 
 use Voucher\Models\VoucherJobParamMetadata;
 use Voucher\Repositories\VoucherJobParamMetadatasRepository;
+use Voucher\Models\VoucherJob;
 
 class VoucherJobParamMetadataRepositoryTest extends TestCase
 {
@@ -17,7 +18,7 @@ class VoucherJobParamMetadataRepositoryTest extends TestCase
 
     public function testGetJobParams()
     {
-        $job_model = new \Voucher\Models\VoucherJob();
+        $job_model = new VoucherJob();
         $job_model->insert(['id' => 9990, 'status' => 'active', 'comments' => 'a comment']);
 
         $data = [
