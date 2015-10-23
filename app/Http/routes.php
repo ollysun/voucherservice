@@ -7,5 +7,5 @@ $app->post('/vouchers', 'VouchersController@create');
 $app->put('/vouchers/{voucher_id}', 'VouchersController@update');
 $app->post('/vouchers/redeem', 'VouchersController@redeem');
 
-$app->post('/vouchers/process', 'TaskController@issueVouchers');
-$app->post('/vouchers/generateCodes', 'TaskController@generateVoucherCodes');
+$app->post('/vouchers/issue-vouchers', 'TaskController@issueVouchers');
+$app->post('/vouchers/generate-codes', 'TaskController@generateVoucherCodes');
