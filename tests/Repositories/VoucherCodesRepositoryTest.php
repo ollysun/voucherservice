@@ -6,6 +6,7 @@ use Voucher\Repositories\VoucherCodesRepository;
 class VoucherCodesRepositoryTest extends TestCase
 {
     protected $model;
+
     protected $repository;
 
     public function setUp()
