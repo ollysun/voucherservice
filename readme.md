@@ -71,9 +71,9 @@ ANALYTICS_SQS_ENDPOINT=https://sqs.eu-west-1.amazonaws.com/695925038353/v3-analy
 
 SQS_VOUCHER_TO_SUBSCRIPTION=https://sqs.eu-west-1.amazonaws.com/695925038353/voucher-dev
 
-PLANS_API_URL = http://www.plans.local
+PLANS_API_URL = http://plans.api.v3.irokotv.com
 
-SUBSCRIPTION_API_URL = http://www.subscription.local
+SUBSCRIPTION_API_URL = http://subscription.api.v3.irokotv.com
 
 
 NOTIFICATIONS_SQS_ENDPOINT_HIGH=https://sqs.eu-west-1.amazonaws.com/695925038353/notifications_high
