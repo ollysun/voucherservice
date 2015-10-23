@@ -45,21 +45,21 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
     /**
      * Creates a new vouchers repository instance.
      *
-     * @param Voucher $voucher
-     * @param VoucherJobParamMetadata $voucherMetadataModel
-     * @param VoucherCode $voucherCodeModel
-     * @param VoucherJob $voucherJob
+     * @param Voucher $voucher_model
+     * @param VoucherJobParamMetadata $voucher_metadata_model
+     * @param VoucherCode $voucher_code_model
+     * @param VoucherJob $voucher_job_model
      */
     public function __construct(
-        Voucher $voucher,
-        VoucherJobParamMetadata $voucherMetadataModel,
-        VoucherCode $voucherCodeModel,
-        VoucherJob $voucherJob
+        Voucher $voucher_model,
+        VoucherJobParamMetadata $voucher_metadata_model,
+        VoucherCode $voucher_code_model,
+        VoucherJob $voucher_job_model
     ) {
-        $this->voucher_model = $voucher;
-        $this->voucher_metadata_model = $voucherMetadataModel;
-        $this->voucher_code_model = $voucherCodeModel;
-        $this->voucher_job_model = $voucherJob;
+        $this->voucher_model = $voucher_model;
+        $this->voucher_metadata_model = $voucher_metadata_model;
+        $this->voucher_code_model = $voucher_code_model;
+        $this->voucher_job_model = $voucher_job_model;
     }
 
     /**
@@ -130,6 +130,7 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
                 ->leftJoin('voucher_logs', 'voucher_logs.voucher_id', '=', 'vouchers.id')
                 ->groupBy('voucher_id')
                 ->first();
+
             if (!is_null($voucher)) {
                 return self::transform($voucher, new VoucherTransformer());
             } else {
@@ -375,14 +376,14 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
     {
         try {
             foreach ($data as $key => $value) {
-                $voucher_metadata = $this->voucher_metadata_model;
+
+                $voucher_metadata = new VoucherJobParamMetadata();
                 $voucher_metadata->voucher_job_id = $voucher_job_id;
                 $voucher_metadata->key = trim($key);
                 $voucher_metadata->value = trim($value);
                 $voucher_metadata->save();
-
-                self::transform($voucher_metadata, new VoucherJobParamMetadataTransformer());
             }
+
             return true;
         } catch (\Exception $ex) {
             throw new \Exception($ex->getMessage());

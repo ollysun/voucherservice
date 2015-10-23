@@ -16,11 +16,11 @@ class VoucherJobsRepository extends AbstractRepository implements IVoucherJobsRe
     /**
      * Creates a new voucher Job repository instance.
      *
-     * @param VoucherJob $model
+     * @param VoucherJob $voucher_job
      */
-    public function __construct(VoucherJob $model)
+    public function __construct(VoucherJob $voucher_job)
     {
-        $this->model = $model;
+        $this->model = $voucher_job;
     }
 
     /**
