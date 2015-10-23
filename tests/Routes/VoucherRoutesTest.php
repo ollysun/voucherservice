@@ -59,7 +59,6 @@ class VoucherRoutesTest extends TestCase
         $this->repository = $this->getMockBuilder('Voucher\Repositories\VouchersRepository')
             ->setConstructorArgs(array(
                 $this->voucher_model,
-                $this->voucher_log_model,
                 $this->voucher_job_params_model,
                 $this->voucher_code_model,
                 $this->voucher_job_model
@@ -79,7 +78,6 @@ class VoucherRoutesTest extends TestCase
         $this->repository = $this->getMockBuilder('Voucher\Repositories\VouchersRepository')
             ->setConstructorArgs(array(
                 $this->voucher_model,
-                $this->voucher_log_model,
                 $this->voucher_job_params_model,
                 $this->voucher_code_model,
                 $this->voucher_job_model
@@ -205,7 +203,6 @@ class VoucherRoutesTest extends TestCase
             ['create', 'getVoucherCodeByStatus'],
             [
                 $this->voucher_model,
-                $this->voucher_log_model,
                 $this->voucher_job_params_model,
                 $this->voucher_code_model,
                 $this->voucher_job_model
@@ -247,7 +244,6 @@ class VoucherRoutesTest extends TestCase
         $this->repository = $this->getMockBuilder('Voucher\Repositories\VouchersRepository')
             ->setConstructorArgs(array(
                 $this->voucher_model,
-                $this->voucher_log_model,
                 $this->voucher_job_params_model,
                 $this->voucher_code_model,
                 $this->voucher_job_model
@@ -346,7 +342,6 @@ class VoucherRoutesTest extends TestCase
         $this->repository = $this->getMockBuilder('Voucher\Repositories\VouchersRepository')
             ->setConstructorArgs(array(
                 $this->voucher_model,
-                $this->voucher_log_model,
                 $this->voucher_job_params_model,
                 $this->voucher_code_model,
                 $this->voucher_job_model
@@ -490,7 +485,6 @@ class VoucherRoutesTest extends TestCase
             ['insertVoucherJob'],
             [
                 $this->voucher_model,
-                $this->voucher_log_model,
                 $this->voucher_job_params_model,
                 $this->voucher_code_model,
                 $this->voucher_job_model

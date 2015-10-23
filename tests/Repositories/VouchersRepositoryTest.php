@@ -26,7 +26,6 @@ class VouchersRepositoryTest extends TestCase
         $this->voucher_job_model = new VoucherJob();
         $this->repository = new VouchersRepository(
             $this->voucher_model,
-            $this->voucher_log_model,
             $this->voucher_param_model,
             $this->voucher_code_model,
             $this->voucher_job_model
@@ -151,7 +150,6 @@ class VouchersRepositoryTest extends TestCase
 
         $this->repository = new VouchersRepository(
             $this->voucher_model,
-            $this->voucher_log_model,
             $this->voucher_param_model,
             $this->voucher_code_model,
             $this->voucher_job_model
@@ -210,7 +208,6 @@ class VouchersRepositoryTest extends TestCase
 
         $this->repository = new VouchersRepository(
             $this->voucher_model,
-            $this->voucher_log_model,
             $this->voucher_param_model,
             $this->voucher_code_model,
             $this->voucher_job_model
@@ -269,7 +266,6 @@ class VouchersRepositoryTest extends TestCase
 
         $this->repository = new VouchersRepository(
             $this->voucher_model,
-            $this->voucher_log_model,
             $this->voucher_param_model,
             $this->voucher_code_model,
             $this->voucher_job_model
@@ -307,7 +303,6 @@ class VouchersRepositoryTest extends TestCase
 
         $this->repository = new VouchersRepository(
             $this->voucher_model,
-            $this->voucher_log_model,
             $this->voucher_param_model,
             $this->voucher_code_model,
             $this->voucher_job_model
@@ -333,7 +328,6 @@ class VouchersRepositoryTest extends TestCase
 
         $this->repository = new VouchersRepository(
             $this->voucher_model,
-            $this->voucher_log_model,
             $this->voucher_param_model,
             $this->voucher_code_model,
             $this->voucher_job_model
@@ -377,7 +371,6 @@ class VouchersRepositoryTest extends TestCase
 
         $this->repository = new VouchersRepository(
             $this->voucher_model,
-            $this->voucher_log_model,
             $this->voucher_param_model,
             $this->voucher_code_model,
             $this->voucher_job_model
@@ -422,7 +415,6 @@ class VouchersRepositoryTest extends TestCase
 
         $this->repository = new VouchersRepository(
             $this->voucher_model,
-            $this->voucher_log_model,
             $this->voucher_param_model,
             $this->voucher_code_model,
             $this->voucher_job_model
@@ -478,7 +470,6 @@ class VouchersRepositoryTest extends TestCase
 
         $this->repository = new VouchersRepository(
             $this->voucher_model,
-            $this->voucher_log_model,
             $this->voucher_param_model,
             $this->voucher_code_model,
             $this->voucher_job_model
@@ -529,7 +520,6 @@ class VouchersRepositoryTest extends TestCase
 
         $this->repository = new VouchersRepository(
             $this->voucher_model,
-            $this->voucher_log_model,
             $this->voucher_param_model,
             $this->voucher_code_model,
             $this->voucher_job_model
@@ -564,7 +554,6 @@ class VouchersRepositoryTest extends TestCase
 
         $this->repository = new VouchersRepository(
             $this->voucher_model,
-            $this->voucher_log_model,
             $this->voucher_param_model,
             $this->voucher_code_model,
             $this->voucher_job_model
@@ -595,7 +584,6 @@ class VouchersRepositoryTest extends TestCase
 
         $this->repository = new VouchersRepository(
             $this->voucher_model,
-            $this->voucher_log_model,
             $this->voucher_param_model,
             $this->voucher_code_model,
             $this->voucher_job_model
