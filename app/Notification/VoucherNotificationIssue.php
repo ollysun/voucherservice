@@ -3,10 +3,11 @@ namespace Voucher\Notification;
 
 use Iroko\Notify\Messages\Notification;
 
-class VoucherBusinessNotification extends Notification
+class VoucherNotificationIssue extends Notification
 {
-    public $file_name;
-    public $s3_url;
+    public $error;
+    public $job_id;
+    public $job_status;
 
     public function __construct($priority, $type, $recipients)
     {
