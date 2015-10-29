@@ -59,7 +59,6 @@ class VoucherRoutesTest extends TestCase
         $this->repository = $this->getMockBuilder('Voucher\Repositories\VouchersRepository')
             ->setConstructorArgs(array(
                 $this->voucher_model,
-                $this->voucher_log_model,
                 $this->voucher_job_params_model,
                 $this->voucher_code_model,
                 $this->voucher_job_model
@@ -79,7 +78,6 @@ class VoucherRoutesTest extends TestCase
         $this->repository = $this->getMockBuilder('Voucher\Repositories\VouchersRepository')
             ->setConstructorArgs(array(
                 $this->voucher_model,
-                $this->voucher_log_model,
                 $this->voucher_job_params_model,
                 $this->voucher_code_model,
                 $this->voucher_job_model
@@ -112,7 +110,6 @@ class VoucherRoutesTest extends TestCase
             "description" => "A voucher",
             "duration" => 4,
             "period" => "month",
-            "is_limited" => true,
             "limit" => 1200,
             "valid_from" => "2015-10-13 02:02:02",
             "valid_to" => "2015-10-15 02:02:02",
@@ -136,7 +133,6 @@ class VoucherRoutesTest extends TestCase
             "description" => "A voucher",
             "duration" => 4,
             "period" => "month",
-            "is_limited" => true,
             "limit" => 1200,
             "valid_from" => "2015-10-13 02:02:02",
             "valid_to" => "2015-10-15 02:02:02",
@@ -158,7 +154,6 @@ class VoucherRoutesTest extends TestCase
             "description" => "A voucher",
             "duration" => "wwww",//bad parameter
             "period" => "month",
-            "is_limited" => true,
             "limit" => 1200,
             "valid_from" => "2015-10-13 02:02:02",
             "valid_to" => "2015-10-15 02:02:02",
@@ -188,7 +183,6 @@ class VoucherRoutesTest extends TestCase
             "description" => "A voucher",
             "duration" => 4,
             "period" => "month",
-            "is_limited" => true,
             "limit" => 1200,
             "valid_from" => "2015-10-13 02:02:02",
             "valid_to" => "2015-10-15 02:02:02",
@@ -205,7 +199,6 @@ class VoucherRoutesTest extends TestCase
             ['create', 'getVoucherCodeByStatus'],
             [
                 $this->voucher_model,
-                $this->voucher_log_model,
                 $this->voucher_job_params_model,
                 $this->voucher_code_model,
                 $this->voucher_job_model
@@ -237,7 +230,6 @@ class VoucherRoutesTest extends TestCase
             "description" => "A voucher",
             "duration" => 4,
             "period" => "month",
-            "is_limited" => true,
             "limit" => 1200,
             "valid_from" => "2015-10-13 02:02:02",
             "valid_to" => "2015-10-15 02:02:02",
@@ -247,7 +239,6 @@ class VoucherRoutesTest extends TestCase
         $this->repository = $this->getMockBuilder('Voucher\Repositories\VouchersRepository')
             ->setConstructorArgs(array(
                 $this->voucher_model,
-                $this->voucher_log_model,
                 $this->voucher_job_params_model,
                 $this->voucher_code_model,
                 $this->voucher_job_model
@@ -273,7 +264,6 @@ class VoucherRoutesTest extends TestCase
             "description" => "A voucher",
             "duration" => 4,
             "period" => "month",
-            "is_limited" => true,
             "limit" => 1200,
             "valid_from" => "2015-10-13 02:02:02",
             "valid_to" => "2015-10-15 02:02:02",
@@ -314,7 +304,6 @@ class VoucherRoutesTest extends TestCase
             "description" => "A voucher",
             "duration" => 4,
             "period" => "month",
-            "is_limited" => true,
             "limit" => 1200,
             "valid_from" => "2015-10-13 02:02:02",
             "valid_to" => "2015-10-15 02:02:02",
@@ -336,7 +325,6 @@ class VoucherRoutesTest extends TestCase
             "description" => "A voucher",
             "duration" => 4,
             "period" => "month",
-            "is_limited" => true,
             "limit" => 1200,
             "valid_from" => "2015-10-13 02:02:02",
             "valid_to" => "2015-10-15 02:02:02",
@@ -346,7 +334,6 @@ class VoucherRoutesTest extends TestCase
         $this->repository = $this->getMockBuilder('Voucher\Repositories\VouchersRepository')
             ->setConstructorArgs(array(
                 $this->voucher_model,
-                $this->voucher_log_model,
                 $this->voucher_job_params_model,
                 $this->voucher_code_model,
                 $this->voucher_job_model
@@ -432,7 +419,6 @@ class VoucherRoutesTest extends TestCase
             "description" => "A voucher",
             "duration" => 4,
             "period" => "day",
-            "is_limited" => true,
             "limit" => 0,
             "brand" => "type",
             "total" => 10,
@@ -455,7 +441,6 @@ class VoucherRoutesTest extends TestCase
             "description" => "A voucher",
             "duration" => "welcome",
             "period" => "day",
-            "is_limited" => true,
             "limit" => 'weell',
             "brand" => "type",
             "total" => 10,
@@ -477,7 +462,6 @@ class VoucherRoutesTest extends TestCase
             "description" => "A voucher",
             "duration" => 4,
             "period" => "day",
-            "is_limited" => true,
             "limit" => 0,
             "brand" => "type",
             "total" => 10,
@@ -490,7 +474,6 @@ class VoucherRoutesTest extends TestCase
             ['insertVoucherJob'],
             [
                 $this->voucher_model,
-                $this->voucher_log_model,
                 $this->voucher_job_params_model,
                 $this->voucher_code_model,
                 $this->voucher_job_model

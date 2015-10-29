@@ -37,7 +37,7 @@ class VoucherValidator extends IlluminateValidator
     {
         return [
             'id' => 'required|regex:/(^[0-9]+$)+/',
-            'status' => 'string|in:active,claiming,claimed,deleted,expired,inactive',
+            'status' => 'required|string|in:active,claiming,claimed,deleted,expired,inactive',
             'title' => 'string|in:INTERNAL,VODAFONE_GHANA_STAFF_MOBILE,VODAFONE_GHANA_CUSTOMER_MOBILE,VODAFONE_GHANA_STAFF_FIXEDLINE',
             'location' => 'string',
             'description' => 'string'
@@ -50,13 +50,6 @@ class VoucherValidator extends IlluminateValidator
             'id' => 'required|regex:/(^[0-9]+$)+/',
         ];
     }
-
-//    public static function getVoucherCodeRules()
-//    {
-//        return [
-//            'total' => 'required|integer|min:1',
-//        ];
-//    }
 
     public static function getRedeemRules()
     {

@@ -7,10 +7,10 @@ use App;
 
 abstract class AbstractRepository
 {
-    public static function setPaginationLinks($paginatorObject, $params)
+    public static function setPaginationLinks($paginator, $params)
     {
-        $paginatorObject->setPageName('offset')->appends(array_except($params, 'offset'));
-        return $paginatorObject;
+        $paginator->setPageName('offset')->appends(array_except($params, 'offset'));
+        return $paginator;
     }
 
     public static function setFractal()
@@ -24,18 +24,18 @@ abstract class AbstractRepository
         return $fractal;
     }
 
-    protected static function transform($dataModel, $transformer)
+    protected static function transform($model, $transformer)
     {
-        if ($dataModel instanceof \Illuminate\Database\Eloquent\Collection) {
+        if ($model instanceof \Illuminate\Database\Eloquent\Collection) {
             $method = 'respondWithCollection';
-        } elseif ($dataModel instanceof \Illuminate\Pagination\AbstractPaginator) {
+        } elseif ($model instanceof \Illuminate\Pagination\AbstractPaginator) {
             $method = 'respondWithPaginatedCollection';
-        } elseif ($dataModel instanceof \Illuminate\Database\Eloquent\Model) {
+        } elseif ($model instanceof \Illuminate\Database\Eloquent\Model) {
             $method = 'respondWithItem';
         } else {
             throw new \Exception('Something went wrong');
         }
-        $rootScope = self::setFractal()->$method($dataModel, $transformer);
+        $rootScope = self::setFractal()->$method($model, $transformer);
         return $rootScope->toArray();
     }
 }
