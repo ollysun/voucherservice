@@ -275,6 +275,7 @@ class VouchersRepositoryTest extends TestCase
 
     public function testGetVoucherCodeByStatus()
     {
+        $this->voucher_code_model->truncate();
         $this->voucher_code_model->insert(['voucher_code' => '123456789abc', 'code_status' => 'new']);
         $this->voucher_code_model->insert(['voucher_code' => '123456789abcd', 'code_status' => 'used']);
 
