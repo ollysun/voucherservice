@@ -106,14 +106,17 @@ class TaskController extends Controller
                     }
                 }
 
+
                 $params['status'] = 'completed';
                 $this->voucher_jobs_repo->updateJobStatus($params);
+
             }
 
             Log::info(SELF::LOGTITLE, array_merge(
                 ['success' => 'Successfully issued Voucher Codes.'],
                 $this->log
             ));
+
             return $this->respondSuccess('Successfully issued Voucher Codes.');
 
         } catch (\Exception $e) {
@@ -151,7 +154,7 @@ class TaskController extends Controller
                     $fp,
                     [
                         $voucher->code,
-                        $params['duration'].' ' .$params['period']
+                        $params['duration'].' '.$params['period']
                     ]
                 );
             }
@@ -174,7 +177,7 @@ class TaskController extends Controller
         try {
             $bucket = getenv('AWS_S3_BUCKET');
             $file_path = storage_path('vouchers').'/'.$file_name.'.csv';
-            $key_name = getenv('AWS_S3_BUCKET_FOLDER').'/'.$file_name;
+            $key_name = getenv('AWS_S3_BUCKET_FOLDER').'/'.$file_name.'.csv';
             $s3 = new S3Client(Config::get('s3'));
 
             $result = $s3->putObject(array(
@@ -203,7 +206,7 @@ class TaskController extends Controller
         try {
             $notify = new VoucherNotification(1, 'Voucher:email', [1]);
             $notify->__set('file_name', $s3);
-            $notify->__set('s3_url', $s3['s3_url']);
+            $notify->__set('s3_url', $s3['ObjectURL']);
             Notification::send($notify);
             return true;
 
