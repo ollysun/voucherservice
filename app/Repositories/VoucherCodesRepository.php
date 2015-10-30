@@ -51,10 +51,11 @@ class VoucherCodesRepository extends AbstractRepository implements IVoucherCodes
     {
         try {
             $voucher_code = $this->model;
-            $voucher_code->voucher_code = $data['voucher_code'];
-            $voucher_code->code_status = $data['voucher_status'];
-            $voucher_code->save();
-
+            $voucher_code->create([
+                'voucher_code' => $data['voucher_code'],
+                'code_status' => $data['voucher_status']
+            ]);
+            
             return self::transform($voucher_code, new VoucherCodeTransformer());
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
