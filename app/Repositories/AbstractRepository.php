@@ -3,7 +3,6 @@
 use Voucher\Providers\Fractal as Fractal;
 use League\Fractal\Manager;
 use Illuminate\Support\Facades\Input;
-use App;
 
 abstract class AbstractRepository
 {

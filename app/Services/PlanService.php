@@ -3,11 +3,12 @@
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use Log;
-use Illuminate\Http\Request;
 
 class PlanService
 {
     protected $client;
+
+    protected $response;
 
     public function __construct()
     {
@@ -25,16 +26,16 @@ class PlanService
     public function plansApi($routes, $method, $bodyParams = '')
     {
         try {
-            $res = $this->client->$method($routes);
+            $this->response = $this->client->$method($routes);
         } catch (RequestException $e) {
             if ($e->getResponse()->getStatusCode() != 200 && $e->getResponse()->getStatusCode() != 201) {
                 return false;
             }
         }
 
-        $resp = $res->getBody()->getContents();
+        $resp = $this->response->getBody()->getContents();
         $response = json_decode($resp, true);
-        Log::info('Processing SUB - SERVICE - Production plan_data', array(
+        Log::info('Calling PLAN - SERVICE - FROM VOUCHER Production plan_data', array(
             'plan_data' => $response
         ));
         return $response;
