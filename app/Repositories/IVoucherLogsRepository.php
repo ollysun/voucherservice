@@ -3,5 +3,4 @@
 interface IVoucherLogsRepository
 {
     public function addVoucherLog($data);
-
 }

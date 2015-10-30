@@ -374,7 +374,6 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
     {
         try {
             foreach ($data as $key => $value) {
-
                 $voucher_metadata = new VoucherJobParamMetadata();
                 $voucher_metadata->voucher_job_id = $voucher_job_id;
                 $voucher_metadata->key = trim($key);

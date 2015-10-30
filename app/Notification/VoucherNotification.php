@@ -1,5 +1,4 @@
-<?php
-namespace Voucher\Notification;
+<?php namespace Voucher\Notification;
 
 use Iroko\Notify\Messages\Notification;
 

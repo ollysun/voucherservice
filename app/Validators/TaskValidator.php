@@ -1,4 +1,5 @@
 <?php namespace Voucher\Validators;
+
 use Illuminate\Validation\Validator as IlluminateValidator;
 
 class TaskValidator extends IlluminateValidator

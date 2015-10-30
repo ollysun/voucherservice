@@ -23,6 +23,4 @@ interface IVouchersRepository
     public function insertVoucherJob($status);
 
     public function insertVoucherJobParamMetadata($data, $id);
-
-
 }

@@ -21,7 +21,8 @@ class VoucherValidator extends IlluminateValidator
             'type' => 'required|string|in:time,discount',
             'status' => 'required|string|in:active,claiming,claimed,deleted,expired,inactive',
             'category' => 'required|string|in:new,expired,active,new_expired',
-            'title' => 'required|string|in:INTERNAL,VODAFONE_GHANA_STAFF_MOBILE,VODAFONE_GHANA_CUSTOMER_MOBILE,VODAFONE_GHANA_STAFF_FIXEDLINE',
+            'title' => 'required|string|in:INTERNAL,VODAFONE_GHANA_STAFF_MOBILE,
+            VODAFONE_GHANA_CUSTOMER_MOBILE,VODAFONE_GHANA_STAFF_FIXEDLINE',
             'location' => 'string',
             'description' => 'string',
             'duration' => 'required|regex:/(^[0-9]+$)+/',
@@ -38,7 +39,8 @@ class VoucherValidator extends IlluminateValidator
         return [
             'id' => 'required|regex:/(^[0-9]+$)+/',
             'status' => 'required|string|in:active,claiming,claimed,deleted,expired,inactive',
-            'title' => 'string|in:INTERNAL,VODAFONE_GHANA_STAFF_MOBILE,VODAFONE_GHANA_CUSTOMER_MOBILE,VODAFONE_GHANA_STAFF_FIXEDLINE',
+            'title' => 'string|in:INTERNAL,VODAFONE_GHANA_STAFF_MOBILE,
+            VODAFONE_GHANA_CUSTOMER_MOBILE,VODAFONE_GHANA_STAFF_FIXEDLINE',
             'location' => 'string',
             'description' => 'string'
         ];
