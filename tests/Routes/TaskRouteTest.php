@@ -256,4 +256,38 @@ class TaskRouteTest extends TestCase
         $this->call("POST", "/vouchers/issue-vouchers", [], [], [], $this->authHeader);
         $this->assertResponseStatus(Response::HTTP_INTERNAL_SERVER_ERROR);
     }
+
+    public function testGenerateVoucherCodes()
+    {
+        $data = [
+            'total'=> 2
+        ];
+
+        $this->call("POST", "/vouchers/generate-codes", $data, [], [], $this->authHeader);
+        $this->assertResponseStatus(Response::HTTP_CREATED);
+    }
+
+    public function testGenerateVoucherCodesWithInvalidArgsException()
+    {
+        $data = [
+            //'total'=> 2
+        ];
+
+        $this->call("POST", "/vouchers/generate-codes", $data, [], [], $this->authHeader);
+        $this->assertResponseStatus(Response::HTTP_BAD_REQUEST);
+    }
+
+    public function testGenerateVoucherCodesWithInternalErrorException()
+    {
+        $code_repo_mocked = $this->getMock('Voucher\Repositories\VoucherCodesRepository', ['isNotExistingVoucherCode'], [new VoucherCode()]);
+        $code_repo_mocked->expects($this->any())->method('isNotExistingVoucherCode')->will($this->throwException(new \Exception()));
+        $this->app->instance('Voucher\Repositories\VoucherCodesRepository', $code_repo_mocked);
+
+        $data = [
+            'total'=> 2
+        ];
+
+        $this->call("POST", "/vouchers/generate-codes", $data, [], [], $this->authHeader);
+        $this->assertResponseStatus(Response::HTTP_INTERNAL_SERVER_ERROR);
+    }
 }
