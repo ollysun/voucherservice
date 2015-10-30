@@ -53,13 +53,6 @@ class VoucherValidator extends IlluminateValidator
         ];
     }
 
-    public static function getVoucherCodeRules()
-    {
-        return [
-            'total' => 'required|integer|min:1',
-        ];
-    }
-
     public static function getRedeemRules()
     {
         return [
