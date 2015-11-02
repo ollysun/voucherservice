@@ -260,7 +260,7 @@ class TaskRouteTest extends TestCase
     public function testGenerateVoucherCodes()
     {
         $data = [
-            'total'=> 2
+            'total'=> 10
         ];
 
         $this->call("POST", "/vouchers/generate-codes", $data, [], [], $this->authHeader);

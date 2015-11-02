@@ -1,7 +1,5 @@
 <?php namespace Voucher\Http\Controllers;
 
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\RequestException;
 use Iroko\Common\Http\Controllers\ApiController;
 use Illuminate\Http\Request;
 
