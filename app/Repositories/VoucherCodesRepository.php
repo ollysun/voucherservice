@@ -13,11 +13,11 @@ class VoucherCodesRepository extends AbstractRepository implements IVoucherCodes
 
     /** Creates a new VoucherCode repository instances
      *
-     * @param VoucherCode $voucherCode
+     * @param VoucherCode $voucher_code
      */
-    public function __construct(VoucherCode $voucherCode)
+    public function __construct(VoucherCode $voucher_code)
     {
-        $this->model = $voucherCode;
+        $this->model = $voucher_code;
     }
 
     /** Checks is a code exists in the voucher_code table.
@@ -50,12 +50,14 @@ class VoucherCodesRepository extends AbstractRepository implements IVoucherCodes
     public function insertVoucherCode($data)
     {
         try {
-            $voucherCodeObject = new VoucherCode();
-            $voucherCodeObject->voucher_code = $data['voucher_code'];
-            $voucherCodeObject->code_status = $data['voucher_status'];
-            $voucherCodeObject->save();
+            $voucher_code = $this->model;
+            $voucher_code->create([
+                'voucher_code' => $data['voucher_code'],
+                'code_status' => $data['voucher_status']
+            ]);
 
-            return self::transform($voucherCodeObject, new VoucherCodeTransformer());
+            return true;
+
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
         }

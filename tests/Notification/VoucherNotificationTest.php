@@ -13,11 +13,10 @@ class VoucherNotificationTest extends TestCase
 
     public function testSet()
     {
-        $this->voucherNotification = new VoucherNotification(1, 'Generate Voucher Initiated', [1]);
-        $this->assertNull($this->voucherNotification->job_status);
+        $this->voucherNotification = new VoucherNotification(1, 'Voucher:email', [1]);
 
-        $this->voucherNotification->__set('job_status', 'new');
-        $this->assertEquals('new', $this->voucherNotification->job_status);
+        $this->voucherNotification->__set('file_name', 'test.csv');
+        $this->assertEquals('test.csv', $this->voucherNotification->file_name);
     }
 
     public function testSetWithException()

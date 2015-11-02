@@ -1,22 +1,10 @@
-<?php
-/**
- * Created by PhpStorm.
- * User: Tech-1
- * Date: 10/12/15
- * Time: 1:49 PM
- */
-
-namespace Voucher\Transformers;
+<?php namespace Voucher\Transformers;
 
 use League\Fractal\TransformerAbstract;
 use Voucher\Models\VoucherJobParamMetadata;
 
-class VoucherJobParamMetadataTransformer extends TransformerAbstract {
-
-//    protected $availableIncludes = [
-//        'voucherJob'
-//    ];
-
+class VoucherJobParamMetadataTransformer extends TransformerAbstract
+{
     public static function transform(VoucherJobParamMetadata $voucherJobMetadata)
     {
         return [
@@ -38,10 +26,4 @@ class VoucherJobParamMetadataTransformer extends TransformerAbstract {
             ]
         ];
     }
-
-//    public function includeVoucherJob(VoucherJobParamMetadata $voucherJobMetadata)
-//    {
-//        $voucherJob = $voucherJobMetadata->voucherJob;
-//        return $this->collection($voucherJob, new VoucherJobTransformer());
-//    }
 }

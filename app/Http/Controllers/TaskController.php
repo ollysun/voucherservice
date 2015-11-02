@@ -2,9 +2,9 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Voucher\Notification\VoucherNotificationIssue;
 use Voucher\Notification\VoucherNotification;
-use Voucher\Notification\VoucherBusinessNotification;
-use Voucher\Validators\VoucherValidator;
+use Voucher\Validators\TaskValidator;
 use Log;
 use Notification;
 use Voucher\Repositories\VoucherJobParamMetaDatasRepository;
@@ -93,7 +93,6 @@ class TaskController extends Controller
                 $i=0;
 
                 while (!($loop_params['start'] < 0) && $loop_params['start'] < $params['total']) {
-
                     $vouchers = $this->voucher_repo->getVouchersByJobIdAndLimit($loop_params);
                     $csv_file = $this->generateCsvFromVouchers($vouchers, $params, $loop_params['voucher_set']++);
                     $s3 = $this->uploadS3($csv_file);
@@ -107,14 +106,17 @@ class TaskController extends Controller
                     }
                 }
 
+
                 $params['status'] = 'completed';
                 $this->voucher_jobs_repo->updateJobStatus($params);
+
             }
 
             Log::info(SELF::LOGTITLE, array_merge(
                 ['success' => 'Successfully issued Voucher Codes.'],
                 $this->log
             ));
+
             return $this->respondSuccess('Successfully issued Voucher Codes.');
 
         } catch (\Exception $e) {
@@ -152,7 +154,7 @@ class TaskController extends Controller
                     $fp,
                     [
                         $voucher->code,
-                        $params['duration'].' ' .$params['period']
+                        $params['duration'].' '.$params['period']
                     ]
                 );
             }
@@ -174,20 +176,18 @@ class TaskController extends Controller
     {
         try {
             $bucket = getenv('AWS_S3_BUCKET');
-
-            $filepath = storage_path('vouchers').'/'.$file_name.'.csv';
-            $keyname = getenv('AWS_S3_BUCKET_FOLDER').'/'.$file_name;
-
+            $file_path = storage_path('vouchers').'/'.$file_name.'.csv';
+            $key_name = getenv('AWS_S3_BUCKET_FOLDER').'/'.$file_name.'.csv';
             $s3 = new S3Client(Config::get('s3'));
 
             $result = $s3->putObject(array(
                 'Bucket' => $bucket,
-                'Key' => $keyname,
-                'SourceFile' => $filepath
+                'Key' => $key_name,
+                'SourceFile' => $file_path
             ));
 
-            unlink($filepath);
-            return $file_name;
+            unlink($file_path);
+            return $result;
         } catch (\Exception $e) {
             throw new \Exception('S3 Upload error:'. $e->getMessage());
         }
@@ -204,13 +204,12 @@ class TaskController extends Controller
     public function notify($s3)
     {
         try {
-            //send business users user_id's
-            $notify = new VoucherBusinessNotification(1, 'Bulk Voucher Requested Processed', [1]);
+            $notify = new VoucherNotification(1, 'Voucher:email', [1]);
             $notify->__set('file_name', $s3);
-            //$notify->__set('s3_url', $s3['s3_url']);
-
+            $notify->__set('s3_url', $s3['ObjectURL']);
             Notification::send($notify);
             return true;
+
         } catch (\Exception $e) {
             throw new \Exception('Failed while sending notification:'. $e->getMessage());
         }
@@ -224,8 +223,8 @@ class TaskController extends Controller
     public function generateVoucherCodes()
     {
         $fields = $this->request->all();
-        $rules = VoucherValidator::getVoucherCodeRules();
-        $messages = VoucherValidator::getMessages();
+        $rules = TaskValidator::getVoucherCodeRules();
+        $messages = TaskValidator::getMessages();
 
         try {
             $validator = Validator::make($fields, $rules, $messages);
@@ -260,8 +259,8 @@ class TaskController extends Controller
                 return $this->respondCreated(['Voucher Codes have been generated.']);
             }
         } catch (\Exception $e) {
-            $notify = new VoucherNotification(1, 'Generate Voucher Codes Initiated', [1374135]);
-            $notify->error = $e->getMessage();
+            $notify = new VoucherNotificationIssue(1, 'Voucher:email', [1]);
+            $notify->__set('error', $e->getMessage());
             Notification::send($notify);
 
             Log::error(SELF::LOGTITLE, array_merge(

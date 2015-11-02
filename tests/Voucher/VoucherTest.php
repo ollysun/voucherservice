@@ -21,7 +21,6 @@ class VoucherTest extends TestCase
     {
         $this->voucher_repo = new VouchersRepository(
             new Voucher(),
-            new VoucherLog(),
             new VoucherJobParamMetadata(),
             new VoucherCode(),
             new VoucherJob()

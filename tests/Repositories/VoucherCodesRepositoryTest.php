@@ -57,7 +57,7 @@ class VoucherCodesRepositoryTest extends TestCase
         ];
 
         $code = $this->repository->insertVoucherCode($data);
-        $this->assertEquals('abc123', $code['data']['voucher_code']);
+        $this->assertTrue($code);
     }
 
     public function testInsertVoucherCodeErrorException()

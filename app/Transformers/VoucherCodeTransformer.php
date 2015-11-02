@@ -1,18 +1,10 @@
-<?php
-/**
- * Created by PhpStorm.
- * User: Tech-1
- * Date: 10/14/15
- * Time: 10:45 AM
- */
-
-namespace Voucher\Transformers;
+<?php namespace Voucher\Transformers;
 
 use League\Fractal\TransformerAbstract;
 use Voucher\Models\VoucherCode;
 
-class VoucherCodeTransformer extends TransformerAbstract {
-
+class VoucherCodeTransformer extends TransformerAbstract
+{
     public static function transform(VoucherCode $voucherCode)
     {
         return [

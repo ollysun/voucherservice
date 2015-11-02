@@ -164,14 +164,7 @@ class VouchersController extends Controller
                 if (!$voucher) {
                     return $this->errorNotFound('Check Id, voucher detail not found');
                 } else {
-                    $data = [
-                        'id' => $fields['id'],
-                        'status' => $fields['status'],
-                        'title' => $fields['title'],
-                        'location' => $fields['location'],
-                        'description' => $fields['description']
-                    ];
-                    $voucher_update =  $this->repository->update($voucher_id, $data);
+                    $voucher_update =  $this->repository->update($voucher_id, $fields);
                     Log::info(SELF::LOGTITLE, array_merge(
                         [
                             'Update Successful' => 'Voucher successfully updated'

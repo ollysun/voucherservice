@@ -4,9 +4,7 @@ use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\DB;
 use Voucher\Models\Voucher;
 use Voucher\Models\VoucherJobParamMetadata;
-use Voucher\Models\VoucherLog;
 use Voucher\Models\VoucherCode;
-use Voucher\Transformers\VoucherJobParamMetadataTransformer;
 use Voucher\Transformers\VoucherTransformer;
 use Voucher\Models\VoucherJob;
 use Voucher\Transformers\VoucherJobTransformer;
@@ -19,57 +17,47 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
      *
      * @var Voucher
      */
-    protected $model;
-
-    /**
-     * voucher log model
-     *
-     * @var
-     */
-    protected $log_model;
+    protected $voucher_model;
 
     /**
      * Voucher parameters metadata model
      *
      * @var
      */
-    protected $voucherMetadata;
+    protected $voucher_metadata_model;
 
     /**
      * VoucherCode model
      *
      * @var
      */
-    protected $voucherCode;
+    protected $voucher_code_model;
 
     /**
      * VoucherJob model
      *
      * @var
      */
-    protected $voucherJob;
+    protected $voucher_job_model;
 
     /**
      * Creates a new vouchers repository instance.
      *
-     * @param Voucher $voucher
-     * @param VoucherLog $voucherLog
-     * @param VoucherJobParamMetadata $voucherMetadataModel
-     * @param VoucherCode $voucherCodeModel
-     * @param VoucherJob $voucherJob
+     * @param Voucher $voucher_model
+     * @param VoucherJobParamMetadata $voucher_metadata_model
+     * @param VoucherCode $voucher_code_model
+     * @param VoucherJob $voucher_job_model
      */
     public function __construct(
-        Voucher $voucher,
-        VoucherLog $voucherLog,
-        VoucherJobParamMetadata $voucherMetadataModel,
-        VoucherCode $voucherCodeModel,
-        VoucherJob $voucherJob
+        Voucher $voucher_model,
+        VoucherJobParamMetadata $voucher_metadata_model,
+        VoucherCode $voucher_code_model,
+        VoucherJob $voucher_job_model
     ) {
-        $this->model = $voucher;
-        $this->log_model = $voucherLog;
-        $this->voucherMetadata = $voucherMetadataModel;
-        $this->voucherCode = $voucherCodeModel;
-        $this->voucherJob = $voucherJob;
+        $this->voucher_model = $voucher_model;
+        $this->voucher_metadata_model = $voucher_metadata_model;
+        $this->voucher_code_model = $voucher_code_model;
+        $this->voucher_job_model = $voucher_job_model;
     }
 
     /**
@@ -89,7 +77,7 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
             );
 
             if (is_null($data['query'])) {
-                $vouchers = $this->model
+                $vouchers = $this->voucher_model
                     ->select([
                         DB::raw('vouchers.*'),
                         DB::raw('sum(case when `action` = \'success\' then 1 else 0 end) as `total_redeemed`')
@@ -99,7 +87,7 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
                     ->orderBy($data['sort'], $data['order'])
                     ->paginate($data['limit']);
             } else {
-                $vouchers = $this->model->where('code', 'like', '%'.$data['query'].'%')
+                $vouchers = $this->voucher_model->where('code', 'like', '%'.$data['query'].'%')
                     ->select([
                         DB::raw('vouchers.*'),
                         DB::raw('sum(case when `action` = \'success\' then 1 else 0 end) as `total_redeemed`')
@@ -131,7 +119,7 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
     public function getVoucherById($id)
     {
         try {
-            $voucher = $this->model
+            $voucher = $this->voucher_model
                 ->select([
                     DB::raw('vouchers.*'),
                     DB::raw('sum(case when `action` = \'success\' then 1 else 0 end) as `total_redeemed`')
@@ -140,6 +128,7 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
                 ->leftJoin('voucher_logs', 'voucher_logs.voucher_id', '=', 'vouchers.id')
                 ->groupBy('voucher_id')
                 ->first();
+
             if (!is_null($voucher)) {
                 return self::transform($voucher, new VoucherTransformer());
             } else {
@@ -160,7 +149,7 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
     public function getVoucherByCode($code)
     {
         try {
-            $voucher = $this->model->where('code', $code)
+            $voucher = $this->voucher_model->where('code', $code)
                 ->select([
                     DB::raw('vouchers.*'),
                     DB::raw('sum(case when `action` = \'success\' then 1 else 0 end) as `total_redeemed`')
@@ -189,9 +178,9 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
     public function getVoucherCodeByStatus($status)
     {
         try {
-            $voucherCodeByStatus = $this->voucherCode->where('code_status', $status)->first();
-            if (!is_null($voucherCodeByStatus)) {
-                return self::transform($voucherCodeByStatus, new VoucherCodeTransformer());
+            $voucher_code = $this->voucher_code_model->where('code_status', $status)->first();
+            if (!is_null($voucher_code)) {
+                return self::transform($voucher_code, new VoucherCodeTransformer());
             } else {
                 return false;
             }
@@ -210,11 +199,11 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
     public function updateVoucherCodeStatusByID($id)
     {
         try {
-            $vouchersCodeObject = $this->voucherCode->find($id);
-            $vouchersCodeObject->code_status = "used";
-            $vouchersCodeObject->save();
+            $voucher_code = $this->voucher_code_model->find($id);
+            $voucher_code->code_status = "used";
+            $voucher_code->save();
 
-            return self::transform($vouchersCodeObject, new VoucherCodeTransformer());
+            return self::transform($voucher_code, new VoucherCodeTransformer());
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
         }
@@ -230,14 +219,13 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
     public function create($input)
     {
         try {
-            $voucher = $this->model;
+            $voucher = $this->voucher_model;
             $voucher->valid_from = (isset($input['valid_from']) ? $input['valid_from'] : '');
             $voucher->valid_to = (isset($input['valid_to']) ? $input['valid_to'] : '');
             $voucher->status = (isset($input['status']) ? $input['status'] : 'active');
             $voucher->title = (isset($input['title']) ? $input['title'] : 'INTERNAL');
             $voucher->description = (isset($input['description']) ? $input['description'] : '');
             $voucher->location = (isset($input['location']) ? $input['location'] : '');
-            //$vouchersObject->is_limited = $input['is_limited'];
             $voucher->limit = (isset($input['limit']) ? $input['limit'] : 1);
             $voucher->period = (isset($input['period']) ? $input['period'] : 'day');
             $voucher->duration = (isset($input['duration']) ? $input['duration'] : '1');
@@ -264,7 +252,7 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
     public function update($id, $input)
     {
         try {
-            $voucher = $this->model->find($id);
+            $voucher = $this->voucher_model->find($id);
 
             $voucher->valid_from = (isset($input['valid_from']) ?
                 $input['valid_from'] : $voucher->valid_from);
@@ -278,7 +266,6 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
                 $input['description'] : $voucher->description);
             $voucher->location = (isset($input['location']) ?
                 $input['location'] : $voucher->location);
-            //$vouchersObject->is_limited = $input['is_limited'];
             $voucher->limit = (isset($input['limit']) ?
                 $input['limit'] : $voucher->limit);
             $voucher->period = (isset($input['period']) ?
@@ -311,14 +298,14 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
     public function getVouchersByJobIdAndLimit($params)
     {
         try {
-            $vouchers = $this->model->where('voucher_job_id', '=', $params['voucher_job_id'])
+            $vouchers = $this->voucher_model->where('voucher_job_id', '=', $params['voucher_job_id'])
                 ->skip($params['start'])
                 ->take($params['limit'])
                 ->orderBy('id')
                 ->select('code')
                 ->get();
 
-            return $vouchers;//self::transform($vouchers, new VoucherTransformer());
+            return $vouchers;
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
         }
@@ -334,7 +321,7 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
     public function updateVoucherStatus($data)
     {
         try {
-            $voucher = $this->model->findOrFail($data['voucher_id']);
+            $voucher = $this->voucher_model->findOrFail($data['voucher_id']);
             $voucher->status = $data['voucher_status'];
             $voucher->save();
 
@@ -354,22 +341,22 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
     public function insertVoucherJob($status)
     {
         try {
-            $voucherJob = $this->voucherJob;
+            $voucher_job = $this->voucher_job_model;
             if ($status == 'new') {
-                $voucherJob->status = 'new';
-                $voucherJob->comments = 'New VoucherJob Inserted';
+                $voucher_job->status = 'new';
+                $voucher_job->comments = 'New VoucherJob Inserted';
             } elseif ($status == 'processing') {
-                $voucherJob->status = 'processing';
-                $voucherJob->comments = 'Processing VoucherJob.........';
+                $voucher_job->status = 'processing';
+                $voucher_job->comments = 'Processing VoucherJob.........';
             } elseif ($status == 'completed') {
-                $voucherJob->status = 'completed';
-                $voucherJob->comments = 'VoucherJob Complete processing';
+                $voucher_job->status = 'completed';
+                $voucher_job->comments = 'VoucherJob Complete processing';
             } else {
-                $voucherJob->status = 'error';
-                $voucherJob->comments = 'Error processing the VoucherJob';
+                $voucher_job->status = 'error';
+                $voucher_job->comments = 'Error processing the VoucherJob';
             }
-            $voucherJob->save();
-            return self::transform($voucherJob, new VoucherJobTransformer());
+            $voucher_job->save();
+            return self::transform($voucher_job, new VoucherJobTransformer());
         } catch (\Exception $ex) {
             throw new \Exception($ex->getMessage());
         }
@@ -387,14 +374,13 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
     {
         try {
             foreach ($data as $key => $value) {
-                $voucherMetadata = $this->voucherMetadata;
-                $voucherMetadata->voucher_job_id = $voucher_job_id;
-                $voucherMetadata->key = trim($key);
-                $voucherMetadata->value = trim($value);
-                $voucherMetadata->save();
-
-                self::transform($voucherMetadata, new VoucherJobParamMetadataTransformer());
+                $voucher_metadata = new VoucherJobParamMetadata();
+                $voucher_metadata->voucher_job_id = $voucher_job_id;
+                $voucher_metadata->key = trim($key);
+                $voucher_metadata->value = trim($value);
+                $voucher_metadata->save();
             }
+
             return true;
         } catch (\Exception $ex) {
             throw new \Exception($ex->getMessage());
