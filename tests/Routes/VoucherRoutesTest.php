@@ -366,7 +366,15 @@ class VoucherRoutesTest extends TestCase
             ->setMethods(array('redeem'))
             ->getMock();
 
-        $this->repository->expects($this->any())->method('redeem')->willReturn(true);
+        $this->repository->expects($this->any())->method('redeem')->willReturn([
+            'valid_from' => '2015-1-1 20:11:1',
+            'valid_to' => date('Y-m-d H:i:s', strtotime('+ 1 day')),
+            'limit' => 1,
+            'type' => 'time',
+            'code' => 'XAD34E1',
+            'category' => 'active',
+            'voucher_job_id' => 1
+        ]);
         $this->app->instance('Voucher\Voucher\Voucher', $this->repository);
 
         $this->call("POST", "/vouchers/redeem", $data, [], [], $this->authHeader);
