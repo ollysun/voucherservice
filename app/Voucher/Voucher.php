@@ -154,19 +154,19 @@ class Voucher
                         }
                         return $voucher['data'];
                     } else {
-                        $data['comments'] = 'you tried redeeming a voucher code that has reached its usage limit.';
+                        $data['comments'] = 'User tried redeeming a voucher code that has reached its usage limit.';
                     }
                 } else {
-                    $data['comments'] = 'you tried redeeming a voucher code whose validity period has passed.';
+                    $data['comments'] = 'User tried redeeming a voucher code whose validity period has passed.';
                 }
             } else {
-                $data['comments'] = 'you tried redeeming a voucher code that has been used or not active.';
+                $data['comments'] = 'User tried redeeming a voucher code that has been used or not active.';
             }
         } else {
-            $data['comments'] = 'you tried redeeming a non existing voucher code.';
+            $data['comments'] = 'User tried redeeming a non existing voucher code.';
         }
         $this->voucher_logs_repository->addVoucherLog($data);
-        throw new \Exception('The voucher code is invalid, ' . $data['comments'], 400);
+        throw new \Exception('The voucher code is invalid. ' . $data['comments'], 400);
     }
 
     /**
