@@ -63,7 +63,7 @@ class VoucherTest extends TestCase
         $voucher =  new VoucherService($this->voucher_repo, $this->voucher_log_repo);
         $voucher->setSubscriptionService($mocked_sub_service);
         $result = $voucher->redeem($inputs);
-        $this->assertEquals(true, $result);
+        $this->assertArrayHasKey("code", $result);
     }
 
     /**
@@ -97,7 +97,7 @@ class VoucherTest extends TestCase
         $voucher =  new VoucherService($this->voucher_repo, $this->voucher_log_repo);
         $voucher->setSubscriptionService($mocked_sub_service);
         $result = $voucher->redeem($inputs);
-        $this->assertEquals(true, $result);
+        $this->assertArrayHasKey("code", $result);
     }
 
     /**
@@ -274,7 +274,7 @@ class VoucherTest extends TestCase
         $voucher =  new VoucherService($this->voucher_repo, $this->voucher_log_repo);
         $voucher->setSubscriptionService($mocked_sub_service);
         $result = $voucher->redeem($inputs);
-        $this->assertEquals(true, $result);
+        $this->assertArrayHasKey("code", $result);
     }
 
     /**
@@ -359,7 +359,7 @@ class VoucherTest extends TestCase
         $voucher =  new VoucherService($this->voucher_repo, $this->voucher_log_repo);
         $voucher->setSubscriptionService($mocked_sub_service);
         $result = $voucher->redeem($inputs);
-        $this->assertEquals(true, $result);
+        $this->assertArrayHasKey("code", $result);
     }
 
     /**
@@ -454,7 +454,7 @@ class VoucherTest extends TestCase
         $voucher->setSubscriptionService($mocked_sub_service);
         $voucher->setPlansService($mocked_plan_service);
         $result = $voucher->redeem($inputs);
-        $this->assertEquals(true, $result);
+        $this->assertArrayHasKey("code", $result);
     }
 
     /**
