@@ -20,6 +20,6 @@ class PlanServiceTest extends TestCase
     public function testPlanApiWithInternalErrorException()
     {
         $result = $this->plan_service->plansApi('/plans/10000000000000000', 'get');
-        $this->assertEquals(false, $result);
+        $this->assertArrayHasKey('error', $result);
     }
 }

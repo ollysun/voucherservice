@@ -20,6 +20,6 @@ class SubscriptionServiceTest   extends TestCase
     public function testSubscriptionApiWithInternalErrorException()
     {
         $result = $this->subscription_service->subscriptionApi('/subscriptions/1111111111111111111111111', 'get');
-        $this->assertEquals(false, $result);
+        $this->assertArrayHasKey('error', $result);
     }
 }
