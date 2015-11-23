@@ -29,7 +29,7 @@ class SubscriptionService
             $this->response = $this->client->$method($routes);
         } catch (RequestException $e) {
             if ($e->getResponse()->getStatusCode() != 200 && $e->getResponse()->getStatusCode() != 201) {
-                return false;
+                return json_decode($e->getResponse()->getBody()->getContents(), true);
             }
         }
 
