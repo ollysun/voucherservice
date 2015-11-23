@@ -116,7 +116,7 @@ class Voucher
             $this->sendSubscribeRequest($subscription_data);
             return $voucher;
         } catch (\Exception $e) {
-            throw new \Exception($e->getMessage());
+            throw new \Exception($e->getMessage(), $e->getCode());
         }
     }
 
@@ -166,7 +166,7 @@ class Voucher
             $data['comments'] = 'User tried redeeming a non existing voucher code.';
         }
         $this->voucher_logs_repository->addVoucherLog($data);
-        throw new \Exception('The voucher code is invalid. ' . $data['comments']);
+        throw new \Exception('The voucher code is invalid. ' . $data['comments'], 400);
     }
 
     /**
@@ -181,6 +181,10 @@ class Voucher
     {
         $subscription = $this->subscriptions_api->subscriptionApi('/subscriptions/' . $user_data['user_id'], 'get');
 
+        if (isset($subscription['error'])) {
+            throw new \Exception($subscription['error']['message'], $subscription['error']['http_code']);
+        }
+
         if ($subscription) {
             switch ($voucher_data['category']) {
                 case 'new_expired':
@@ -188,15 +192,17 @@ class Voucher
                         return $subscription['data'];
                     }
                     break;
-
                 case 'expired':
                     if (!$subscription['data']['is_active']) {
                         return $subscription['data'];
                     }
                     break;
-
                 case 'active':
-                    if ($plan = $this->plans_api->plansApi('/plans/' . $subscription['data']['plan_id'], 'get')) {
+                    $plan = $this->plans_api->plansApi('/plans/' . $subscription['data']['plan_id'], 'get');
+                    if (isset($plan['error'])) {
+                        throw new \Exception($plan['error']['message'], $plan['error']['http_code']);
+                    }
+                    if ($plan) {
                         if ($subscription['data']['is_active'] && !$plan['data']['is_recurring']) {
                             return $subscription['data'];
                         }
@@ -222,7 +228,7 @@ class Voucher
             'comments' => 'User is not eligible to use the voucher code.',
         ];
         $this->voucher_logs_repository->addVoucherLog($data);
-        throw new \Exception('You are not eligible to use this voucher code.');
+        throw new \Exception('You are not eligible to use this voucher code.', 400);
     }
 
     /**
@@ -256,7 +262,7 @@ class Voucher
             $log_data['comments'] = 'Something went wrong on queueing the subscribe by voucher request.';
             $log_data['action'] = "attempt";
             $this->voucher_logs_repository->addVoucherLog($log_data);
-            throw new \Exception('Something went wrong, please try again in a later time.');
+            throw new \Exception('Something went wrong, please try again in a later time.', 500);
         }
     }
 }
