@@ -206,11 +206,7 @@ class VouchersController extends Controller
                 return $this->respondWithArray($voucher);
             }
         } catch (\Exception $e) {
-            Log::error(SELF::LOGTITLE, array_merge(
-                ['error' => $e->getMessage()],
-                $this->log
-            ));
-            return $this->errorInternalError($e->getMessage());
+            return $this->buildExceptionResponse($e);
         }
     }
 
