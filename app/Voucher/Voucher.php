@@ -182,10 +182,12 @@ class Voucher
         $subscription = $this->subscriptions_api->subscriptionApi('/subscriptions/' . $user_data['user_id'], 'get');
 
         if (isset($subscription['error'])) {
-            throw new \Exception($subscription['error']['message'], $subscription['error']['http_code']);
+            if ($subscription['error']['http_code'] != 404) {
+                throw new \Exception($subscription['error']['message'], $subscription['error']['http_code']);
+            }
         }
 
-        if ($subscription) {
+        if (isset($subscription['data'])) {
             switch ($voucher_data['category']) {
                 case 'new_expired':
                     if (!$subscription['data']['is_active']) {
