@@ -200,15 +200,19 @@ class Voucher
                     }
                     break;
                 case 'active':
-                    $plan = $this->plans_api->plansApi('/plans/' . $subscription['data']['plan_id'], 'get');
-                    if (isset($plan['error'])) {
-                        throw new \Exception($plan['error']['message'], $plan['error']['http_code']);
-                    }
-                    if ($plan) {
-                        if ($subscription['data']['is_active'] && !$plan['data']['is_recurring']) {
-                            return $subscription['data'];
+                    if(isset($subscription['data']['plan_id'])) {
+                        $plan = $this->plans_api->plansApi('/plans/' . $subscription['data']['plan_id'], 'get');dd($plan);
+                        if (isset($plan['error'])) {
+                            throw new \Exception($plan['error']['message'], $plan['error']['http_code']);
                         }
-                        break;
+                        if ($plan) {
+                            if ($subscription['data']['is_active'] && !$plan['data']['is_recurring']) {
+                                return $subscription['data'];
+                            }
+                            break;
+                        }
+                    } else {
+                        return $subscription['data'];
                     }
             }
         } else {
