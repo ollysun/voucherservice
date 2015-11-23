@@ -202,8 +202,8 @@ class VouchersController extends Controller
             } else {
                 $this->voucher->setSubscriptionService(new Services\SubscriptionService());
                 $this->voucher->setPlansService(new PlanService());
-                $this->voucher->redeem($inputs);
-                return $this->respondSuccess('Voucher successfully redeemed, your subscription will be active soon.');
+                $voucher = $this->voucher->redeem($inputs);
+                return $this->respondWithArray($voucher);
             }
         } catch (\Exception $e) {
             Log::error(SELF::LOGTITLE, array_merge(

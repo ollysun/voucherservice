@@ -114,7 +114,7 @@ class Voucher
                 'subscription_duration' => $voucher['duration'] . ' ' . $voucher['period'],
             ];
             $this->sendSubscribeRequest($subscription_data);
-            return true;
+            return $voucher;
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
         }
