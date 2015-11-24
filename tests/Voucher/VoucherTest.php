@@ -54,7 +54,7 @@ class VoucherTest extends TestCase
         $inputs = [
           'code' => 'XAD34E1',
             'user_id' => 122333,
-            'platform' => 1,
+            'platform' => "mobile",
         ];
 
         $mocked_sub_service = $this->getMock('Voucher\Services\SubscriptionService', ['subscriptionApi']);
@@ -88,7 +88,7 @@ class VoucherTest extends TestCase
         $inputs = [
             'code' => 'XAD34E13',
             'user_id' => 122333,
-            'platform' => 1,
+            'platform' => "mobile",
         ];
 
         $mocked_sub_service = $this->getMock('Voucher\Services\SubscriptionService', ['subscriptionApi']);
@@ -110,7 +110,7 @@ class VoucherTest extends TestCase
         $inputs = [
             'code' => 'TESTCODE',
             'user_id' => 122333,
-            'platform' => 1,
+            'platform' => "mobile",
         ];
 
         $this->setExpectedException('\Exception');
@@ -146,7 +146,7 @@ class VoucherTest extends TestCase
         $inputs = [
             'code' => 'XD34E1HH',
             'user_id' => 122333,
-            'platform' => 1,
+            'platform' => "mobile",
         ];
 
         $this->setExpectedException('\Exception');
@@ -181,7 +181,7 @@ class VoucherTest extends TestCase
         $inputs = [
             'code' => 'XAD34E1',
             'user_id' => 122333,
-            'platform' => 1,
+            'platform' => "mobile",
         ];
 
         $this->setExpectedException('\Exception');
@@ -202,7 +202,7 @@ class VoucherTest extends TestCase
         $inputs = [
             'code' => 'XD34E1Q11',
             'user_id' => 122333,
-            'platform' => 1,
+            'platform' => "mobile",
         ];
 
         $voucher_job_model = new VoucherJob();
@@ -258,7 +258,7 @@ class VoucherTest extends TestCase
         $inputs = [
             'code' => 'XAD34E1',
             'user_id' => 122333,
-            'platform' => 1,
+            'platform' => "mobile",
         ];
 
         $mocked_sub_service = $this->getMock('Voucher\Services\SubscriptionService', ['subscriptionApi']);
@@ -301,7 +301,7 @@ class VoucherTest extends TestCase
         $inputs = [
             'code' => 'XAD34E1',
             'user_id' => 122333,
-            'platform' => 1,
+            'platform' => "mobile",
         ];
 
         $mocked_sub_service = $this->getMock('Voucher\Services\SubscriptionService', ['subscriptionApi']);
@@ -343,7 +343,7 @@ class VoucherTest extends TestCase
         $inputs = [
             'code' => 'XAD34E1',
             'user_id' => 122333,
-            'platform' => 1,
+            'platform' => "mobile",
         ];
 
         $mocked_sub_service = $this->getMock('Voucher\Services\SubscriptionService', ['subscriptionApi']);
@@ -386,7 +386,7 @@ class VoucherTest extends TestCase
         $inputs = [
             'code' => 'XAD34E1',
             'user_id' => 122333,
-            'platform' => 1,
+            'platform' => "mobile",
         ];
 
         $mocked_sub_service = $this->getMock('Voucher\Services\SubscriptionService', ['subscriptionApi']);
@@ -428,7 +428,7 @@ class VoucherTest extends TestCase
         $inputs = [
             'code' => 'XAD34E1',
             'user_id' => 122333,
-            'platform' => 1,
+            'platform' => "mobile",
         ];
 
         $mocked_sub_service = $this->getMock('Voucher\Services\SubscriptionService', ['subscriptionApi']);
@@ -481,7 +481,7 @@ class VoucherTest extends TestCase
         $inputs = [
             'code' => 'XAD34E1',
             'user_id' => 122333,
-            'platform' => 1,
+            'platform' => "mobile",
         ];
 
         $mocked_sub_service = $this->getMock('Voucher\Services\SubscriptionService', ['subscriptionApi']);
