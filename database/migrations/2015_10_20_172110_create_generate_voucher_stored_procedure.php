@@ -45,7 +45,7 @@ class CreateGenerateVoucherStoredProcedure extends Migration
                 UPDATE voucher_codes set code_status = "used" WHERE id = $voucher_code_id;
 
                 #select $vget_code;
-                SET @vcode=concat(binary brand ,$voucher_code);
+                SET @vcode=concat(UPPER(brand) ,$voucher_code);
 
                 INSERT INTO vouchers (
                       `type`,
