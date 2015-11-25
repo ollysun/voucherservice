@@ -39,7 +39,7 @@ class VouchersRepositoryTest extends TestCase
 
         $data = [
             'id' => 9999,
-            'code' => '12345678abc',
+            'code' => '12345678ABC',
             'type' => 'time',
             'status' => 'active',
             'category' => 'new',
@@ -58,7 +58,7 @@ class VouchersRepositoryTest extends TestCase
 
         $this->voucher_log_model->insert([
             'voucher_id' => 9999,
-            'user_id' => '9999a',
+            'user_id' => 123456,
             'action' => 'attempt',
             'platform' => 'mobile',
             'comments' => 'a comment'
