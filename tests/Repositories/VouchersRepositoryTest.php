@@ -39,7 +39,7 @@ class VouchersRepositoryTest extends TestCase
 
         $data = [
             'id' => 9999,
-            'code' => '12345678abc',
+            'code' => '12345678ABC',
             'type' => 'time',
             'status' => 'active',
             'category' => 'new',
@@ -58,7 +58,7 @@ class VouchersRepositoryTest extends TestCase
 
         $this->voucher_log_model->insert([
             'voucher_id' => 9999,
-            'user_id' => '9999a',
+            'user_id' => 123456,
             'action' => 'attempt',
             'platform' => 'mobile',
             'comments' => 'a comment'
@@ -276,16 +276,16 @@ class VouchersRepositoryTest extends TestCase
     public function testGetVoucherCodeByStatus()
     {
         $this->voucher_code_model->truncate();
-        $this->voucher_code_model->insert(['voucher_code' => '123456789abc', 'code_status' => 'new']);
-        $this->voucher_code_model->insert(['voucher_code' => '123456789abcd', 'code_status' => 'used']);
+        $this->voucher_code_model->insert(['voucher_code' => '123456789ABC', 'code_status' => 'new']);
+        $this->voucher_code_model->insert(['voucher_code' => '123456789ABCD', 'code_status' => 'used']);
 
         $result = $this->repository->getVoucherCodeByStatus('new');
         $this->assertEquals('new', $result['data']['code_status']);
-        $this->assertEquals('123456789abc', $result['data']['voucher_code']);
+        $this->assertEquals('123456789ABC', $result['data']['voucher_code']);
 
         $result = $this->repository->getVoucherCodeByStatus('used');
         $this->assertEquals('used', $result['data']['code_status']);
-        $this->assertEquals('123456789abcd', $result['data']['voucher_code']);
+        $this->assertEquals('123456789ABCD', $result['data']['voucher_code']);
     }
 
     public function testGetVoucherCodeByStatusFalse()
@@ -314,11 +314,11 @@ class VouchersRepositoryTest extends TestCase
 
     public function testUpdateVoucherCodeStatusByID()
     {
-        $this->voucher_code_model->insert(['id' => '9990', 'voucher_code' => '123456789abc', 'code_status' => 'new']);
+        $this->voucher_code_model->insert(['id' => '9990', 'voucher_code' => '123456789ABC', 'code_status' => 'new']);
 
         $result = $this->repository->updateVoucherCodeStatusByID('9990');
         $this->assertEquals('used', $result['data']['code_status']);
-        $this->assertEquals('123456789abc', $result['data']['voucher_code']);
+        $this->assertEquals('123456789ABC', $result['data']['voucher_code']);
     }
 
     public function testUpdateVoucherCodeStatusByIDErrorException()

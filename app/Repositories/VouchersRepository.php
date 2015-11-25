@@ -277,7 +277,7 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
             $voucher->type = (isset($input['type']) ?
                 $input['type'] : $voucher->type);
             $voucher->code = (isset($input['code']) ?
-                $input['code'] : $voucher->code);
+                strtoupper($input['code']) : $voucher->code);
             $voucher->voucher_job_id = (isset($input['voucher_job_id']) ?
                 $input['voucher_job_id'] : $voucher->voucher_job_id);
             $voucher->save();

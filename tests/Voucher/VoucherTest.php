@@ -52,7 +52,7 @@ class VoucherTest extends TestCase
         ]);
 
         $inputs = [
-          'code' => 'XAD34E1',
+          'code' => 'XAD34e1',
             'user_id' => 122333,
             'platform' => "mobile",
         ];

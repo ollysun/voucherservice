@@ -248,7 +248,7 @@ class TaskController extends Controller
                     $code = $this->voucher_codes_repo->isNotExistingVoucherCode($voucher_code);
                     if ($code) {
                         $data = [
-                            'voucher_code' => $voucher_code,
+                            'voucher_code' => strtoupper($voucher_code),
                             'voucher_status' => 'new'
                         ];
                         $this->voucher_codes_repo->insertVoucherCode($data);
