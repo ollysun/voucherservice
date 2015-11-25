@@ -100,7 +100,7 @@ class Voucher
     public function redeem($data)
     {
         try {
-            $data['code'] = strtoupper($data['code']);
+            //$data['code'] = strtoupper($data['code']);
             $voucher = $this->isVoucherExistsAndValid($data);
             $subscription = $this->isVoucherValidForUser($data, $voucher);
 
