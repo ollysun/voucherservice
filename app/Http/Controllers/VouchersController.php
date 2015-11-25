@@ -108,7 +108,7 @@ class VouchersController extends Controller
                     return $this->errorNotFound('No voucher codes were found.');
                 } else {
                     $firstTwoLetter = substr($inputs['title'], 0, 2);
-                    $inputs['code'] = $firstTwoLetter . $voucherCode['data']['voucher_code'];
+                    $inputs['code'] = strtoupper($firstTwoLetter . $voucherCode['data']['voucher_code']);
 
                     DB::begintransaction();
                     try {
