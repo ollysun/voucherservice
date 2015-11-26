@@ -33,7 +33,7 @@ class VoucherJobParamMetadatasSeeder extends Seeder
                     'id' => 3,
                     'voucher_job_id' => 1,
                     'key' => 'title',
-                    'value' => 'INTERNAL',
+                    'value' => 'iROKO BD Test',
                     'created_at' => '0000-00-00 00:00:00',
                     'updated_at' => '0000-00-00 00:00:00'
                 ],
@@ -145,7 +145,7 @@ class VoucherJobParamMetadatasSeeder extends Seeder
                     'id' => 17,
                     'voucher_job_id' => 2,
                     'key' => 'title',
-                    'value' => 'INTERNAL',
+                    'value' => 'Spectranet Nigeria Test',
                     'created_at' => '0000-00-00 00:00:00',
                     'updated_at' => '0000-00-00 00:00:00'
                 ],

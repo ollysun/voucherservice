@@ -23,11 +23,44 @@ class CreateVouchersTable extends Migration
             $table->enum('status', ['active', 'claiming', 'claimed', 'deleted', 'expired', 'inactive'])->default('inactive');
             $table->enum('category', ['new', 'expired', 'active', 'new_expired'])->default('new');
             $table->enum('title', [
-                'INTERNAL',
-                'VODAFONE_GHANA_STAFF_MOBILE',
-                'VODAFONE_GHANA_CUSTOMER_MOBILE',
-                'VODAFONE_GHANA_STAFF_FIXEDLINE'
-            ])->default('INTERNAL')->index('title');
+                'Afrimax Ghana',
+                'Airtel Ghana',
+                'iROKO Film Festival 2014',
+                'iROKO BD Test',
+                'Brandless',
+                'iROKO Test',
+                'iROKO CS',
+                'Dealdey Nigeria',
+                'Etisalat Nigeria Test',
+                'iROKO Facebook',
+                'Lowe Staff',
+                'MTN Nigeria Staff',
+                'New Africa',
+                'Rancard VAS Nigeria Test',
+                'Rancard VAS Nigeria',
+                'Smile',
+                'Spectranet Nigeria',
+                'Spectranet Nigeria Test',
+                'Spectranet Nigeria Staff',
+                'Swift',
+                'Teledatal Ghana',
+                'Teledatal Ghana Test',
+                'Tigo Rwanda',
+                'Tigo Tanzania Staff',
+                'Tigo Rwanda Staff',
+                'Tigo Rwanda Test',
+                'Tigo Tanzania',
+                'Travelstart Nigeria',
+                'Uber Nigeria',
+                'Vodafone Ghana Fixed',
+                'Vodafone Ghana Fixed Test',
+                'Vodafone Ghana Mobile',
+                'Vodafone Ghana Fixed Staff',
+                'Vodafone Ghana Mobile Test',
+                'Vodafone Staff',
+                'Wish South Africa',
+                'iROKO Christmas 2014'
+            ])->default('Afrimax Ghana')->index('title');
             $table->string('location')->nullable();
             $table->string('description')->nullable();
             $table->integer('duration')->index('duration');
