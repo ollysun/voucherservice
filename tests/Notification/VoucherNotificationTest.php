@@ -13,7 +13,7 @@ class VoucherNotificationTest extends TestCase
 
     public function testSet()
     {
-        $this->voucherNotification = new VoucherNotification(1, 'Voucher:email', [1]);
+        $this->voucherNotification = new VoucherNotification(1, 'voucher.issue_code', [1], ['email', 'sms']);
 
         $this->voucherNotification->__set('file_name', 'test.csv');
         $this->assertEquals('test.csv', $this->voucherNotification->file_name);
@@ -21,7 +21,7 @@ class VoucherNotificationTest extends TestCase
 
     public function testSetWithException()
     {
-        $this->voucherNotification = new VoucherNotification(1, 'Generate Voucher Initiated', [1]);
+        $this->voucherNotification = new VoucherNotification(1, 'voucher.issue_code', [1], ['email', 'sms']);
 
         $this->setExpectedException('\Exception');
         $this->voucherNotification->__set('fake_property', true);

@@ -13,7 +13,7 @@ class VoucherNotificationIssueTest extends TestCase
 
     public function testSet()
     {
-        $this->voucherBusinessNotification = new VoucherNotificationIssue(1, 'Voucher:email', [1]);
+        $this->voucherBusinessNotification = new VoucherNotificationIssue(1, 'voucher.generate_failed', [1], ['email', 'sms']);
 
         $this->voucherBusinessNotification->__set('error', 'no such file exist');
         $this->assertEquals('no such file exist', $this->voucherBusinessNotification->error);
@@ -21,7 +21,7 @@ class VoucherNotificationIssueTest extends TestCase
 
     public function testSetWithException()
     {
-        $this->voucherBusinessNotification = new VoucherNotificationIssue(1, 'Voucher:email', [1]);
+        $this->voucherBusinessNotification = new VoucherNotificationIssue(1, 'voucher.generate_failed', [1], ['email', 'sms']);
 
         $this->setExpectedException('\Exception');
         $this->voucherBusinessNotification->__set('fake_property', true);
