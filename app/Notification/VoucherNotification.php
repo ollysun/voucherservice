@@ -8,9 +8,9 @@ class VoucherNotification extends Notification
 
     public $s3_url;
 
-    public function __construct($priority, $type, $recipients)
+    public function __construct($priority, $type, $recipients, $channels)
     {
-        parent::__construct($priority, $type, $recipients);
+        parent::__construct($priority, $type, $recipients, $channels);
     }
 
     public function __set($property, $value)

@@ -19,7 +19,7 @@
         "iroko/common-lib": "~0.0.4",
         "iroko/analytics": "~1.1.0",
         "iroko/auth-api": "~1.1.2",
-        "iroko/notify": "~0.0.4",
+        "iroko/notify": "~0.1.0",
         "league/csv":"7.1"
     },
     "require-dev": {
