@@ -193,14 +193,16 @@ class Voucher
         }
 
         if (isset($subscription['data'])) {
+            $date = date("Y-m-d H:i:s", time());
             switch ($voucher_data['category']) {
                 case 'new_expired':
-                    if (!$subscription['data']['is_active']) {
+
+                    if (!$subscription['data']['is_active'] || $subscription['data']['expiry_time'] < $date) {
                         return $subscription['data'];
                     }
                     break;
                 case 'expired':
-                    if (!$subscription['data']['is_active']) {
+                    if (!$subscription['data']['is_active'] || $subscription['data']['expiry_time'] < $date ) {
                         return $subscription['data'];
                     }
                     break;
