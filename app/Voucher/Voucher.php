@@ -147,15 +147,19 @@ class Voucher
                 $now = DateTime::createFromFormat('Y-m-d H:i:s', Carbon::now());
 
                 if ($expires_on >= $now) {
-                    if ($voucher['data']['limit'] > $voucher['data']['total_redeemed']) {
-                        if ($voucher['data']['limit'] == ($voucher['data']['total_redeemed'] + 1)) {
-                            $voucher['data']['voucher_status'] = "claimed";
+                    if (!$this->voucher_logs_repository->redeemedByUser($post_data['user_id'], $voucher['data']['id'])) {
+                        if ($voucher['data']['limit'] > $voucher['data']['total_redeemed']) {
+                            if ($voucher['data']['limit'] == ($voucher['data']['total_redeemed'] + 1)) {
+                                $voucher['data']['voucher_status'] = "claimed";
+                            } else {
+                                $voucher['data']['voucher_status'] = "claiming";
+                            }
+                            return $voucher['data'];
                         } else {
-                            $voucher['data']['voucher_status'] = "claiming";
+                            $data['comments'] = 'User tried redeeming a voucher code that has reached its usage limit.';
                         }
-                        return $voucher['data'];
                     } else {
-                        $data['comments'] = 'User tried redeeming a voucher code that has reached its usage limit.';
+                        $data['comments'] = 'User previously redeemed this voucher code.';
                     }
                 } else {
                     $data['comments'] = 'User tried redeeming a voucher code whose validity period has passed.';

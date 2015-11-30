@@ -45,4 +45,24 @@ class VoucherLogsRepository extends AbstractRepository implements IVoucherLogsRe
             throw new \Exception($e->getMessage());
         }
     }
+
+    /**
+     * Gets the voucher log of a particular user and voucher code.
+     * returns true if found or false if not found
+     *
+     * @param $user_id
+     * @param $voucher_id
+     * @return bool
+     */
+    public function redeemedByUser($user_id, $voucher_id)
+    {
+        $voucher_log = $this->model->where('user_id', $user_id)
+            ->where('voucher_id', $voucher_id)
+            ->first();
+        if (is_null($voucher_log)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 }
