@@ -206,7 +206,7 @@ class TaskController extends Controller
     public function notify($s3)
     {
         try {
-            $notify = new VoucherNotification(self::PRIORITY, 'voucher.issue_codes', [1], ['email', 'sms']);
+            $notify = new VoucherNotification(self::PRIORITY, 'voucher.issue.codes', [1], ['email', 'sms']);
             $notify->__set('file_name', $s3);
             $notify->__set('s3_url', $s3['ObjectURL']);
             Notification::send($notify);
@@ -261,7 +261,7 @@ class TaskController extends Controller
                 return $this->respondCreated(['Voucher Codes have been generated.']);
             }
         } catch (\Exception $e) {
-            $notify = new VoucherNotificationIssue(self::PRIORITY, 'voucher.generate_failed', [1], ['email', 'sms']);
+            $notify = new VoucherNotificationIssue(self::PRIORITY, 'voucher.generate.codes.failed', [1], ['email', 'sms']);
             $notify->__set('error', $e->getMessage());
             Notification::send($notify);
 
