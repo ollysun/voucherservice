@@ -200,14 +200,14 @@ class Voucher
                     if (!$subscription['data']['is_active'] || $subscription['data']['expiry_time'] < $date) {
                         return $subscription['data'];
                     } else {
-                        $data['comments'] = 'Voucher cannot be claimed as user has active subscription';
+                        $comments = 'Voucher cannot be claimed as user has active subscription';
                     }
                     break;
                 case 'expired':
                     if (!$subscription['data']['is_active'] || $subscription['data']['expiry_time'] < $date ) {
                         return $subscription['data'];
                     } else {
-                        $data['comments'] = 'Voucher cannot be claimed as user has active subscription';
+                        $comments = 'Voucher cannot be claimed as user has active subscription';
                     }
                     break;
                 case 'active':
@@ -235,7 +235,7 @@ class Voucher
                 ];
                 return $subscription;
             } else {
-                $data['comments'] = 'Voucher cannot be claimed as user has active subscription';
+                $comments = 'Voucher cannot be claimed as user has active subscription';
             }
         }
 
@@ -244,7 +244,7 @@ class Voucher
             'user_id' => $user_data['user_id'],
             'platform' => $user_data['platform'],
             'action' => 'attempt',
-            'comments' => 'User is not eligible to use the voucher code.',
+            'comments' => $comments,
         ];
         $this->voucher_logs_repository->addVoucherLog($data);
         throw new \Exception($data['comments'], 400);
