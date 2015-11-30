@@ -206,7 +206,7 @@ class Voucher
                         if (isset($plan['error'])) {
                             throw new \Exception($plan['error']['message'], $plan['error']['http_code']);
                         }
-                        if ($plan) {
+                        if (isset($plan['data'])) {
                             if ($subscription['data']['is_active'] && !$plan['data']['is_recurring']) {
                                 return $subscription['data'];
                             }
@@ -217,7 +217,7 @@ class Voucher
                     }
             }
         } else {
-            if ($voucher_data['category'] == 'new' || $voucher_data['category'] == 'new_expire') {
+            if ($voucher_data['category'] == 'new' || $voucher_data['category'] == 'new_expired') {
                 $subscription = [
                     'customer_id' => null,
                     'plan_id' => null,
