@@ -58,6 +58,7 @@ class VoucherLogsRepository extends AbstractRepository implements IVoucherLogsRe
     {
         $voucher_log = $this->model->where('user_id', $user_id)
             ->where('voucher_id', $voucher_id)
+            ->where('action', 'success')
             ->first();
         if (is_null($voucher_log)) {
             return false;
