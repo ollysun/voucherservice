@@ -156,19 +156,19 @@ class Voucher
                             }
                             return $voucher['data'];
                         } else {
-                            $data['comments'] = 'Voucher limit reached.';
+                            $data['comments'] = 'This voucher code has been overused.';
                         }
                     } else {
-                        $data['comments'] = 'Voucher already claimed.';
+                        $data['comments'] = 'This voucher code has already been claimed.';
                     }
                 } else {
-                    $data['comments'] = 'Voucher has expired.';
+                    $data['comments'] = 'This voucher code has expired.';
                 }
             } else {
-                $data['comments'] = 'Voucher not active.';
+                $data['comments'] = 'This voucher is not active.';
             }
         } else {
-            $data['comments'] = 'Voucher not found.';
+            $data['comments'] = 'This voucher code does not exist. Please check the code and try again.';
         }
         $this->voucher_logs_repository->addVoucherLog($data);
         throw new \Exception($data['comments'], 400);
@@ -196,18 +196,17 @@ class Voucher
             $date = date("Y-m-d H:i:s", time());
             switch ($voucher_data['category']) {
                 case 'new_expired':
-
                     if (!$subscription['data']['is_active'] || $subscription['data']['expiry_time'] < $date) {
                         return $subscription['data'];
                     } else {
-                        $comments = 'Voucher cannot be claimed as user has active subscription';
+                        $comments = 'You are not eligible to redeem this voucher.';
                     }
                     break;
                 case 'expired':
                     if (!$subscription['data']['is_active'] || $subscription['data']['expiry_time'] < $date ) {
                         return $subscription['data'];
                     } else {
-                        $comments = 'Voucher cannot be claimed as user has active subscription';
+                        $comments = 'You are not eligible to redeem this voucher. Only returning members can redeem this code.';
                     }
                     break;
                 case 'active':
@@ -219,6 +218,8 @@ class Voucher
                         if (isset($plan['data'])) {
                             if ($subscription['data']['is_active'] && !$plan['data']['is_recurring']) {
                                 return $subscription['data'];
+                            } else {
+                                $comments = 'You are not eligible to redeem this voucher. Only subscribed members can redeem this code.';
                             }
                             break;
                         }
@@ -235,7 +236,7 @@ class Voucher
                 ];
                 return $subscription;
             } else {
-                $comments = 'Voucher cannot be claimed as user has active subscription';
+                $comments = 'You are not eligible to redeem this voucher. Only new members can redeem this code.';
             }
         }
 
