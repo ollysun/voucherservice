@@ -9,6 +9,7 @@ use Voucher\Transformers\VoucherTransformer;
 use Voucher\Models\VoucherJob;
 use Voucher\Transformers\VoucherJobTransformer;
 use Voucher\Transformers\VoucherCodeTransformer;
+use Voucher\Models\VoucherLog;
 
 class VouchersRepository extends AbstractRepository implements IVouchersRepository
 {
@@ -40,6 +41,9 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
      */
     protected $voucher_job_model;
 
+
+    protected $voucher_log_model;
+
     /**
      * Creates a new vouchers repository instance.
      *
@@ -52,12 +56,14 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
         Voucher $voucher_model,
         VoucherJobParamMetadata $voucher_metadata_model,
         VoucherCode $voucher_code_model,
-        VoucherJob $voucher_job_model
+        VoucherJob $voucher_job_model,
+        VoucherLog $voucherLog
     ) {
         $this->voucher_model = $voucher_model;
         $this->voucher_metadata_model = $voucher_metadata_model;
         $this->voucher_code_model = $voucher_code_model;
         $this->voucher_job_model = $voucher_job_model;
+        $this->voucher_log_model = $voucherLog;
     }
 
     /**
@@ -384,6 +390,23 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
             return true;
         } catch (\Exception $ex) {
             throw new \Exception($ex->getMessage());
+        }
+    }
+
+    public function getVoucherUserID($user_id)
+    {
+        try {
+            $voucherUserDetail = $this->voucher_model->join('voucher_logs', 'vouchers.id', '=', 'voucher_logs.voucher_id')
+                                                     ->where('voucher_logs.user_id', 'LIKE', '%'.$user_id.'%')
+                                                     ->get();
+
+            if (!is_null($voucherUserDetail)) {
+                return self::transform($voucherUserDetail, new VoucherTransformer());
+            } else {
+                return null;
+            }
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
         }
     }
 }
