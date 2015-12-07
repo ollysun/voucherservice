@@ -397,7 +397,8 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
     {
         try {
             $voucherUserDetail = $this->voucher_model->join('voucher_logs', 'vouchers.id', '=', 'voucher_logs.voucher_id')
-                                                     ->where('voucher_logs.user_id', 'LIKE', '%'.$user_id.'%')
+                                                     ->where('voucher_logs.user_id','=', $user_id)
+                                                     ->where('vouchers.status','=','claimed')
                                                      ->get();
 
             if (!is_null($voucherUserDetail)) {
