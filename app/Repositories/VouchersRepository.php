@@ -9,7 +9,6 @@ use Voucher\Transformers\VoucherTransformer;
 use Voucher\Models\VoucherJob;
 use Voucher\Transformers\VoucherJobTransformer;
 use Voucher\Transformers\VoucherCodeTransformer;
-use Voucher\Models\VoucherLog;
 
 class VouchersRepository extends AbstractRepository implements IVouchersRepository
 {

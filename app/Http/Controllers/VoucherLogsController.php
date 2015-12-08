@@ -78,7 +78,7 @@ class VoucherLogsController extends Controller {
                 ['error' => $e->getMessage()],
                 $this->log
             ));
-            return $this->errorInternalError($e->getMessage());
+            return $this->buildExceptionResponse($e);
         }
     }
 

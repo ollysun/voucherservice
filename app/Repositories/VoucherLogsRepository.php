@@ -81,14 +81,10 @@ class VoucherLogsRepository extends AbstractRepository implements IVoucherLogsRe
     {
         try {
             $voucherUserDetail = $this->voucher_model
-                                    ->select([
-                                        DB::raw('vouchers.*'),
-                                        DB::raw('sum(case when `action` = \'success\' then 1 else 0 end) as `total_redeemed`')
-                                    ])
-                                    ->join('voucher_logs', 'vouchers.id', '=', 'voucher_logs.voucher_id')
-                                    ->where('voucher_logs.user_id','=', $user_id)
-                                    ->where('vouchers.status','=','claimed')
-                                    ->get();
+                                      ->leftJoin('voucher_logs', 'vouchers.id', '=', 'voucher_logs.voucher_id')
+                                      ->where('voucher_logs.user_id', $user_id)
+                                      ->where('voucher_logs.action', 'success')
+                                      ->get();
 
             if (!is_null($voucherUserDetail)) {
                 return self::transform($voucherUserDetail, new VoucherTransformer());
