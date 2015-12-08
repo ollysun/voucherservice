@@ -31,7 +31,10 @@ class VoucherLogsController extends Controller {
     public function show($user_id)
     {
         $fields = [
-            'id' => $user_id
+            'id' => $user_id,
+            'order' => 'ASC',
+            'limit' => 5,
+            'offset' => 1
         ];
         $rules = VoucherValidator::getIdRules();
         $message = VoucherValidator::getMessages();
@@ -46,7 +49,7 @@ class VoucherLogsController extends Controller {
                 return $this->errorWrongArgs($validator->errors());
 
             } else {
-                $voucher = $this->repository->getVoucherUserID($user_id);
+                $voucher = $this->repository->getVoucherUserID($fields);
 
                 if ($voucher) {
                     Log::info(

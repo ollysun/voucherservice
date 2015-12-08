@@ -77,15 +77,20 @@ class VoucherLogsRepository extends AbstractRepository implements IVoucherLogsRe
         }
     }
 
-    public function getVoucherUserID($user_id)
+    public function getVoucherUserID($fields)
     {
+        Paginator::currentPageResolver(
+            function () use ($fields) {
+                return $fields['offset'];
+            }
+        );
         try {
             $voucherUserDetail = $this->voucher_model
                                       ->leftJoin('voucher_logs', 'vouchers.id', '=', 'voucher_logs.voucher_id')
-                                      ->where('voucher_logs.user_id', $user_id)
+                                      ->where('voucher_logs.user_id', $fields['id'])
                                       ->where('voucher_logs.action', 'success')
-                                      ->get();
-
+                                      ->orderBy('vouchers.created_at', $fields['order'])
+                                      ->paginate($fields['limit']);
             if (!is_null($voucherUserDetail)) {
                 return self::transform($voucherUserDetail, new VoucherTransformer());
             } else {
