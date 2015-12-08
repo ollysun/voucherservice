@@ -1,7 +1,12 @@
 <?php namespace Voucher\Repositories;
 
+use Voucher\Models\Voucher;
 use Voucher\Models\VoucherLog;
 use Voucher\Transformers\VoucherLogTransformer;
+use Voucher\Transformers\VoucherTransformer;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\DB;
+
 
 class VoucherLogsRepository extends AbstractRepository implements IVoucherLogsRepository
 {
@@ -12,14 +17,19 @@ class VoucherLogsRepository extends AbstractRepository implements IVoucherLogsRe
      */
     protected $model;
 
+
+    protected $voucher_model;
+
     /**
      * Creates a new voucher log repository instance.
      *
      * @param VoucherLog $voucher_log
+     * @param Voucher $voucher
      */
-    public function __construct(VoucherLog $voucher_log)
+    public function __construct(VoucherLog $voucher_log, Voucher $voucher)
     {
         $this->model = $voucher_log;
+        $this->voucher_model = $voucher;
     }
 
     /**
@@ -66,4 +76,30 @@ class VoucherLogsRepository extends AbstractRepository implements IVoucherLogsRe
             return true;
         }
     }
+
+    public function getVoucherUserID($user_id)
+    {
+        try {
+            $voucherUserDetail = $this->voucher_model
+                                    ->select([
+                                        DB::raw('vouchers.*'),
+                                        DB::raw('sum(case when `action` = \'success\' then 1 else 0 end) as `total_redeemed`')
+                                    ])
+                                    ->join('voucher_logs', 'vouchers.id', '=', 'voucher_logs.voucher_id')
+                                    ->where('voucher_logs.user_id','=', $user_id)
+                                    ->where('vouchers.status','=','claimed')
+                                    ->get();
+
+            if (!is_null($voucherUserDetail)) {
+                return self::transform($voucherUserDetail, new VoucherTransformer());
+            } else {
+                return null;
+            }
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
+
+
+
 }
