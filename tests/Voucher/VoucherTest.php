@@ -26,7 +26,7 @@ class VoucherTest extends TestCase
             new VoucherJob()
         );
 
-        $this->voucher_log_repo = new VoucherLogsRepository(new VoucherLog());
+        $this->voucher_log_repo = new VoucherLogsRepository(new VoucherLog(), new Voucher());
 
         parent::setUp();
     }

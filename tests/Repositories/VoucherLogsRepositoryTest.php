@@ -1,18 +1,21 @@
 <?php
 
 use Voucher\Models\VoucherLog;
+use Voucher\Models\Voucher;
 use Voucher\Repositories\VoucherLogsRepository;
 
 class VoucherLogsRepositoryTest extends TestCase
 {
     protected $model;
     protected $repository;
+    protected  $voucher_model;
 
     public function setUp()
     {
         parent::setUp();
         $this->model = new VoucherLog();
-        $this->repository = new VoucherLogsRepository($this->model);
+        $this->voucher_model = new Voucher();
+        $this->repository = new VoucherLogsRepository($this->model, $this->voucher_model);
     }
 
     public function testAddVoucherLog()

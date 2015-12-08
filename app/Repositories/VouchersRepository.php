@@ -42,7 +42,6 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
     protected $voucher_job_model;
 
 
-    protected $voucher_log_model;
 
     /**
      * Creates a new vouchers repository instance.
@@ -56,14 +55,12 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
         Voucher $voucher_model,
         VoucherJobParamMetadata $voucher_metadata_model,
         VoucherCode $voucher_code_model,
-        VoucherJob $voucher_job_model,
-        VoucherLog $voucherLog
+        VoucherJob $voucher_job_model
     ) {
         $this->voucher_model = $voucher_model;
         $this->voucher_metadata_model = $voucher_metadata_model;
         $this->voucher_code_model = $voucher_code_model;
         $this->voucher_job_model = $voucher_job_model;
-        $this->voucher_log_model = $voucherLog;
     }
 
     /**
