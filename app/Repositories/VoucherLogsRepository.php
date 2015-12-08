@@ -89,7 +89,7 @@ class VoucherLogsRepository extends AbstractRepository implements IVoucherLogsRe
                                       ->leftJoin('voucher_logs', 'vouchers.id', '=', 'voucher_logs.voucher_id')
                                       ->where('voucher_logs.user_id', $fields['id'])
                                       ->where('voucher_logs.action', 'success')
-                                      ->orderBy('vouchers.created_at', $fields['order'])
+                                      ->orderBy('voucher_logs.created_at', $fields['order'])
                                       ->paginate($fields['limit']);
             if (!is_null($voucherUserDetail)) {
                 return self::transform($voucherUserDetail, new VoucherTransformer());
