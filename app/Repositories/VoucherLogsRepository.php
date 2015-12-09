@@ -5,8 +5,6 @@ use Voucher\Models\VoucherLog;
 use Voucher\Transformers\VoucherLogTransformer;
 use Voucher\Transformers\VoucherTransformer;
 use Illuminate\Pagination\Paginator;
-use Illuminate\Support\Facades\DB;
-
 
 class VoucherLogsRepository extends AbstractRepository implements IVoucherLogsRepository
 {
@@ -86,11 +84,12 @@ class VoucherLogsRepository extends AbstractRepository implements IVoucherLogsRe
         );
         try {
             $voucherUserDetail = $this->voucher_model
-                                      ->leftJoin('voucher_logs', 'vouchers.id', '=', 'voucher_logs.voucher_id')
-                                      ->where('voucher_logs.user_id', $fields['id'])
-                                      ->where('voucher_logs.action', 'success')
-                                      ->orderBy('voucher_logs.created_at', $fields['order'])
-                                      ->paginate($fields['limit']);
+                ->leftJoin('voucher_logs', 'vouchers.id', '=', 'voucher_logs.voucher_id')
+                ->where('voucher_logs.user_id', $fields['id'])
+                ->where('voucher_logs.action', 'success')
+                ->orderBy('voucher_logs.created_at', $fields['order'])
+                ->paginate($fields['limit']);
+
             if (!is_null($voucherUserDetail)) {
                 return self::transform($voucherUserDetail, new VoucherTransformer());
             } else {
@@ -100,7 +99,4 @@ class VoucherLogsRepository extends AbstractRepository implements IVoucherLogsRe
             throw new \Exception($e->getMessage());
         }
     }
-
-
-
 }

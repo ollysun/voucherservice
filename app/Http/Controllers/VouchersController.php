@@ -257,5 +257,4 @@ class VouchersController extends Controller
             return $this->errorInternalError($e->getMessage());
         }
     }
-
 }
