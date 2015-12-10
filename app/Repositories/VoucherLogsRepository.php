@@ -13,9 +13,13 @@ class VoucherLogsRepository extends AbstractRepository implements IVoucherLogsRe
      *
      * @var
      */
-    protected $model;
+    protected $voucher_log_model;
 
-
+    /**
+     * Voucher model.
+     *
+     * @var
+     */
     protected $voucher_model;
 
     /**
@@ -26,7 +30,7 @@ class VoucherLogsRepository extends AbstractRepository implements IVoucherLogsRe
      */
     public function __construct(VoucherLog $voucher_log, Voucher $voucher)
     {
-        $this->model = $voucher_log;
+        $this->voucher_log_model = $voucher_log;
         $this->voucher_model = $voucher;
     }
 
@@ -40,7 +44,7 @@ class VoucherLogsRepository extends AbstractRepository implements IVoucherLogsRe
     public function addVoucherLog($data)
     {
         try {
-            $voucher_log = $this->model;
+            $voucher_log = $this->voucher_log_model;
             $voucher_log->voucher_id = (isset($data['voucher_id']) ? $data['voucher_id'] : null);
             $voucher_log->user_id = (isset($data['user_id']) ? $data['user_id'] : null);
             $voucher_log->action = (isset($data['action']) ? $data['action'] : null);
@@ -64,7 +68,7 @@ class VoucherLogsRepository extends AbstractRepository implements IVoucherLogsRe
      */
     public function redeemedByUser($user_id, $voucher_id)
     {
-        $voucher_log = $this->model->where('user_id', $user_id)
+        $voucher_log = $this->voucher_log_model->where('user_id', $user_id)
             ->where('voucher_id', $voucher_id)
             ->where('action', 'success')
             ->first();
@@ -75,28 +79,25 @@ class VoucherLogsRepository extends AbstractRepository implements IVoucherLogsRe
         }
     }
 
-    public function getVoucherUserID($fields)
+    public function getVoucherClaimedByUserID($fields)
     {
         Paginator::currentPageResolver(
             function () use ($fields) {
                 return $fields['offset'];
             }
         );
-        try {
-            $voucherUserDetail = $this->voucher_model
-                ->leftJoin('voucher_logs', 'vouchers.id', '=', 'voucher_logs.voucher_id')
-                ->where('voucher_logs.user_id', $fields['id'])
-                ->where('voucher_logs.action', 'success')
-                ->orderBy('voucher_logs.created_at', $fields['order'])
-                ->paginate($fields['limit']);
 
-            if (!is_null($voucherUserDetail)) {
-                return self::transform($voucherUserDetail, new VoucherTransformer());
-            } else {
-                return null;
-            }
-        } catch (\Exception $e) {
-            throw new \Exception($e->getMessage());
+        $voucher_log = $this->voucher_model
+            ->leftJoin('voucher_logs', 'vouchers.id', '=', 'voucher_logs.voucher_id')
+            ->where('voucher_logs.user_id', $fields['user_id'])
+            ->where('voucher_logs.action', 'success')
+            ->orderBy('voucher_logs.created_at', $fields['order'])
+            ->paginate($fields['limit']);
+
+        if (!$voucher_log->isEmpty()) {
+            return self::transform($voucher_log, new VoucherTransformer());
+        } else {
+            return false;
         }
     }
 }
