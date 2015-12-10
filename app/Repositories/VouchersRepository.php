@@ -39,7 +39,7 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
      * @var
      */
     protected $voucher_job_model;
-
+    
     /**
      * Creates a new vouchers repository instance.
      *
@@ -386,4 +386,6 @@ class VouchersRepository extends AbstractRepository implements IVouchersReposito
             throw new \Exception($ex->getMessage());
         }
     }
+
+
 }

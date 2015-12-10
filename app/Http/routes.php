@@ -9,3 +9,7 @@ $app->post('/vouchers/redeem', 'VouchersController@redeem');
 
 $app->post('/vouchers/issue-vouchers', 'TaskController@issueVouchers');
 $app->post('/vouchers/generate-codes', 'TaskController@generateVoucherCodes');
+
+$app->get('/vouchers/{user_id}/logs', 'VoucherLogsController@show');
+
+

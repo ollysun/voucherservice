@@ -1,7 +1,10 @@
 <?php namespace Voucher\Repositories;
 
+use Voucher\Models\Voucher;
 use Voucher\Models\VoucherLog;
 use Voucher\Transformers\VoucherLogTransformer;
+use Voucher\Transformers\VoucherTransformer;
+use Illuminate\Pagination\Paginator;
 
 class VoucherLogsRepository extends AbstractRepository implements IVoucherLogsRepository
 {
@@ -12,14 +15,19 @@ class VoucherLogsRepository extends AbstractRepository implements IVoucherLogsRe
      */
     protected $model;
 
+
+    protected $voucher_model;
+
     /**
      * Creates a new voucher log repository instance.
      *
      * @param VoucherLog $voucher_log
+     * @param Voucher $voucher
      */
-    public function __construct(VoucherLog $voucher_log)
+    public function __construct(VoucherLog $voucher_log, Voucher $voucher)
     {
         $this->model = $voucher_log;
+        $this->voucher_model = $voucher;
     }
 
     /**
@@ -64,6 +72,31 @@ class VoucherLogsRepository extends AbstractRepository implements IVoucherLogsRe
             return false;
         } else {
             return true;
+        }
+    }
+
+    public function getVoucherUserID($fields)
+    {
+        Paginator::currentPageResolver(
+            function () use ($fields) {
+                return $fields['offset'];
+            }
+        );
+        try {
+            $voucherUserDetail = $this->voucher_model
+                ->leftJoin('voucher_logs', 'vouchers.id', '=', 'voucher_logs.voucher_id')
+                ->where('voucher_logs.user_id', $fields['id'])
+                ->where('voucher_logs.action', 'success')
+                ->orderBy('voucher_logs.created_at', $fields['order'])
+                ->paginate($fields['limit']);
+
+            if (!is_null($voucherUserDetail)) {
+                return self::transform($voucherUserDetail, new VoucherTransformer());
+            } else {
+                return null;
+            }
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
         }
     }
 }
