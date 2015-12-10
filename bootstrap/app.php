@@ -59,6 +59,8 @@ $app->singleton(
     'log',
     function ($app) {
         $log_handlers = array();
+        $log_processors = array();
+
         // Do we want to push our logs to an SQS queue?
         if ($app['config']['iroko_logger.enabled']) {
             $config = $app['config']['iroko_logger.aws'];
@@ -66,10 +68,11 @@ $app->singleton(
             $sqs_client = new \Aws\Sqs\SqsClient($config);
             // Setup our SQS handler
             $sqsHandler = new SQSHandler($sqs_client, $app['config']['iroko_logger.endpoint_url']);
-
             $sqsHandler->setFormatter(new JsonFormatter());
-
             $log_handlers[] = $sqsHandler;
+
+            $ec2processor = new \Iroko\Logging\Monolog\Processor\EC2MetadataProcessor();
+            $log_processors[] = $ec2processor;
         }
 
         // If we also want to enable the default handler configured in app config
@@ -79,8 +82,10 @@ $app->singleton(
             $log_handlers[] = $streamHandler;
         }
 
-        return new Logger('lumens', $log_handlers);
-    });
+        $environment = getenv('ENVIRONMENT').'.'.getenv('SERVICE');
+        return new Logger($environment, $log_handlers, $log_processors);
+    }
+);
 
 $app->register(Iroko\Analytics\Providers\AnalyticsServiceProvider::class);
 
