@@ -51,6 +51,13 @@ class VoucherValidator extends IlluminateValidator
         ];
     }
 
+    public static function getUserIdRules()
+    {
+        return [
+            'user_id' => 'required|regex:/(^[0-9]+$)+/',
+        ];
+    }
+
     public static function getRedeemRules()
     {
         return [

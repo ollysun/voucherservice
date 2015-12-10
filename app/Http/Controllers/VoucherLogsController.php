@@ -1,12 +1,9 @@
 <?php namespace Voucher\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Voucher\Repositories\VoucherLogsRepository;
-use Voucher\Services\PlanService;
 use Voucher\Validators\VoucherValidator;
-use Voucher\Validators\VoucherJobValidator;
 use Voucher\Voucher\Voucher;
 use Illuminate\Support\Facades\Input;
 use Voucher\Services;
@@ -30,15 +27,16 @@ class VoucherLogsController extends Controller {
 
     public function show($user_id)
     {
-        $fields = [
-            'id' => $user_id,
-            'order' => 'ASC',
-            'limit' => 5,
-            'offset' => 1
-        ];
-        $rules = VoucherValidator::getIdRules();
-        $message = VoucherValidator::getMessages();
         try {
+            $fields = [
+                'user_id' => $user_id,
+                'order' => Input::get('order', 'ASC'),
+                'limit' => Input::get('limit', 100),
+                'offset' => Input::get('offset', 1)
+            ];
+
+            $rules = VoucherValidator::getUserIdRules();
+            $message = VoucherValidator::getMessages();
             $validator = Validator::make($fields, $rules, $message);
 
             if ($validator->fails()) {
@@ -47,34 +45,32 @@ class VoucherLogsController extends Controller {
                     $this->log
                 ));
                 return $this->errorWrongArgs($validator->errors());
+            }
+            $voucher = $this->repository->getVoucherClaimedByUserID($fields);
+
+            if ($voucher) {
+                Log::info(
+                    SELF::LOGTITLE,
+                    array(
+                        [
+                            'success' => 'Retrieve list of vouchers per user'
+                        ],
+                        $this->log
+                    )
+                );
+                return $this->respondWithArray($voucher);
 
             } else {
-                $voucher = $this->repository->getVoucherUserID($fields);
-
-                if ($voucher) {
-                    Log::info(
-                        SELF::LOGTITLE,
-                        array(
-                            [
-                                'success' => 'Retrieve list of vouchers per user'
-                            ],
-                            $this->log
-                        )
-                    );
-                    return $this->respondWithArray($voucher);
-
-                } else {
-                    Log::error(
-                        SELF::LOGTITLE,
-                        array_merge(
-                            [
-                                'error' => 'Vouchers detail Not Found ' . $user_id
-                            ],
-                            $this->log
-                        )
-                    );
-                    return $this->errorNotFound('Voucher Users detail Not Found');
-                }
+                Log::error(
+                    SELF::LOGTITLE,
+                    array_merge(
+                        [
+                            'error' => 'No claimed voucher by user: ' . $user_id
+                        ],
+                        $this->log
+                    )
+                );
+                return $this->errorNotFound('No claimed voucher by user: ' . $user_id);
             }
         } catch (\Exception $e) {
             Log::error(SELF::LOGTITLE, array_merge(
