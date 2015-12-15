@@ -226,6 +226,10 @@ class Voucher
                     } else {
                         return $subscription['data'];
                     }
+                    break;
+                case 'new':
+                    $comments = 'You are not eligible to redeem this voucher. Only new members can redeem this code.';
+                    break;
             }
         } else {
             if ($voucher_data['category'] == 'new' || $voucher_data['category'] == 'new_expired') {
