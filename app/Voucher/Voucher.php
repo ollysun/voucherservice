@@ -210,7 +210,7 @@ class Voucher
                     }
                     break;
                 case 'active':
-                    if(isset($subscription['data']['plan_id'])) {
+                    if (isset($subscription['data']['plan_id'])) {
                         $plan = $this->plans_api->plansApi('/plans/' . $subscription['data']['plan_id'], 'get');
                         if (isset($plan['error'])) {
                             throw new \Exception($plan['error']['message'], $plan['error']['http_code']);
